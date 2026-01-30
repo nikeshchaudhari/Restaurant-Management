@@ -1,11 +1,10 @@
-import { Link } from "react-router-dom";
 import food from "../assets/foods.png";
 
 const SignUp = () => {
   return (
     <div className="w-screen h-screen flex justify-center items-center bg-gray-100">
       
-      <div className="w-[800px] h-[450px] rounded-lg flex overflow-hidden bg-white">
+      <div className="w-200 h-112.5 rounded-lg flex overflow-hidden bg-white">
         
         {/* Image section */}
         <div className="w-1/2">
@@ -20,25 +19,25 @@ const SignUp = () => {
         <div className="w-1/2 bg-[#04578B] text-white p-8">
           <form className="flex flex-col gap-1">
             <h1 className="text-center text-[20px]">Create Account</h1>
-            <label htmlFor="fullname">FullName</label>
+            <label htmlFor="fullname">Full_Name <span className="text-red-500">*</span></label>
             <input
               type="text"
               className="p-2 border outline-none text-white rounded" id="fullname"
               placeholder="Enter full name"
             />
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">Email<span className="text-red-500">*</span></label>
             <input
               type="email" id="email"
               className="p-2 border outline-none text-white rounded"
               placeholder="Enter your email"
             />
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">Password<span className="text-red-500">*</span></label>
             <input
               type="password" id="password"
               className="p-2 border outline-none text-white rounded"
               placeholder="Enter password"
             />
-            <label htmlFor="password">Confirm Password</label>
+            <label htmlFor="password">Confirm Password<span className="text-red-500">*</span></label>
             <input
               type="password" id="password"
               className="p-2 border outline-none text-white rounded"
