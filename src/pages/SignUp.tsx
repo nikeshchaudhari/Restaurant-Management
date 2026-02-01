@@ -16,7 +16,7 @@ const SignUp = () => {
         </div>
 
         {/* Form section */}
-        <div className="w-1/2 bg-[#04578B] text-white p-8">
+        <div className="w-1/2 bg-[#095483] text-white p-8">
           <form className="flex flex-col gap-1">
             <h1 className="text-center text-[20px]">Create Account</h1>
             <label htmlFor="fullname">Full_Name <span className="text-red-500">*</span></label>
