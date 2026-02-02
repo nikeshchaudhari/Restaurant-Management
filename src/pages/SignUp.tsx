@@ -2,6 +2,7 @@ import { useState } from "react";
 import food from "../assets/foods.png";
 import { FiEye } from "react-icons/fi";
 import { FiEyeOff } from "react-icons/fi";
+import { Link } from "react-router-dom";
 
 const SignUp = () => {
   const [passwordshow, SetpasswordShow] = useState(false)
@@ -68,7 +69,7 @@ const SignUp = () => {
 
             </div>
             <button className="bg-[#1992DE] p-2 -mt-2 transition duration-300 hover:bg-[#0E6BA6] cursor-pointer text-white rounded">SignUp</button>
-            <span className="text-center">Already have an account?SignIn</span>
+            <span className="text-center">Already have an account? <Link to="/login">Login</Link></span>
           </form>
         </div>
 
