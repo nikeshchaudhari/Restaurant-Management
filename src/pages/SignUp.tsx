@@ -2,9 +2,10 @@ import { useState } from "react";
 import food from "../assets/foods.png";
 import { FiEye } from "react-icons/fi";
 import { FiEyeOff } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const SignUp = () => {
 
@@ -16,18 +17,44 @@ const SignUp = () => {
   const [password, SetPassword] = useState<string>("");
   const [confirmPassword, SetconfirmPassword] = useState<string>("");
 
+  const navigate = useNavigate();
 
-  const handleForm = (e: React.FormEvent<HTMLFormElement>) => {
+
+  const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // console.log("Data insert");
 
-    const formData = new FormData(e.currentTarget);
+    if (password != confirmPassword) {
+      alert("password do not match");
+      return;
+    }
 
-    formData.append("fullName", fullName);
-    formData.append("email", email);
-    formData.append("password", password);
-    formData.append("confirmPassword", confirmPassword);
+    const data = {
+      fullName,
+      email,
+      password,
+      confirmPassword
+    }
 
+    try {
+
+      const response = await axios.post("http://localhost:3000/users",
+        data
+      )
+      console.log("User Add", response.data);
+      toast.success("Data Add Sucessfully...")
+      navigate("/login")
+
+
+    }
+    catch (err) {
+      toast.error("Error ")
+    }
+
+    SetfullName("");
+    SetEmail("");
+    SetPassword("");
+    SetconfirmPassword("");
 
 
 
