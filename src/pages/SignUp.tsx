@@ -4,35 +4,39 @@ import { FiEye } from "react-icons/fi";
 import { FiEyeOff } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
+import axios from "axios";
 
 const SignUp = () => {
 
- type FormValues={
-
- }
- 
   const [passwordshow, SetpasswordShow] = useState<boolean>(false)
   const [confirmshow, Setconfirmshow] = useState<boolean>(false)
-  
-  const [fullName,SetfullName]= useState<string>("Nikesh");
-  const [email,SetEmail]= useState<string>("");
-  const[password,SetPassword]=useState<string>("");
-  const[confirmPassword,SetconfirmPassword]=useState<string>("");
+
+  const [fullName, SetfullName] = useState<string>("");
+  const [email, SetEmail] = useState<string>("");
+  const [password, SetPassword] = useState<string>("");
+  const [confirmPassword, SetconfirmPassword] = useState<string>("");
 
 
-  const handleForm =(e:React.FormEvent<HTMLFormElement>)=>{
+  const handleForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Hello Reactjs");
-    
+    // console.log("Data insert");
+
+    const formData = new FormData(e.currentTarget);
+
+    formData.append("fullName", fullName);
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("confirmPassword", confirmPassword);
+
+
+
+
+
+
+
   }
 
-  const handleChange =(e:React.ChangeEvent<HTMLInputElement>)=>{
-    SetfullName(e.target.value);
-    console.log(e.target.value);
-    
-    
 
-  }
 
   return (
     <div className="w-screen h-screen flex justify-center items-center bg-gray-100">
@@ -50,6 +54,7 @@ const SignUp = () => {
 
         {/* Form section */}
         <div className=" w-full md:w-1/2  p-8 ">
+
           <form onSubmit={handleForm} className="flex flex-col gap-1">
             <h1 className="text-center text-[20px] mb-3 font-bold">Create Your Account ?</h1>
             {/* <label htmlFor="fullname">Full_Name <span className="text-red-500">*</span></label> */}
@@ -57,17 +62,19 @@ const SignUp = () => {
               type="text"
               className="p-2 border focus:outline-none border-[#e2dddd] rounded mb-3 focus:ring-1 focus:ring-blue-500" id="fullname"
               placeholder="Enter full name"
+              name="fullname"
 
               value={fullName}
-              onChange={(e)=>SetfullName(e.target.value)}
+              onChange={(e) => SetfullName(e.target.value)}
             />
             {/* <label htmlFor="email">Email<span className="text-red-500">*</span></label> */}
             <input
               type="email" id="email"
               className="p-2 border outline-none border-[#e2dddd] rounded mb-3 focus:ring-1 focus:ring-blue-500"
               placeholder="Enter your email"
+              name="email"
               value={email}
-              onChange={(e)=>SetEmail(e.target.value)}
+              onChange={(e) => SetEmail(e.target.value)}
             />
             <div className="relative">
               {/* <label htmlFor="password">Password<span className="text-red-500">*</span></label> */}
@@ -80,7 +87,7 @@ const SignUp = () => {
                 placeholder="Enter password"
                 value={password}
 
-                onChange={(e)=>SetPassword(e.target.value)}
+                onChange={(e) => SetPassword(e.target.value)}
               />
 
               <button type="button" className="absolute top-3 right-2 cursor-pointer " onClick={() => SetpasswordShow(!passwordshow)}>
@@ -92,12 +99,12 @@ const SignUp = () => {
               <input
                 type={confirmshow ? "text" : "password"} id="confirmpassword"
                 className="w-full p-2 border outline-none border-[#e2dddd] rounded mb-3 focus:ring-1 focus:ring-blue-500"
-                 name="confirm-password"
+                name="confirm-password"
                 autoComplete="new-password"
                 placeholder="Enter confirm password"
 
                 value={confirmPassword}
-                onChange={(e)=>SetconfirmPassword(e.target.value)}
+                onChange={(e) => SetconfirmPassword(e.target.value)}
               />
               <button className="absolute top-3 right-2 cursor-pointer " type="button" onClick={() => Setconfirmshow(!confirmshow)}>
                 {confirmshow ? <FiEye size={18} /> : <FiEyeOff size={18} />}
