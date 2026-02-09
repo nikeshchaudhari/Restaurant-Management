@@ -7,19 +7,20 @@ import { toast } from "react-toastify";
 
 interface Order{
     id:number,
-    total:number
+    total:number,
+    date: string;
 
 }
 const AdminDashboard = () => {
 
-    const[orders,SetOrders] = useState<Order[]>([]);
+    const[sales,SetSales] = useState<Order[]>([]);
     
     useEffect(()=>{
         const dataFetch = async()=>{
 
             try{
                 const res = await axios.get("http://localhost:3000/orders");
-                SetOrders(res.data);
+                SetSales(res.data);
             }
             catch(err){
                 toast.error("Data Error...")
@@ -32,9 +33,18 @@ const AdminDashboard = () => {
         dataFetch();
     },[])
 
+    // dade filter
+
+    const today = new Date().toISOString().split("T")[0]
+    // console.log(today);
+
+    const todaySales = sales.filter(sale=> sale.date === today)
+    // console.log(todaySales);
+    
+    
 //    total Add
 
-const totalOrders = orders.reduce((sum,order)=> sum+order.total,0)
+const totalSales = todaySales.reduce((sum,sale)=> sum+sale.total,0)
     return (
         <>
             <main className="flex ">
@@ -76,21 +86,22 @@ const totalOrders = orders.reduce((sum,order)=> sum+order.total,0)
                        <Link to="/"> <button className="rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300">Logout</button></Link>
                        </div>
                        <div className=" mx-10 mt-5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                        <div className="bg-white h-30 rounded-lg  flex flex-col justify-center items-center">
+                        <div className="bg-white h-30 rounded-lg  flex flex-col justify-center items-center cursor-pointer hover:scale-105 transition duration-300 ">
                             <h1 className="font-medium">Today's Sales</h1>
-                           <h1>
+                           <h1 className="text-[#831F00]">
                             Rs. 
-                          {totalOrders}
+                          {totalSales}
                            </h1>
                           
                         </div>
-                         <div className="bg-white  h-30 rounded-lg flex justify-center items-center ">
+                         <div className="bg-white h-30 rounded-lg  flex flex-col justify-center items-center  hover:scale-105 transition duration-300 cursor-pointer">
                             <h1 className="font-medium">Total Orders</h1>
+                            <h2 className="text-[#831F00]">{sales.length}</h2>
                         </div>
-                         <div className="bg-white h-30 rounded-lg flex justify-center items-center  ">
+                         <div className="bg-white h-30 rounded-lg flex justify-center items-center  hover:scale-105 transition duration-300 cursor-pointer ">
                             <h1 className="font-medium">Active Tables</h1>
                         </div>
-                         <div className="bg-white h-30 rounded-lg flex justify-center items-center ">
+                         <div className="bg-white h-30 rounded-lg flex justify-center items-center cursor-pointer hover:scale-105 transition duration-300 ">
                             <h1 className="font-medium">Low Stock</h1>
                         </div>
                        </div>
