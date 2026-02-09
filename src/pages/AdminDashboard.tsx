@@ -1,6 +1,40 @@
 import { Link } from "react-router-dom"
 import adminLogo from "../assets/adminlogo.png"
+import { useEffect, useState } from "react"
+import axios from "axios";
+import { toast } from "react-toastify";
+
+
+interface Order{
+    id:number,
+    total:number
+
+}
 const AdminDashboard = () => {
+
+    const[orders,SetOrders] = useState<Order[]>([]);
+    
+    useEffect(()=>{
+        const dataFetch = async()=>{
+
+            try{
+                const res = await axios.get("http://localhost:3000/orders");
+                SetOrders(res.data);
+            }
+            catch(err){
+                toast.error("Data Error...")
+                console.log(err);
+                
+
+            }
+
+        }
+        dataFetch();
+    },[])
+
+//    total Add
+
+const totalOrders = orders.reduce((sum,order)=> sum+order.total,0)
     return (
         <>
             <main className="flex ">
@@ -42,8 +76,13 @@ const AdminDashboard = () => {
                        <Link to="/"> <button className="rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300">Logout</button></Link>
                        </div>
                        <div className=" mx-10 mt-5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                        <div className="bg-white h-30 rounded-lg  flex justify-center items-center">
+                        <div className="bg-white h-30 rounded-lg  flex flex-col justify-center items-center">
                             <h1 className="font-medium">Today's Sales</h1>
+                           <h1>
+                            Rs. 
+                          {totalOrders}
+                           </h1>
+                          
                         </div>
                          <div className="bg-white  h-30 rounded-lg flex justify-center items-center ">
                             <h1 className="font-medium">Total Orders</h1>
