@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import adminLogo from "../assets/adminlogo.png"
 const AdminDashboard = () => {
     return (
@@ -34,9 +35,28 @@ const AdminDashboard = () => {
                         </div>
 
                     </aside>
-                    {/* Dashboard index */}
+                    {/* Dashboard  */}
                     <section className="w-screen h-screen bg-[#E9E9E9] overflow-hidden">
-                        <div>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Excepturi libero possimus, molestiae ullam reprehenderit at ut quis, deserunt voluptatum fuga hic dolore accusantium minima quaerat est unde aspernatur aliquam aperiam.</div>
+                       <div className=" flex justify-between mx-10 mt-5 bg-white p-2 rounded-full items-center">
+                        <h1 className="mx-2 text-[20px] font-bold">Welcome,Admin</h1>
+                       <Link to="/"> <button className="rounded-full bg-[#1F354D] w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300">Logout</button></Link>
+                       </div>
+                       <div className=" mx-10 mt-5 flex gap-10 ">
+                        <div className="bg-white w-60 h-20 rounded-md">
+                            <h1 className="text-center mt-5 font-medium">Today's Sales</h1>
+                        </div>
+                         <div className="bg-white w-60 h-20 rounded-md">
+                            <h1 className="text-center mt-5 font-medium">Total Orders</h1>
+                        </div>
+                         <div className="bg-white w-60 h-20 rounded-md">
+                            <h1 className="text-center mt-5 font-medium">Active Tables</h1>
+                        </div>
+                         <div className="bg-white w-60 h-20 rounded-md">
+                            <h1 className="text-center mt-5 font-medium">Low Stock</h1>
+                        </div>
+                       </div>
+
+
 
                     </section>
                   
