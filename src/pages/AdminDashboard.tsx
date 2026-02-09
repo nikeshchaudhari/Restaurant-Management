@@ -37,22 +37,22 @@ const AdminDashboard = () => {
                     </aside>
                     {/* Dashboard  */}
                     <section className="w-screen h-screen bg-[#E9E9E9] overflow-hidden">
-                       <div className=" flex justify-between mx-10 mt-5 bg-white p-2 rounded-full items-center">
-                        <h1 className="mx-2 text-[20px] font-bold">Welcome,Admin</h1>
-                       <Link to="/"> <button className="rounded-full bg-[#1F354D] w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300">Logout</button></Link>
+                       <div className=" flex justify-between mx-5 mt-5 bg-white p-2 rounded-full items-center">
+                        <h1 className="mx-2 md:text-[20px] font-bold">Welcome,Admin</h1>
+                       <Link to="/"> <button className="rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300">Logout</button></Link>
                        </div>
-                       <div className=" mx-10 mt-5 flex gap-10 ">
-                        <div className="bg-white w-60 h-20 rounded-md">
-                            <h1 className="text-center mt-5 font-medium">Today's Sales</h1>
+                       <div className=" mx-10 mt-5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                        <div className="bg-white h-30 rounded-lg  flex justify-center items-center">
+                            <h1 className="font-medium">Today's Sales</h1>
                         </div>
-                         <div className="bg-white w-60 h-20 rounded-md">
-                            <h1 className="text-center mt-5 font-medium">Total Orders</h1>
+                         <div className="bg-white  h-30 rounded-lg flex justify-center items-center ">
+                            <h1 className="font-medium">Total Orders</h1>
                         </div>
-                         <div className="bg-white w-60 h-20 rounded-md">
-                            <h1 className="text-center mt-5 font-medium">Active Tables</h1>
+                         <div className="bg-white h-30 rounded-lg flex justify-center items-center  ">
+                            <h1 className="font-medium">Active Tables</h1>
                         </div>
-                         <div className="bg-white w-60 h-20 rounded-md">
-                            <h1 className="text-center mt-5 font-medium">Low Stock</h1>
+                         <div className="bg-white h-30 rounded-lg flex justify-center items-center ">
+                            <h1 className="font-medium">Low Stock</h1>
                         </div>
                        </div>
 
