@@ -86,7 +86,7 @@ const totalSales = todaySales.reduce((sum,sale)=> sum+sale.total,0)
                     <section className="w-screen h-screen bg-[#E9E9E9] overflow-hidden">
                        <div className=" flex justify-between mx-5 mt-5 bg-white p-2 rounded-full items-center">
                         <h1 className="mx-2 md:text-[20px] font-bold">Welcome,Admin</h1>
-                       <Link to="/"> <button className="rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300">Logout</button></Link>
+                       <Link to="/login"> <button className="rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300">Logout</button></Link>
                        </div>
                        <div className=" mx-10 mt-5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                         <div className="bg-white h-30 rounded-lg  flex flex-col justify-center items-center cursor-pointer hover:scale-105 transition duration-300 ">
