@@ -3,6 +3,7 @@ import adminLogo from "../assets/adminlogo.png"
 import { useEffect, useState } from "react"
 import axios from "axios";
 import { toast } from "react-toastify";
+import Slide from "../components/Slide";
 
 
 interface Order{
@@ -48,7 +49,7 @@ const totalSales = todaySales.reduce((sum,sale)=> sum+sale.total,0)
     return (
         <>
             <main className="flex ">
-                    <aside className="hidden md:block py-5 w-90 bg-[rgb(16,34,55)] h-screen">
+                    {/* <aside className="hidden md:block py-5 w-90 bg-[rgb(16,34,55)] h-screen">
                         <div className="py-2 flex justify-center gap-2">
                             <img src={adminLogo} alt="" className="w-10 h-10" />
                             <h1 className="text-white text-[30px] font-bold">RMS Admin</h1>
@@ -78,7 +79,9 @@ const totalSales = todaySales.reduce((sum,sale)=> sum+sale.total,0)
                             </div>
                         </div>
 
-                    </aside>
+                    </aside> */}
+
+                    <Slide/>
                     {/* Dashboard  */}
                     <section className="w-screen h-screen bg-[#E9E9E9] overflow-hidden">
                        <div className=" flex justify-between mx-5 mt-5 bg-white p-2 rounded-full items-center">
