@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Slide from "../components/Slide";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const UserAdd = () => {
     const [fullName, Setfullname] = useState<string>("")
@@ -27,10 +28,12 @@ const UserAdd = () => {
             })
 
             console.log(res.data);
+            toast.success("User Add Successfully..")
             
 
         } catch (err) {
-            console.log("error");
+            toast.error("Error ");
+            console.log(err);
             
 
         }
@@ -72,7 +75,7 @@ const UserAdd = () => {
                             value={fullName}
                             onChange={(e) => {
                                 Setfullname(e.target.value);
-                                console.log(e.target.value);
+                                
 
                             }
 
@@ -111,7 +114,7 @@ const UserAdd = () => {
                             }}>
                             <option value="">--SELECT ROLE--</option>
                             <option value="admin">Admin</option>
-                            <option value="">Waiters</option>
+                            <option value="waiter">Waiters</option>
 
                         </select>
                         <div className="w-full flex justify-center">
