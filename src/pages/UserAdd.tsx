@@ -3,6 +3,7 @@ import Slide from "../components/Slide";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import MobileDashboard from "../components/MobileDashboard";
 
 const UserAdd = () => {
     const [fullName, Setfullname] = useState<string>("")
@@ -48,6 +49,7 @@ const UserAdd = () => {
 
     return (
         <main className="flex">
+            <MobileDashboard/>
             <Slide />
             {/* Dashboard  */}
             <section className="w-screen h-screen bg-[#E9E9E9] overflow-hidden">
