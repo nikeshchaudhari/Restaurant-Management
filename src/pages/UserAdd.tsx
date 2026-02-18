@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import MobileDashboard from "../components/MobileDashboard";
+import { FaRegEdit } from "react-icons/fa";
+import { AiFillDelete } from "react-icons/ai";
 
 const UserAdd = () => {
 
@@ -89,7 +91,7 @@ const UserAdd = () => {
             <MobileDashboard />
             <Slide />
             {/* Dashboard  */}
-            <section className="w-screen h-screen bg-[#E9E9E9] overflow-hidden">
+            <section className="w-screen h-full bg-[#E9E9E9] overflow-hidden">
                 <div className=" flex justify-between mx-5 mt-5 bg-white p-2 rounded-full items-center">
                     <h1 className="mx-2 md:text-[20px] font-bold">Users </h1>
                     <Link to="/login">
@@ -166,11 +168,11 @@ const UserAdd = () => {
                 </div>
 
                 {/* Data View */}
-                <div className=" flex justify-center p-2 md:p-0 mx-5 md:mx-2 lg:mx-0 ">
-                    <table className="bg-white w-full md:w-250 h-full mt-5 rounded-md ">
-                        <thead className="bg-gray-100">
+                <div className=" md:flex justify-center  overflow-x-auto p-5">
+                    <table className="bg-white min-w-[200px] w-full md:w-250 h-full mt-5 rounded-md ">
+                        <thead className="bg-gray-100 ">
                             <tr>
-                                <th className="border px-4 py-2 text-left">Id</th>
+                                <th className="border px-4 py-2 text-left ">Id</th>
                                 <th className="border px-4 py-2 text-left">Name</th>
                                 <th className="border px-4 py-2 text-left">Role</th>
                                 <th className="border px-4 py-2 text-left">Username</th>
@@ -189,11 +191,23 @@ const UserAdd = () => {
 
                            ):(
                             users.map((user,index)=>(
-                                <tr key={index}>
-                                    <td>{user.id}</td>
-                                    <td>{user.fullName}</td>
-                                    <td>{user.email}</td>
-                                    <td>{user.role}</td>
+                                <tr key={index} className="hover:bg-gray-400/10">
+                                    <td  className="border px-2 md:px-4  py-2">{user.id}</td>
+                                    <td className="border px-2 md:px-4 py-2">{user.fullName}</td>
+                                    <td className="border px-2 md:px-4 py-2">{user.email}</td>
+                                    <td className="border px-2 md:px-4 py-2">{user.role}</td>
+                                    <td className="flex gap-5 justify-start md:px-4 py-2 text-[20px] " >
+                                       <span>
+                                        <FaRegEdit className="cursor-pointer" />
+
+                                       </span>
+                                         <span>
+                                            <AiFillDelete className="cursor-pointer" />
+
+                                         </span>
+                                        
+                                    </td>
+                                   
                                 </tr>
                             ))
                            )}
