@@ -37,7 +37,7 @@ const AdminDashboard = () => {
         dataFetch();
     }, [])
 
-    // dade filter
+    // date filter
 
     const today = new Date().toISOString().split("T")[0]
     // console.log(today);
@@ -57,7 +57,7 @@ const AdminDashboard = () => {
 
                 <Slide />
                 {/* Dashboard  */}
-                <section className="w-screen h-screen bg-[#E9E9E9] overflow-hidden">
+                <section className="w-screen h-screen bg-[#E9E9E9] overflow-x-auto">
                     <div className=" flex justify-between mx-5 mt-5 bg-white p-4 md:p-2 rounded-full items-center ">
                         <h1 className="mx-2 md:text-[20px] font-bold">Welcome,Admin</h1>
                         <Link to="/login" className=""> <button className="rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300 hidden md:block">Logout</button></Link>
