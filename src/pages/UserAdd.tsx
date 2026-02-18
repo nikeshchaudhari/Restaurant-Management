@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Slide from "../components/Slide";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -6,10 +6,19 @@ import { toast } from "react-toastify";
 import MobileDashboard from "../components/MobileDashboard";
 
 const UserAdd = () => {
+
+    interface User {
+        id: any,
+        fullName: string,
+        email: string,
+        password: string,
+        role: string
+    }
     const [fullName, Setfullname] = useState<string>("")
     const [email, SetEmail] = useState<string>("")
     const [password, SetPassword] = useState<string>("")
     const [role, SetRole] = useState<string>("waiter")
+    const [users, setUser] = useState<User[]>([]);
 
     const data = {
         fullName,
@@ -20,22 +29,23 @@ const UserAdd = () => {
 
     }
 
+
     const formHandle = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         try {
-            const res = await axios.post("http://localhost:3000/newuser",{
+            const res = await axios.post("http://localhost:3000/newuser",
                 data
-            })
+            )
 
             console.log(res.data);
             toast.success("User Add Successfully..")
-            
+
 
         } catch (err) {
             toast.error("Error ");
             console.log(err);
-            
+
 
         }
         Setfullname("");
@@ -47,9 +57,36 @@ const UserAdd = () => {
 
     }
 
+    // dataFetch
+
+    useEffect(() => {
+
+        const dataFetch = async () => {
+
+            try {
+                const res = await axios.get("http://localhost:3000/newuser");
+                setUser(res.data);
+
+                console.log(res.data);
+
+
+
+
+
+            }
+            catch (err) {
+
+                toast.error("Data error...");
+
+
+            }
+        }
+        dataFetch();
+    }, [])
+
     return (
         <main className="flex">
-            <MobileDashboard/>
+            <MobileDashboard />
             <Slide />
             {/* Dashboard  */}
             <section className="w-screen h-screen bg-[#E9E9E9] overflow-hidden">
@@ -77,7 +114,7 @@ const UserAdd = () => {
                             value={fullName}
                             onChange={(e) => {
                                 Setfullname(e.target.value);
-                                
+
 
                             }
 
@@ -127,6 +164,46 @@ const UserAdd = () => {
 
                     </form>
                 </div>
+
+                {/* Data View */}
+                <div className=" flex justify-center p-2 md:p-0 mx-5 md:mx-2 lg:mx-0 ">
+                    <table className="bg-white w-full md:w-250 h-full mt-5 rounded-md ">
+                        <thead className="bg-gray-100">
+                            <tr>
+                                <th className="border px-4 py-2 text-left">Id</th>
+                                <th className="border px-4 py-2 text-left">Name</th>
+                                <th className="border px-4 py-2 text-left">Role</th>
+                                <th className="border px-4 py-2 text-left">Username</th>
+                                <th className="border px-4 py-2 text-left">Actions</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                           {users.length === 0?(
+
+                            <tr>
+                                <td>
+                                    NO Users Found
+                                </td>
+                            </tr>
+
+                           ):(
+                            users.map((user,index)=>(
+                                <tr key={index}>
+                                    <td>{user.id}</td>
+                                    <td>{user.fullName}</td>
+                                    <td>{user.email}</td>
+                                    <td>{user.role}</td>
+                                </tr>
+                            ))
+                           )}
+                        </tbody>
+                    </table>
+
+                </div>
+              
+
+
             </section>
         </main>
     );
