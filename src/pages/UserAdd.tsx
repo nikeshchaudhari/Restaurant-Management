@@ -88,6 +88,25 @@ const UserAdd = () => {
         dataFetch();
     }, [])
 
+
+    // delete data
+
+    const deleteUser= async(id:any)=>{
+
+
+        try{
+            const res = await axios.delete(`http://localhost:3000/newuser/${id}`);
+
+            console.log(res);
+               toast.success("User deleted successfully");
+
+        }
+        catch(err){
+            console.log(err);
+            
+
+        }
+    }
     return (
         <main className="flex">
             <MobileDashboard />
