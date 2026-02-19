@@ -4,8 +4,10 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import MobileDashboard from "../components/MobileDashboard";
-import { FaRegEdit } from "react-icons/fa";
-import { AiFillDelete } from "react-icons/ai";
+
+import { Trash2 } from 'lucide-react';
+
+import { SquarePen } from 'lucide-react';
 
 const UserAdd = () => {
 
@@ -169,14 +171,14 @@ const UserAdd = () => {
 
                 {/* Data View */}
                 <div className=" md:flex justify-center  overflow-x-auto p-5">
-                    <table className="bg-white min-w-[200px] w-full md:w-250 h-full mt-5 rounded-md ">
+                    <table className="bg-white min-w-50 w-full md:w-250 h-full mt-5 rounded-md ">
                         <thead className="bg-gray-100 ">
                             <tr>
-                                <th className="border px-4 py-2 text-left ">Id</th>
-                                <th className="border px-4 py-2 text-left">Name</th>
-                                <th className="border px-4 py-2 text-left">Role</th>
-                                <th className="border px-4 py-2 text-left">Username</th>
-                                <th className="border px-4 py-2 text-left">Actions</th>
+                                <th className=" px-4 py-2 text-left ">Id</th>
+                                <th className=" px-4 py-2 text-left">Name</th>
+                                <th className=" px-4 py-2 text-left">Role</th>
+                                <th className=" px-4 py-2 text-left">Username</th>
+                                <th className=" px-4 py-2 text-left">Actions</th>
                             </tr>
 
                         </thead>
@@ -184,25 +186,25 @@ const UserAdd = () => {
                            {users.length === 0?(
 
                             <tr>
-                                <td>
-                                    NO Users Found
+                                <td colSpan={5} className="text-center p-5 text-[20px] font-bold">
+                                    No Users Found
                                 </td>
                             </tr>
 
                            ):(
                             users.map((user,index)=>(
                                 <tr key={index} className="hover:bg-gray-400/10">
-                                    <td  className="border px-2 md:px-4  py-2">{user.id}</td>
-                                    <td className="border px-2 md:px-4 py-2">{user.fullName}</td>
-                                    <td className="border px-2 md:px-4 py-2">{user.email}</td>
-                                    <td className="border px-2 md:px-4 py-2">{user.role}</td>
-                                    <td className="flex gap-5 justify-start md:px-4 py-2 text-[20px] " >
+                                    <td  className=" px-2 md:px-4  py-2">{user.id}</td>
+                                    <td className=" px-2 md:px-4 py-2">{user.fullName}</td>
+                                    <td className="px-2 md:px-4 py-2">{user.email}</td>
+                                    <td className="px-2 md:px-4 py-2">{user.role}</td>
+                                    <td className="flex gap-5 justify-start items-center px-2 md:px-4 py-2 text-[20px] " >
                                        <span>
-                                        <FaRegEdit className="cursor-pointer" />
+                                      <SquarePen className="text-[#080833] cursor-pointer" />
 
                                        </span>
                                          <span>
-                                            <AiFillDelete className="cursor-pointer" />
+                                         <Trash2 className="text-red-600 cursor-pointer"  />
 
                                          </span>
                                         
