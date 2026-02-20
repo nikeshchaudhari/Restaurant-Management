@@ -38,36 +38,36 @@ const UserAdd = () => {
     const formHandle = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        if(editUser){
-            const res = await  axios.put(`http://localhost:3000/newuser/${editUser.id}`,data);
-            toast.success("Update sucessfully!");
+//         try{
+//   if(editUser){
+//             const res = await  axios.put(`http://localhost:3000/newuser/${editUser.id}`,data);
+//             toast.success("Update sucessfully!");
 
-            setEditUser(null)
-            setUser((prev)=>prev.map((u)=>u.id === editUser.id ? res.data: u));
-        }else{
-              try {
-            const res = await axios.post("http://localhost:3000/newuser",
-                data
-            )
+          
+//             setUser((prev)=>prev.map((u)=>u.id === editUser.id ? res.data: u));
+//               setEditUser(null)
+//         }else{
+              
+//             const res = await axios.post("http://localhost:3000/newuser",
+//                 data
+//             )
 
-            // console.log(res.data);
-            toast.success("User Add Successfully..")
+//             // console.log(res.data);
+//             toast.success("User Add Successfully..")
 
-            setUser((prevUser)=>[...prevUser,res.data]);
+//             setUser((prevUser)=>[...prevUser,res.data]);
+
+//         }
+        
+      
+//          catch (err) {
+//             toast.error("Error ");
+//             console.log(err);
 
 
-        } catch (err) {
-            toast.error("Error ");
-            console.log(err);
-
-
-        }
-        Setfullname("");
-        SetEmail("");
-        SetPassword("");
-        SetRole("");
-
-        }
+//         }
+      
+        
 
       
 
