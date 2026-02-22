@@ -23,7 +23,7 @@ const UserAdd = () => {
     const [password, SetPassword] = useState<string>("")
     const [role, SetRole] = useState<string>("waiter")
     const [users, setUser] = useState<User[]>([]);
-    const [editUser,setEditUser]= useState<User|null>(null);
+    const [editUser, setEditUser] = useState<User | null>(null);
 
     const data = {
         fullName,
@@ -38,38 +38,10 @@ const UserAdd = () => {
     const formHandle = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-//         try{
-//   if(editUser){
-//             const res = await  axios.put(`http://localhost:3000/newuser/${editUser.id}`,data);
-//             toast.success("Update sucessfully!");
-
-          
-//             setUser((prev)=>prev.map((u)=>u.id === editUser.id ? res.data: u));
-//               setEditUser(null)
-//         }else{
-              
-//             const res = await axios.post("http://localhost:3000/newuser",
-//                 data
-//             )
-
-//             // console.log(res.data);
-//             toast.success("User Add Successfully..")
-
-//             setUser((prevUser)=>[...prevUser,res.data]);
-
-//         }
-        
-      
-//          catch (err) {
-//             toast.error("Error ");
-//             console.log(err);
-
-
-//         }
-      
         
 
-      
+
+
 
 
 
@@ -113,9 +85,9 @@ const UserAdd = () => {
         try {
             await axios.delete(`http://localhost:3000/newuser/${id}`);
             toast.success("User deleted successfully");
-            
-                setUser((prevUser) =>
-                    prevUser.filter((users) => users.id !== id))
+
+            setUser((prevUser) =>
+                prevUser.filter((users) => users.id !== id))
 
         }
         catch (err) {
@@ -132,9 +104,9 @@ const UserAdd = () => {
             <section className="w-screen h-full bg-[#E9E9E9] overflow-hidden">
                 <div className=" flex justify-between mx-5 mt-5 bg-white p-2 rounded-full items-center">
                     <h1 className="mx-2 md:text-[20px] font-bold">
-                        
-                        {editUser ? "EditUser":"Users"}
-                         </h1>
+
+                        {editUser ? "EditUser" : "Users"}
+                    </h1>
                     <Link to="/login">
                         {" "}
                         <button className="rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300">
@@ -148,7 +120,7 @@ const UserAdd = () => {
                     <form onSubmit={formHandle} className="bg-white w-full md:w-250 h-full mt-5 rounded-md p-5">
 
                         <h1 className="text-2xl font-medium mb-3">
-                            {editUser ? " Update Users":"Add Users"}
+                            {editUser ? " Update Users" : "Add Users"}
                         </h1>
                         <input
                             type="text"
@@ -204,7 +176,7 @@ const UserAdd = () => {
                         </select>
                         <div className="w-full flex justify-center">
                             <button type="submit" className="w-full bg-[#080833] p-2 rounded text-white md:font-bold cursor-pointer transition hover:bg-[#232341] duration-300">
-                                {editUser?"Update User":"Add User"}
+                                {editUser ? "Update User" : "Add User"}
                             </button>
                         </div>
 
@@ -242,14 +214,14 @@ const UserAdd = () => {
                                         <td className="px-2 md:px-4 py-2">{user.role}</td>
                                         <td className="flex gap-5 justify-start items-center px-2 md:px-4 py-2 text-[20px] " >
                                             <span>
-                                                <SquarePen className="text-[#080833] cursor-pointer transform hover:-translate-y-0.5 duration-300" onClick={()=>{
+                                                <SquarePen className="text-[#080833] cursor-pointer transform hover:-translate-y-0.5 duration-300" onClick={() => {
                                                     setEditUser(user);
                                                     Setfullname(user.fullName);
                                                     SetEmail(user.email);
                                                     SetRole(user.role);
                                                     SetPassword(user.password);
-                                                    
-                                                }}/>
+
+                                                }} />
 
                                             </span>
                                             <span>
