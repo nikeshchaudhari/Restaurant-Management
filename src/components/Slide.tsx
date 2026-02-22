@@ -7,7 +7,7 @@ const Slide = () => {
   return (
    <>
   
-        <aside className="hidden md:block py-5 w-90 bg-[rgb(16,34,55)] h-screen sticky">
+        <aside className="hidden md:block py-5 w-90 bg-[rgb(16,34,55)] h-screen sticky top-0">
                         <div className="py-2 flex justify-center gap-2">
                             <img src={adminLogo} alt="" className="w-10 h-10" />
                             <h1 className="text-white text-[30px] font-bold">RMS Admin</h1>

@@ -4,7 +4,7 @@ import { RxCross2 } from "react-icons/rx";
 import { Link } from "react-router-dom";
 import { FiLogOut } from "react-icons/fi";
 const MobileDashboard = () => {
-  const [isOpen, SetIsOpen] = useState<boolean>(true);
+  const [isOpen, SetIsOpen] = useState<boolean>(false);
 
   return (
     <>
