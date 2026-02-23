@@ -6,6 +6,7 @@ import { ToastContainer } from "react-toastify"
 import Dashboard from "./pages/Dashboard"
 import AdminDashboard from "./pages/AdminDashboard"
 import UserAdd from "./pages/UserAdd"
+import Menu from "./pages/Menu"
 
 
 export const myroute=createBrowserRouter([
@@ -16,7 +17,8 @@ export const myroute=createBrowserRouter([
 {path:"dashboard",Component:Dashboard, children:[
   {path:"",Component:AdminDashboard},
   {path:"admin",Component:AdminDashboard},
-  {path:"useradd",Component:UserAdd}
+  {path:"useradd",Component:UserAdd},
+  {path:"menu",Component:Menu},
   
 ]}
 ])
