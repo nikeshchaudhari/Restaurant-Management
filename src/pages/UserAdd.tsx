@@ -49,7 +49,7 @@ const UserAdd = () => {
       } else {
        const res =  await axios.post("http://localhost:3000/newuser", data);
 
-       setUser((prev)=>[...prev, res.data])
+       setUser((prev)=>[res.data, ...prev])
 
         toast.success("User Add Sucessfully...");
       }
@@ -99,7 +99,7 @@ const UserAdd = () => {
       <MobileDashboard />
       <Slide />
       {/* Dashboard  */}
-      <section className="w-screen h-full bg-[#E9E9E9] overflow-hidden">
+      <section className="w-screen  bg-[#E9E9E9] overflow-hidden">
         <div className=" flex justify-between mx-5 mt-5 bg-white p-2 rounded-full items-center">
           <h1 className="mx-2 md:text-[20px] font-bold">
             {editUser ? "EditUser" : "Users"}
