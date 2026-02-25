@@ -43,6 +43,17 @@ const Menu = () => {
                 <option value="burger">Burger</option>
                 <option value="desert">Desert</option>
               </select>
+                <input
+                type="text"
+                placeholder="Available"
+                className="border border-gray-300 outline-none w-full p-2  rounded mb-3 focus:ring-1 focus:ring-blue-500 "
+              />
+              
+               <input
+                type="file"
+                placeholder="Enter Price"
+                className="border border-gray-300 outline-none cursor-pointer  w-full p-2  rounded mb-3 focus:ring-1 focus:ring-blue-500 "
+              />
               <div className="w-full flex justify-center">
                 <button
                   type="submit"
