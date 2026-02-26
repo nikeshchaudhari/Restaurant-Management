@@ -6,6 +6,9 @@ import { toast } from "react-toastify";
 import Slide from "../components/Slide";
 import { X,Menu} from "lucide-react";
 import MobileDashboard from "../components/MobileDashboard";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "../store/store";
+import { toggleMenu } from "../features/menuSlice";
 
 
 interface Order {
@@ -15,6 +18,8 @@ interface Order {
 
 }
 const AdminDashboard = () => {
+    const dispatch:AppDispatch = useDispatch();
+    const Open = useSelector((state:RootState)=>state.menu.isOpen)
 
     const [sales, SetSales] = useState<Order[]>([]);
     const[isOpen,setIsOpen]= useState<boolean>(false)
@@ -63,11 +68,11 @@ const AdminDashboard = () => {
                         <Link to="/login" className=""> <button className="rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300 hidden md:block">Logout</button></Link>
                         <span className="md:hidden" onClick={()=>setIsOpen(!isOpen)}>
                             {
-                                isOpen ?(
+                                Open ?(
                                     <X className="text-2xl"/>
                                 ):
                                 (
-                                    <Menu className="text-2xl"/>
+                                    <Menu className="text-2xl" onClick={()=>dispatch(toggleMenu())}/>
                                 )
                             }
 
