@@ -40,16 +40,16 @@ const UserAdd = () => {
 
         toast.success("User Update Sucessfully....");
 
-        setUser((prev)=>
-        
-        prev.map((u)=> u.id===editUser.id ? res.data : u )
+        setUser((prev) =>
+
+          prev.map((u) => u.id === editUser.id ? res.data : u)
         );
 
         setEditUser(null);
       } else {
-       const res =  await axios.post("http://localhost:3000/newuser", data);
+        const res = await axios.post("http://localhost:3000/newuser", data);
 
-       setUser((prev)=>[res.data, ...prev])
+        setUser((prev) => [res.data, ...prev])
 
         toast.success("User Add Sucessfully...");
       }
@@ -214,7 +214,7 @@ const UserAdd = () => {
                       <div className="relative  group">
                         <SquarePen
                           className="text-[#080833] cursor-pointer transform hover:-translate-y-0.5 duration-300  "
-                          
+
                           onClick={() => {
                             setEditUser(user);
                             Setfullname(user.fullName);
@@ -224,17 +224,22 @@ const UserAdd = () => {
                           }}
                         />
 
-                        <span className="absolute -top-8 left-0 hidden group-hover:block bg-black text-white text-sm mb-2 rounded px-2 py-1 whitespace-nowrap 
+                        <span className="absolute bottom-full left-1/2 hidden group-hover:block bg-black text-white text-sm mb-2 rounded px-2 py-1 whitespace-nowrap 
                         ">
                           Edit
                         </span>
                       </div>
-                      <span>
+                      <div className="relative group">
                         <Trash2
-                          className="text-red-600 cursor-pointer transform hover:-translate-y-0.5 duration-300"
+                          className="text-black cursor-pointer transform hover:-translate-y-0.5 duration-300"
                           onClick={() => deleteUser(user.id)}
                         />
-                      </span>
+
+                        <span className="absolute left-1/2 bottom-full bg-red-600 text-white text-sm rounded px-2 py-1 mb-2 hidden group-hover:block">
+                          Delete
+
+                        </span>
+                      </div>
                     </td>
                   </tr>
                 ))
