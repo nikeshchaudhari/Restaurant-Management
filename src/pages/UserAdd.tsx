@@ -211,9 +211,10 @@ const UserAdd = () => {
                     <td className="px-2 md:px-4 py-2">{user.email}</td>
                     <td className="px-2 md:px-4 py-2">{user.role}</td>
                     <td className="flex gap-5 justify-start items-center px-2 md:px-4 py-2 text-[20px] ">
-                      <span>
+                      <div className="relative  group">
                         <SquarePen
-                          className="text-[#080833] cursor-pointer transform hover:-translate-y-0.5 duration-300"
+                          className="text-[#080833] cursor-pointer transform hover:-translate-y-0.5 duration-300  "
+                          
                           onClick={() => {
                             setEditUser(user);
                             Setfullname(user.fullName);
@@ -222,7 +223,12 @@ const UserAdd = () => {
                             SetPassword(user.password);
                           }}
                         />
-                      </span>
+
+                        <span className="absolute -top-8 left-0 hidden group-hover:block bg-black text-white text-sm mb-2 rounded px-2 py-1 whitespace-nowrap 
+                        ">
+                          Edit
+                        </span>
+                      </div>
                       <span>
                         <Trash2
                           className="text-red-600 cursor-pointer transform hover:-translate-y-0.5 duration-300"
