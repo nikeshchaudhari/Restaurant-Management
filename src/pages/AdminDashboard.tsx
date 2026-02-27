@@ -8,7 +8,7 @@ import { X,Menu} from "lucide-react";
 import MobileDashboard from "../components/MobileDashboard";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../store/store";
-import { toggleMenu } from "../features/menuSlice";
+import { menuOpen, toggleMenu } from "../features/menuSlice";
 
 
 interface Order {
@@ -72,7 +72,7 @@ const AdminDashboard = () => {
                                     <X className="text-2xl"/>
                                 ):
                                 (
-                                    <Menu className="text-2xl" onClick={()=>dispatch(toggleMenu())}/>
+                                    <Menu className="text-2xl" onClick={()=>dispatch(menuOpen())}/>
                                 )
                             }
 
