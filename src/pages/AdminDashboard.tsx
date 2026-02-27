@@ -8,7 +8,7 @@ import { X,Menu} from "lucide-react";
 import MobileDashboard from "../components/MobileDashboard";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../store/store";
-import { menuOpen, toggleMenu } from "../features/menuSlice";
+import { menuOpen, } from "../features/menuSlice";
 
 
 interface Order {
