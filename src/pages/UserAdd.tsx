@@ -5,9 +5,12 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import MobileDashboard from "../components/MobileDashboard";
 
-import { Trash2 } from "lucide-react";
+import { Menu, Trash2, X } from "lucide-react";
 
 import { SquarePen } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "../store/store";
+import { menuOpen } from "../features/menuSlice";
 
 const UserAdd = () => {
   interface User {
@@ -94,6 +97,12 @@ const UserAdd = () => {
       console.log(err);
     }
   };
+
+
+  // state management
+
+  const dispatch:AppDispatch = useDispatch();
+  const Open = useSelector((state:RootState)=>state.menu.isOpen)
   return (
     <main className="flex">
       <MobileDashboard />
@@ -106,10 +115,19 @@ const UserAdd = () => {
           </h1>
           <Link to="/login">
             {" "}
-            <button className="rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300">
+            <button className="hidden md:block rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300">
               Logout
             </button>
           </Link>
+          
+          <span className="md:hidden" onClick={()=> dispatch(menuOpen())}>
+            {Open ?(
+               <X/>
+            ):(
+              <Menu/>
+            )}
+
+          </span>
         </div>
 
         {/* UserAdd  */}
