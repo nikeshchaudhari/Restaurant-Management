@@ -1,8 +1,17 @@
+import { useDispatch, useSelector } from "react-redux";
 import MobileDashboard from "../components/MobileDashboard";
 import Slide from "../components/Slide";
 import { Link } from "react-router-dom";
-
+import type { AppDispatch, RootState } from "../store/store";
+import {   MenuIcon,  X } from "lucide-react";
+import { menuOpen } from "../features/menuSlice";
+import { useState } from "react";
 const Menu = () => {
+
+  const[status,setStatus]= useState()
+
+  const dispatch:AppDispatch = useDispatch()
+  const Open = useSelector((state:RootState)=>state.menu.isOpen)
   return (
     <>
       <main className="md:flex">
@@ -14,10 +23,20 @@ const Menu = () => {
             <h1 className="mx-2 md:text-[20px] font-bold">Menu</h1>
             <Link to="/login">
               {" "}
-              <button className="rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300">
+              <button className="hidden md:block rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300">
                 Logout
               </button>
             </Link>
+            <span className="md:hidden" onClick={()=>dispatch(menuOpen())}>
+              {
+                Open?(
+                  <X/>
+                ):(
+              < MenuIcon/>
+
+                )
+              }
+            </span>
           </div>
           {/* Add Menu Form */}
           <div className=" flex justify-center p-2 md:p-0 mx-5 md:mx-2 lg:mx-0">
@@ -33,21 +52,27 @@ const Menu = () => {
                 placeholder="Enter Price"
                 className="border border-gray-300 outline-none  w-full p-2  rounded mb-3 focus:ring-1 focus:ring-blue-500 "
               />
-              <select
-                name=""
-                id=""
-                className="border border-gray-300 outline-none  w-full p-2  rounded mb-3 focus:ring-1 focus:ring-blue-500"
-              >
-                <option value="">--SELECT CATEGORY--</option>
-                <option value="pizza">Pizza</option>
-                <option value="burger">Burger</option>
-                <option value="desert">Desert</option>
-              </select>
-                <input
+              <input
                 type="text"
-                placeholder="Available"
+                placeholder="Enter Category"
                 className="border border-gray-300 outline-none w-full p-2  rounded mb-3 focus:ring-1 focus:ring-blue-500 "
               />
+         <div className="flex gap-2 mb-3 ">
+          <h1>Available</h1>
+            <label htmlFor="" >
+          <input type="radio"
+          name="status"
+          className="cursor-pointer"
+          
+          />
+           </label>
+           Yes
+
+           <label htmlFor="">
+            <input type="radio" name="status" id=""  className="cursor-pointer"/>
+           </label>
+           No
+         </div>
               
                <input
                 type="file"
