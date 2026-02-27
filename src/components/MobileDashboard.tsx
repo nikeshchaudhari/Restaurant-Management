@@ -1,4 +1,4 @@
-import { useState } from "react";
+
 import adminLogo from "../assets/adminlogo.png";
 import { RxCross2 } from "react-icons/rx";
 import { Link } from "react-router-dom";
@@ -64,7 +64,9 @@ const MobileDashboard = () => {
             <li className="bg-[#1F354D] p-2 text-white px-10 mb-3">Users</li>
           </Link>
 
+        <Link to="/dashboard/menu" onClick={()=>dispatch(menuClose())}>
           <li className="bg-[#1F354D] p-2 text-white px-10 mb-3">Menus</li>
+        </Link>
           <li className="bg-[#1F354D] p-2 text-white px-10 mb-3">Tables</li>
           <li className="bg-[#1F354D] p-2 text-white px-10 mb-3">Orders</li>
           <li className="bg-[#1F354D] p-2 text-white px-10 mb-3">Reports</li>
