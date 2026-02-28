@@ -3,15 +3,26 @@ import MobileDashboard from "../components/MobileDashboard";
 import Slide from "../components/Slide";
 import { Link } from "react-router-dom";
 import type { AppDispatch, RootState } from "../store/store";
-import {   MenuIcon,  X } from "lucide-react";
+import { MenuIcon, X } from "lucide-react";
 import { menuOpen } from "../features/menuSlice";
-import { useState } from "react";
+import { useState, type ReactElement } from "react";
 const Menu = () => {
+  const[menuName,setMenuName]= useState<string>("")
+  const[price,setPrice]= useState<string>("")
+  const[category,setCategory]=useState<string>("")
+  const [available, setAvailable] = useState<string>("available");
+const [photo,setPhoto]= useState<file|null>(null)
+  const dispatch: AppDispatch = useDispatch();
+  const Open = useSelector((state: RootState) => state.menu.isOpen);
 
-  const[status,setStatus]= useState()
+  // menu add
 
-  const dispatch:AppDispatch = useDispatch()
-  const Open = useSelector((state:RootState)=>state.menu.isOpen)
+  const formHandle =(e:React.FormEvent<HTMLFormElement>)=>{
+    e.preventDefault()
+    console.log("Hello");
+    
+
+  }
   return (
     <>
       <main className="md:flex">
@@ -27,20 +38,13 @@ const Menu = () => {
                 Logout
               </button>
             </Link>
-            <span className="md:hidden" onClick={()=>dispatch(menuOpen())}>
-              {
-                Open?(
-                  <X/>
-                ):(
-              < MenuIcon/>
-
-                )
-              }
+            <span className="md:hidden" onClick={() => dispatch(menuOpen())}>
+              {Open ? <X /> : <MenuIcon />}
             </span>
           </div>
           {/* Add Menu Form */}
           <div className=" flex justify-center p-2 md:p-0 mx-5 md:mx-2 lg:mx-0">
-            <form className="bg-white w-full md:w-250 h-full mt-5 rounded-md p-5">
+            <form onSubmit={formHandle} className="bg-white w-full md:w-250 h-full mt-5 rounded-md p-5">
               <h1 className="text-2xl font-medium mb-3">Menu Add</h1>
               <input
                 type="text"
@@ -57,24 +61,33 @@ const Menu = () => {
                 placeholder="Enter Category"
                 className="border border-gray-300 outline-none w-full p-2  rounded mb-3 focus:ring-1 focus:ring-blue-500 "
               />
-         <div className="flex gap-2 mb-3 ">
-          <h1>Available</h1>
-            <label htmlFor="" >
-          <input type="radio"
-          name="status"
-          className="cursor-pointer"
-          
-          />
-           </label>
-           Yes
+              <div className="flex gap-2 mb-3 ">
+                <label htmlFor="">
+                  <input
+                    type="radio"
+                    name="available"
+                    className="cursor-pointer"
+                    value="available"
+                    checked={available === "available"}
+                    onChange={(e) => setAvailable(e.target.value)}
+                  />
+                </label>
+                Available
+                <label htmlFor="">
+                  <input
+                    type="radio"
+                    name="no available"
+                    value="no available"
+                    checked={available === "no available"}
+                    onChange={(e)=>setAvailable(e.target.value)}
+                    
+                    className="cursor-pointer"
+                  />
+                </label>
+                No Available
+              </div>
 
-           <label htmlFor="">
-            <input type="radio" name="status" id=""  className="cursor-pointer"/>
-           </label>
-           No
-         </div>
-              
-               <input
+              <input
                 type="file"
                 placeholder="Enter Price"
                 className="border border-gray-300 outline-none cursor-pointer  w-full p-2  rounded mb-3 focus:ring-1 focus:ring-blue-500 "
@@ -92,11 +105,7 @@ const Menu = () => {
 
           {/* View All Menu */}
           <div className=" md:flex justify-center  overflow-x-auto p-5">
-            <table className="bg-white min-w-50 w-full md:w-250 h-full mt-5 rounded-md ">
-
-
-              
-            </table>
+            <table className="bg-white min-w-50 w-full md:w-250 h-full mt-5 rounded-md "></table>
           </div>
         </section>
       </main>
