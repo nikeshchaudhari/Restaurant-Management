@@ -11,18 +11,31 @@ const Menu = () => {
   const[price,setPrice]= useState<string>("")
   const[category,setCategory]=useState<string>("")
   const [available, setAvailable] = useState<string>("available");
-const [photo,setPhoto]= useState<file|null>(null)
+const [photo,setPhoto]= useState<null>(null)
   const dispatch: AppDispatch = useDispatch();
   const Open = useSelector((state: RootState) => state.menu.isOpen);
 
-  // menu addnp
+  
+  const formHandle =async(e:React.FormEvent<HTMLFormElement>)=>{
+ e.preventDefault()
+    // 
+  const formData = new FormData();
+  formData.append("menuName",menuName);
+  formData.append("price",price);
+  formData.append("category",category);
+  formData.append("available",available);
+if(photo){
+  formData.append("photo",photo);
+}
+try{
 
-  const formHandle =(e:React.FormEvent<HTMLFormElement>)=>{
-    e.preventDefault()
-    console.log("Hello");
-    
-
+}catch(err){
+  
+}
+ 
   }
+   
+  
   return (
     <>
       <main className="md:flex">

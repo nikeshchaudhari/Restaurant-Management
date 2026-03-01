@@ -7,9 +7,11 @@ import Dashboard from "./pages/Dashboard"
 import AdminDashboard from "./pages/AdminDashboard"
 import UserAdd from "./pages/UserAdd"
 import Menu from "./pages/Menu"
+import Error from "./pages/Error"
 
 
 export const myroute=createBrowserRouter([
+  
 {path:"",Component:Home},
 {path:"home",Component:Home},
 {path:"signup",Component:SignUp},
@@ -20,7 +22,8 @@ export const myroute=createBrowserRouter([
   {path:"useradd",Component:UserAdd},
   {path:"menu",Component:Menu},
   
-]}
+]},
+{path:"*",Component:Error},
 ])
 const App = () => {
 

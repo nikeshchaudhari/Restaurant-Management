@@ -20,6 +20,7 @@ const SignIn = () => {
           const response = await axios.post("http://localhost:3000/users",{
             email,password
           })
+          localStorage.setItem("token",response.data.token);
 
           console.log(response.data);
         toast.success("Login Sucessfully..")
