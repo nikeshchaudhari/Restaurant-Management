@@ -15,7 +15,7 @@ const [photo,setPhoto]= useState<file|null>(null)
   const dispatch: AppDispatch = useDispatch();
   const Open = useSelector((state: RootState) => state.menu.isOpen);
 
-  // menu add
+  // menu addnp
 
   const formHandle =(e:React.FormEvent<HTMLFormElement>)=>{
     e.preventDefault()
