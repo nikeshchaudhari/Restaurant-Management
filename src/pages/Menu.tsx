@@ -5,20 +5,32 @@ import { Link } from "react-router-dom";
 import type { AppDispatch, RootState } from "../store/store";
 import { MenuIcon, X } from "lucide-react";
 import { menuOpen } from "../features/menuSlice";
-import { useState} from "react";
+import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+interface menuAdd {
+  id: any;
+  mneuName: string;
+  price: string;
+  category: string;
+  available: string;
+}
 const Menu = () => {
   const [menuName, setMenuName] = useState<string>("");
   const [price, setPrice] = useState<string>("");
   const [category, setCategory] = useState<string>("");
   const [available, setAvailable] = useState<string>("available");
   const [photo, setPhoto] = useState<File | null>(null);
+  const [editMenu, setEditMenu] = useState<string>("");
   const dispatch: AppDispatch = useDispatch();
   const Open = useSelector((state: RootState) => state.menu.isOpen);
 
   const formHandle = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (editMenu) {
+      const edit = await axios.put(`http://localhost:3000/menu/${editMenu.id}`);
+    }
     // FormatData
     const formData = new FormData();
     formData.append("menuName", menuName);
@@ -48,11 +60,8 @@ const Menu = () => {
     } catch (err) {
       console.log(err);
     }
-    setMenuName(""),
-    setPrice(""),
-    setCategory(""),
-    setAvailable("")
-    setPhoto(null)
+    (setMenuName(""), setPrice(""), setCategory(""), setAvailable(""));
+    setPhoto(null);
   };
 
   return (
@@ -63,7 +72,9 @@ const Menu = () => {
         <Slide />
         <section className="w-screen bg-[#E9E9E9] h-screen overflow-hidden">
           <div className=" flex justify-between mx-5 mt-5 bg-white p-2 rounded-full items-center">
-            <h1 className="mx-2 md:text-[20px] font-bold">Menu</h1>
+            <h1 className="mx-2 md:text-[20px] font-bold">
+              {editMenu ? "Edit Menu" : "Menu"}
+            </h1>
             <Link to="/login">
               {" "}
               <button className="hidden md:block rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300">
@@ -128,12 +139,11 @@ const Menu = () => {
               </div>
 
               <input
-                type="file" className="border border-gray-300 outline-none cursor-pointer  w-full p-2  rounded mb-3 focus:ring-1 focus:ring-blue-500 "
-                onChange={(e)=>{
-                  if(e.target.files)setPhoto(e.target.files[0])
+                type="file"
+                className="border border-gray-300 outline-none cursor-pointer  w-full p-2  rounded mb-3 focus:ring-1 focus:ring-blue-500 "
+                onChange={(e) => {
+                  if (e.target.files) setPhoto(e.target.files[0]);
                 }}
-              
-
               />
               <div className="w-full flex justify-center">
                 <button
