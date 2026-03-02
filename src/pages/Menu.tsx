@@ -5,44 +5,63 @@ import { Link } from "react-router-dom";
 import type { AppDispatch, RootState } from "../store/store";
 import { MenuIcon, X } from "lucide-react";
 import { menuOpen } from "../features/menuSlice";
-import { useState, type ReactElement } from "react";
+import { useState} from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
 const Menu = () => {
-  const[menuName,setMenuName]= useState<string>("")
-  const[price,setPrice]= useState<string>("")
-  const[category,setCategory]=useState<string>("")
+  const [menuName, setMenuName] = useState<string>("");
+  const [price, setPrice] = useState<string>("");
+  const [category, setCategory] = useState<string>("");
   const [available, setAvailable] = useState<string>("available");
-const [photo,setPhoto]= useState<null>(null)
+  const [photo, setPhoto] = useState<File | null>(null);
   const dispatch: AppDispatch = useDispatch();
   const Open = useSelector((state: RootState) => state.menu.isOpen);
 
-  
-  const formHandle =async(e:React.FormEvent<HTMLFormElement>)=>{
- e.preventDefault()
-    // 
-  const formData = new FormData();
-  formData.append("menuName",menuName);
-  formData.append("price",price);
-  formData.append("category",category);
-  formData.append("available",available);
-if(photo){
-  formData.append("photo",photo);
-}
-try{
+  const formHandle = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // FormatData
+    const formData = new FormData();
+    formData.append("menuName", menuName);
+    formData.append("price", price);
+    formData.append("category", category);
+    formData.append("available", available);
+    if (photo) {
+      formData.append("photo", photo);
+    }
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/menu",
+        {
+          menuName,
+          price,
+          category,
+          available,
+          photo,
+        },
+        {
+          headers: {},
+        },
+      );
+      console.log(res.data);
 
-}catch(err){
-  
-}
- 
-  }
-   
-  
+      toast.success("Menu Add Sucessfull..");
+    } catch (err) {
+      console.log(err);
+    }
+    setMenuName(""),
+    setPrice(""),
+    setCategory(""),
+    setAvailable("")
+    setPhoto(null)
+  };
+
   return (
     <>
       <main className="md:flex">
         <MobileDashboard />
 
         <Slide />
-        <section className="w-screen bg-[#E9E9E9] overflow-hidden">
+        <section className="w-screen bg-[#E9E9E9] h-screen overflow-hidden">
           <div className=" flex justify-between mx-5 mt-5 bg-white p-2 rounded-full items-center">
             <h1 className="mx-2 md:text-[20px] font-bold">Menu</h1>
             <Link to="/login">
@@ -57,22 +76,31 @@ try{
           </div>
           {/* Add Menu Form */}
           <div className=" flex justify-center p-2 md:p-0 mx-5 md:mx-2 lg:mx-0">
-            <form onSubmit={formHandle} className="bg-white w-full md:w-250 h-full mt-5 rounded-md p-5">
+            <form
+              onSubmit={formHandle}
+              className="bg-white w-full md:w-250 h-full mt-5 rounded-md p-5"
+            >
               <h1 className="text-2xl font-medium mb-3">Menu Add</h1>
               <input
                 type="text"
                 placeholder="Enter Menu Name"
                 className="border border-gray-300 outline-none  w-full p-2  rounded mb-3 focus:ring-1 focus:ring-blue-500 "
+                value={menuName}
+                onChange={(e) => setMenuName(e.target.value)}
               />
               <input
                 type="text"
                 placeholder="Enter Price"
                 className="border border-gray-300 outline-none  w-full p-2  rounded mb-3 focus:ring-1 focus:ring-blue-500 "
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
               />
               <input
                 type="text"
                 placeholder="Enter Category"
                 className="border border-gray-300 outline-none w-full p-2  rounded mb-3 focus:ring-1 focus:ring-blue-500 "
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
               />
               <div className="flex gap-2 mb-3 ">
                 <label htmlFor="">
@@ -92,8 +120,7 @@ try{
                     name="no available"
                     value="no available"
                     checked={available === "no available"}
-                    onChange={(e)=>setAvailable(e.target.value)}
-                    
+                    onChange={(e) => setAvailable(e.target.value)}
                     className="cursor-pointer"
                   />
                 </label>
@@ -101,9 +128,12 @@ try{
               </div>
 
               <input
-                type="file"
-                placeholder="Enter Price"
-                className="border border-gray-300 outline-none cursor-pointer  w-full p-2  rounded mb-3 focus:ring-1 focus:ring-blue-500 "
+                type="file" className="border border-gray-300 outline-none cursor-pointer  w-full p-2  rounded mb-3 focus:ring-1 focus:ring-blue-500 "
+                onChange={(e)=>{
+                  if(e.target.files)setPhoto(e.target.files[0])
+                }}
+              
+
               />
               <div className="w-full flex justify-center">
                 <button
