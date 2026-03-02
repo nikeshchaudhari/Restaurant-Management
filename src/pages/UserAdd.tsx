@@ -204,7 +204,7 @@ const UserAdd = () => {
           <table className="bg-white min-w-50 w-full md:w-250 h-full mt-5 rounded-md ">
             <thead className="bg-gray-100 ">
               <tr>
-                <th className=" px-4 py-2 text-left ">Id</th>
+                <th className=" px-4 py-2 text-left ">No.</th>
                 <th className=" px-4 py-2 text-left">Name</th>
                 <th className=" px-4 py-2 text-left">Role</th>
                 <th className=" px-4 py-2 text-left">Username</th>
@@ -224,7 +224,7 @@ const UserAdd = () => {
               ) : (
                 users.map((user, index) => (
                   <tr key={index} className="hover:bg-gray-400/10">
-                    <td className=" px-2 md:px-4  py-2">{user.id}</td>
+                    <td className=" px-2 md:px-4  py-2">{index+1}</td>
                     <td className=" px-2 md:px-4 py-2">{user.fullName}</td>
                     <td className="px-2 md:px-4 py-2">{user.email}</td>
                     <td className="px-2 md:px-4 py-2">{user.role}</td>
