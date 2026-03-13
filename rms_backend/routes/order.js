@@ -68,4 +68,8 @@ route.get("/recent-order", async (req, res) => {
     });
   }
 });
+
+route.get("/get-order",async(req,res)=>{
+  res.send("hello")
+})
 module.exports = route;
