@@ -14,7 +14,7 @@ const Slide = () => {
       <aside className="hidden md:block py-5 w-90 bg-[rgb(16,34,55)] h-screen sticky top-0">
         <div className="py-2 flex justify-center items-center gap-2">
           <img src={adminLogo} alt="" className="w-10 h-10" />
-          <h1 className="text-white text-[30px] font-bold">RMS Admin</h1>
+          <h1 className="text-white text-[30px] font-bold"> RMS Admin </h1>
         </div>
         <div className="text-white flex  flex-col  mt-2 ">
           <div className="bg-[#1F354D] md:w-60 ml-2   lg:w-65  p-2 rounded transition-all  hover:bg-[#445971]  duration-300 cursor-pointer mb-5">
