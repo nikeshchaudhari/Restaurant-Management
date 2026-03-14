@@ -12,7 +12,7 @@ import { Trash2 } from "lucide-react";
 
 import { SquarePen } from "lucide-react";
 interface menuAdd {
-  id: any;
+  _id: any;
   menuName: string;
   price: string;
   category: string;
@@ -33,7 +33,7 @@ const Menu = () => {
   const formHandle = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if(editMenu){
-      const res = await axios.put(`http://localhost:3000/menu/${editMenu.id}`)
+      const res = await axios.put(`http://localhost:3000/menu/${editMenu._id}`)
     }else{
       // FormatData
     const formData = new FormData();
@@ -45,24 +45,21 @@ const Menu = () => {
       formData.append("photo", photo);
     }
     try {
+
+      const token = localStorage.getItem("token")
+
       const res = await axios.post(
-        "http://localhost:3000/menu",
-        {
-          menuName,
-          price,
-          category,
-          available,
-          photo,
-        },
-        {
-          headers: {},
-        },
+        "http://localhost:3000/menu/add-menu",formData,{
+          headers:{
+            Authorization:`Bearer ${token}`
+          }
+        }
       );
       console.log(res.data);
 
       toast.success("Menu Add Sucessfull..");
     } catch (err) {
-      console.log(err);
+      console.log("error",err);
     }
 
     }
@@ -106,7 +103,7 @@ const Menu = () => {
 
         <Slide />
         <section className="w-full  bg-[#E9E9E9] min-h-screen  ">
-          {/* <div className="flex justify-between mx-5 mt-5 bg-white p-2 rounded-full items-center">
+           <div className="flex justify-between mx-5 mt-5 bg-white p-2 rounded-full items-center">
             <h1 className="mx-2 md:text-[20px] font-bold">
               {editMenu ? "Edit Menu" : "Menu"}
             </h1>
@@ -119,28 +116,8 @@ const Menu = () => {
             <span className="md:hidden" onClick={() => dispatch(menuOpen())}>
               {Open ? <X /> : <MenuIcon />}
             </span>
-          </div> */}
-           <div className=" flex justify-between mx-5 mt-5 bg-white p-2 rounded-full items-center">
-                    <h1 className="mx-2 md:text-[20px] font-bold">
-                     
-                    </h1>
-                    <Link to="/login">
-                      {" "}
-                      <button className="hidden md:block rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300">
-                        Logout
-                      </button>
-                    </Link>
-                    
-                    <span className="md:hidden" onClick={()=> dispatch(menuOpen())}>
-                      {Open ?(
-                         <X/>
-                      ):(
-                        <Menu/>
-                      )}
-          
-                    </span>
-                  </div>
-          
+          </div> 
+           
           {/* Add Menu Form */}
           <div className=" flex justify-center p-2 md:p-0 mx-5 md:mx-2 lg:mx-0">
             <form
@@ -268,7 +245,7 @@ const Menu = () => {
                         <div className="relative group">
                           <Trash2
                             className="text-black cursor-pointer transform hover:-translate-y-0.5 duration-300"
-                            onClick={() => deleteMenu(m.id)}
+                            onClick={() => deleteMenu(m._id)}
                           />
 
                           <span className="absolute left-1/2 bottom-full bg-red-600 text-white text-sm rounded px-2 py-1 mb-2 hidden group-hover:block">
