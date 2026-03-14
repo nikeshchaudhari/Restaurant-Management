@@ -17,7 +17,8 @@ const userSchema = new mongoose.Schema({
     },
     ImageId:{type:String},
     ImageUrl:{type:String},
-    createdBy:{type:mongoose.Schema.Types.ObjectId, ref:"users"}
+    createdBy:{type:mongoose.Schema.Types.ObjectId, ref:"users"},
+   
 },{
     timestamps:true
 })
