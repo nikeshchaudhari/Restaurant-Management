@@ -28,6 +28,7 @@ route.post("/add-menu", async (req, res) => {
       menuName: req.body.menuName,
       price: req.body.price,
       category: req.body.category,
+      available:req.body.available,
       description: req.body.description,
       imageId: uploadPhoto.public_id,
       imageUrl: uploadPhoto.secure_url,
