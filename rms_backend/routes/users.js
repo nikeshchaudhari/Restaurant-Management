@@ -36,6 +36,7 @@ route.post("/admin", async (req, res) => {
       email: req.body.email,
       password: hash,
       role: "admin",
+     
     });
     const admin = await createAdmin.save();
 
@@ -44,7 +45,8 @@ route.post("/admin", async (req, res) => {
       _id: admin._id,
       fullName: admin.fullName,
       email: admin.email,
-      role:admin.role
+      role:admin.role,
+      
     });
   } catch (err) {
     console.log("error");
@@ -154,6 +156,7 @@ route.post("/login", async (req, res) => {
         fullName: user[0].fullName,
         email: user[0].email,
         role: user[0].role,
+        resturantId :user[0].restaurantId
       },
       "rmskey",
       {
