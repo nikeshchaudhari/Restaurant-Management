@@ -6,8 +6,9 @@ const Protected = ({children}:any) => {
 const navigate = useNavigate()
 useEffect(()=>{
 const token = localStorage.getItem("token")
+const role = localStorage.getItem("role")
 
-if(!token){
+if(!token || role !=="admin"){
 navigate("/login")
 }
 },[])
