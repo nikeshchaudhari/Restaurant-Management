@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import type { AppDispatch, RootState } from "../store/store";
 import { MenuIcon, X } from "lucide-react";
 import { menuOpen } from "../features/menuSlice";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Trash2 } from "lucide-react";
@@ -17,7 +17,7 @@ interface menuAdd {
   price: string;
   category: string;
   available: string;
-   photo?: string;
+  photo?: string;
 }
 const Menu = () => {
   const [menuName, setMenuName] = useState<string>("");
@@ -26,47 +26,55 @@ const Menu = () => {
   const [available, setAvailable] = useState<string>("available");
   const [photo, setPhoto] = useState<File | null>(null);
   const [editMenu, setEditMenu] = useState<menuAdd | null>(null);
-  const [menu, setMenu] = useState<menuAdd []>([]);
+  const [menu, setMenu] = useState<menuAdd[]>([]);
+
+  // reset_file
+  const fileReset = useRef<HTMLInputElement>(null);
+  // state
   const dispatch: AppDispatch = useDispatch();
   const Open = useSelector((state: RootState) => state.menu.isOpen);
 
+  // form handle
   const formHandle = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if(editMenu){
-      const res = await axios.put(`http://localhost:3000/menu/${editMenu._id}`)
-    }else{
+    if (editMenu) {
+      const res = await axios.put(`http://localhost:3000/menu/${editMenu._id}`);
+    } else {
       // FormatData
-    const formData = new FormData();
-    formData.append("menuName", menuName);
-    formData.append("price", price);
-    formData.append("category", category);
-    formData.append("available", available);
-    if (photo) {
-      formData.append("photo", photo);
+      const formData = new FormData();
+      formData.append("menuName", menuName);
+      formData.append("price", price);
+      formData.append("category", category);
+      formData.append("available", available);
+      if (photo) {
+        formData.append("photo", photo);
+      }
+      try {
+        const token = localStorage.getItem("token");
+
+        const res = await axios.post(
+          "http://localhost:3000/menu/add-menu",
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+        console.log(res.data);
+
+        toast.success("Menu Add Sucessfully..");
+      } catch (err) {
+        console.log("error", err);
+      }
     }
-    try {
 
-      const token = localStorage.getItem("token")
-
-      const res = await axios.post(
-        "http://localhost:3000/menu/add-menu",formData,{
-          headers:{
-            Authorization:`Bearer ${token}`
-          }
-        }
-      );
-      console.log(res.data);
-
-      toast.success("Menu Add Sucessfull..");
-    } catch (err) {
-      console.log("error",err);
-    }
-
-    }
-
-    
     (setMenuName(""), setPrice(""), setCategory(""), setAvailable(""));
     setPhoto(null);
+
+    if (fileReset.current) {
+      fileReset.current.value = "";
+    }
   };
 
   // fetch Data
@@ -74,8 +82,8 @@ const Menu = () => {
   useEffect(() => {
     const dataFect = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/menu");
-        setMenu(res.data);
+        const res = await axios.get("http://localhost:3000/menu/all-menu");
+        setMenu(res.data.allMenu.reverse());
       } catch (err) {
         console.log(err);
       }
@@ -88,13 +96,11 @@ const Menu = () => {
   const deleteMenu = async (id: any) => {
     try {
       await axios.delete(`http://localhost:3000/menu/${id}`);
-      toast.success("delete menu")
+      toast.success("delete menu");
     } catch (err) {
       console.log(err);
-
     }
-
-  }
+  };
 
   return (
     <>
@@ -103,7 +109,7 @@ const Menu = () => {
 
         <Slide />
         <section className="w-full  bg-[#E9E9E9] min-h-screen  ">
-           <div className="flex justify-between mx-5 mt-5 bg-white p-2 rounded-full items-center">
+          <div className="flex justify-between mx-5 mt-5 bg-white p-2 rounded-full items-center">
             <h1 className="mx-2 md:text-[20px] font-bold">
               {editMenu ? "Edit Menu" : "Menu"}
             </h1>
@@ -116,8 +122,8 @@ const Menu = () => {
             <span className="md:hidden" onClick={() => dispatch(menuOpen())}>
               {Open ? <X /> : <MenuIcon />}
             </span>
-          </div> 
-           
+          </div>
+
           {/* Add Menu Form */}
           <div className=" flex justify-center p-2 md:p-0 mx-5 md:mx-2 lg:mx-0">
             <form
@@ -216,31 +222,29 @@ const Menu = () => {
                 ) : (
                   menu.map((m, i) => (
                     <tr key={i}>
-                      <td>{i + 1}</td>
-                      <td>{m.menuName}</td>
-                      <td>{m.category}</td>
-                      <td>{m.price}</td>
-                      <td>Photo</td>
+                      <td className=" px-2 md:px-4 py-2">{menu.length - i}</td>
+                      <td className=" px-2 md:px-4 py-2">{m.menuName}</td>
+                      <td className=" px-2 md:px-4 py-2">{m.category}</td>
+                      <td className=" px-2 md:px-4 py-2">{m.price}</td>
+                      <td className=" px-2 md:px-4 py-2">Photo</td>
                       <td className="flex gap-5 justify-start items-center px-2 md:px-4 py-2 text-[20px] ">
-
                         <div className="relative  group">
-                          <SquarePen  className="text-black cursor-pointer transform hover:-translate-y-0.5 duration-300" onClick={()=>{
-                            setMenuName(m.menuName);
-                            setCategory(m.category);
-                            setAvailable(m.available);
-                            setPrice(m.price)
-                            // setPhoto(m.photo)
-                          }
-                          
-                            
-                            
-                          } />
-                          <span className="absolute bottom-full left-1/2 hidden group-hover:block bg-black text-white text-sm mb-2 rounded px-2 py-1 whitespace-nowrap 
-                        ">
+                          <SquarePen
+                            className="text-black cursor-pointer transform hover:-translate-y-0.5 duration-300"
+                            onClick={() => {
+                              setMenuName(m.menuName);
+                              setCategory(m.category);
+                              setAvailable(m.available);
+                              setPrice(m.price);
+                              // setPhoto(m.photo)
+                            }}
+                          />
+                          <span
+                            className="absolute bottom-full left-1/2 hidden group-hover:block bg-black text-white text-sm mb-2 rounded px-2 py-1 whitespace-nowrap 
+                        "
+                          >
                             Edit
                           </span>
-
-
                         </div>
                         <div className="relative group">
                           <Trash2
@@ -250,7 +254,6 @@ const Menu = () => {
 
                           <span className="absolute left-1/2 bottom-full bg-red-600 text-white text-sm rounded px-2 py-1 mb-2 hidden group-hover:block">
                             Delete
-
                           </span>
                         </div>
                       </td>
