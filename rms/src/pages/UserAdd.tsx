@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Slide from "../components/Slide";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import MobileDashboard from "../components/MobileDashboard";
@@ -26,6 +26,7 @@ const UserAdd = () => {
   const [role, SetRole] = useState<string>("waiter");
   const [users, setUser] = useState<User[]>([]);
   const [editUser, setEditUser] = useState<User | null>(null);
+  const navigate = useNavigate();
 
   const data = {
     fullName,
@@ -61,7 +62,9 @@ const UserAdd = () => {
         toast.success("User Update Sucessfully....");
 
         setUser((prev) =>
-          prev.map((u) => (u._id === editUser._id ? res.data.updateData||res.data : u)),
+          prev.map((u) =>
+            u._id === editUser._id ? res.data.updateData || res.data : u,
+          ),
         );
 
         setEditUser(null);
@@ -92,9 +95,13 @@ const UserAdd = () => {
       SetEmail("");
       SetPassword("");
       SetRole("");
-    } catch (err) {
-      toast.error("Error");
-      console.log(err);
+    } catch (err: any) {
+      if (err.response && err.response.status === 401) {
+        toast.error(err.response.data.msg || "Email already exists");
+      } else {
+        toast.error("Something went wrong");
+        console.log(err);
+      }
     }
   };
 
@@ -120,7 +127,14 @@ const UserAdd = () => {
     if (!window.confirm("Are You Sure you want  to delete this user?")) return;
 
     try {
-      await axios.delete(`http://localhost:3000/newuser/${id}`);
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast.error("Please login first");
+        return;
+      }
+      await axios.delete(`http://localhost:3000/user/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       toast.success("User deleted successfully");
 
       setUser((prevUser) => prevUser.filter((users) => users._id !== id));
@@ -133,6 +147,14 @@ const UserAdd = () => {
 
   const dispatch: AppDispatch = useDispatch();
   const Open = useSelector((state: RootState) => state.menu.isOpen);
+
+  // logout
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    navigate("/login");
+  };
   return (
     <main className="flex">
       <MobileDashboard />
@@ -143,12 +165,13 @@ const UserAdd = () => {
           <h1 className="mx-2 md:text-[20px] font-bold">
             {editUser ? "EditUser" : "Users"}
           </h1>
-          <Link to="/login">
-            {" "}
-            <button className="hidden md:block rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300">
-              Logout
-            </button>
-          </Link>
+
+          <button
+            className="hidden md:block rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300"
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
 
           <span className="md:hidden" onClick={() => dispatch(menuOpen())}>
             {Open ? <X /> : <Menu />}
@@ -261,7 +284,7 @@ const UserAdd = () => {
                           className="text-[#080833] cursor-pointer transform hover:-translate-y-0.5 duration-300  "
                           onClick={() => {
                             setEditUser(user);
-                            console.log("Edit clicked:", user); // यो हेर्नुहोस्
+                            console.log("Edit clicked:", user);
 
                             SetfullName(user.fullName);
                             console.log("Setting fullName:", user.fullName);
