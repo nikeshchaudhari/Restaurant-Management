@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Slide from "../components/Slide";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import MobileDashboard from "../components/MobileDashboard";
