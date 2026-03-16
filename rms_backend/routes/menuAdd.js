@@ -3,6 +3,7 @@ const route = express.Router();
 const Menu = require("../model/Menu");
 const mongoose = require("mongoose");
 const cloudinary = require("cloudinary").v2;
+const Auth = require("../middleware/Auth");
 require("dotenv").config();
 
 cloudinary.config({
@@ -12,8 +13,36 @@ cloudinary.config({
 });
 
 // menu-added
-route.post("/add-menu", async (req, res) => {
+route.post("/add-menu",Auth, async (req, res) => {
   try {
+
+    if(!req.files && !req.files.photo){
+      return res.status(400).json({
+        msg:"Photo is required"
+      })
+    }
+
+const photo = req.files.photo
+
+// photo type check
+const allowedType = ["image/jpeg","imahe/png","image/jpg"];
+
+if(!allowedType.includes(photo.mimetype)){
+  return res.status(400).json({
+    msg:"Only Jpeg,Png & Jpg"
+  })
+}
+
+// photo size
+
+const maxSize = 2*1024*1024;
+
+if(photo.size>maxSize){
+  return res.status(400).json({
+     msg: "Image size must be less than 2MB"
+  })
+}
+
     const uploadPhoto = await cloudinary.uploader.upload(
       req.files.photo.tempFilePath,
       {
@@ -47,7 +76,7 @@ route.post("/add-menu", async (req, res) => {
   }
 });
 
-// get all value
+// get all menu
 
 route.get("/all-menu", async (req, res) => {
   try {
@@ -104,6 +133,8 @@ route.put("/:id", async (req, res) => {
     });
   }
 });
+
+
 // delete menu
 
 route.delete("/:id", async (req, res) => {

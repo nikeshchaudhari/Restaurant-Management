@@ -10,7 +10,7 @@ const verifyToken = await jwt.verify(token,"rmskey")
 console.log("token verify__middleware ");
 
 req.user= verifyToken;
-// console.log(req.user);
+console.log(req.user);
 
 
 next();

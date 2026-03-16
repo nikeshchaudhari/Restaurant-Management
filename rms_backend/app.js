@@ -5,20 +5,21 @@ const mongoose = require("mongoose");
 const userRoute = require("./routes/users");
 const menuRoute = require("./routes/menuAdd");
 const tableRoute = require("./routes/tableAdd");
-const orderRoute = require("./routes/order")
+const orderRoute = require("./routes/order");
+const resRoute = require("./routes/restaurantAdd")
 const cors = require("cors");
 const dns = require("dns");
 const fileUpload = require("express-fileupload");
 dns.setServers(["1.1.1.1", "8.8.8.8"]);
 
-require("dotenv").config();
+require("dotenv").config()
 
 const connDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URL);
+    await mongoose.connect(process.env.MONGO_URI);
     console.log("Database connected...");
   } catch (err) {
-    console.log("Connection Failed...", err);
+    console.log("Connection Failed...");
   }
 };
 connDB();
@@ -34,5 +35,6 @@ app.use(
 app.use("/user", userRoute);
 app.use("/menu", menuRoute);
 app.use("/table",tableRoute);
-app.use("/order",orderRoute)
+app.use("/order",orderRoute);
+app.use("/addname",resRoute)
 module.exports = app;

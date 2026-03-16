@@ -2,7 +2,7 @@ const mongoose = require("mongoose")
 const userSchema = new mongoose.Schema({
     _id:mongoose.Types.ObjectId,
     fullName:{type:String,required:true},
-    email:{type:String,required:true},
+    email:{type:String,required:true,unique:true},
     password:{type:String,required:true},
     confirm_password:{type:String},
     role:{

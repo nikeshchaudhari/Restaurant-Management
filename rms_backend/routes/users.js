@@ -65,6 +65,11 @@ route.post("/add-user", Auth, async (req, res) => {
     // check main
 
     const user = await User.find({ email: req.body.email });
+    if(user.length>0){
+      return res.status(401).json({
+        msg:"Email already register"
+      })
+    }
 
     console.log(user[0]);
 
@@ -223,6 +228,15 @@ route.get("/all-user", async (req, res) => {
 
 route.put("/:id", Auth, async (req, res) => {
   try {
+    const email = await User.find({email:req.body.email})
+    if(email.length >0){
+      return res.status(401).json({
+        msg:"Email already register"
+      })
+     
+    }
+
+      
     const user = await User.find({ _id: req.params.id });
     console.log(user[0]);
 
@@ -275,12 +289,14 @@ route.put("/:id", Auth, async (req, res) => {
 
 // delete user
 
-route.delete("/:id", async (req, res) => {
+route.delete("/:id",Auth, async (req, res) => {
   try {
     const deleteUser = await User.find({ _id: req.params.id });
     console.log(deleteUser[0]);
 
-    await cloudinary.uploader.destroy(deleteUser[0].ImageId);
+   if(deleteUser.ImageId){
+     await cloudinary.uploader.destroy(deleteUser[0].ImageId);
+   }
     const deleteData = await User.findByIdAndDelete(req.params.id);
 
     res.status(200).json({
