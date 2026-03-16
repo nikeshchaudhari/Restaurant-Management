@@ -28,8 +28,6 @@ const Menu = () => {
   const [editMenu, setEditMenu] = useState<menuAdd | null>(null);
   const [menu, setMenu] = useState<menuAdd[]>([]);
 
-  // reset_file
-  const fileReset = useRef<HTMLInputElement>(null);
   // state
   const dispatch: AppDispatch = useDispatch();
   const Open = useSelector((state: RootState) => state.menu.isOpen);
@@ -37,21 +35,42 @@ const Menu = () => {
   // form handle
   const formHandle = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (editMenu) {
-      const res = await axios.put(`http://localhost:3000/menu/${editMenu._id}`);
-    } else {
-      // FormatData
+
+    try {
+      const token = localStorage.getItem("token");
+
+      // FormData
       const formData = new FormData();
       formData.append("menuName", menuName);
       formData.append("price", price);
       formData.append("category", category);
       formData.append("available", available);
+
       if (photo) {
         formData.append("photo", photo);
       }
-      try {
-        const token = localStorage.getItem("token");
 
+      if (editMenu) {
+        // UPDATE MENU
+        const res = await axios.put(
+          `http://localhost:3000/menu/${editMenu._id}`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        toast.success("Menu Updated Successfully");
+
+        setMenu((prev) =>
+          prev.map((m) => (m._id === editMenu._id ? res.data.menu : m)),
+        );
+
+        setEditMenu(null);
+      } else {
+        // ADD MENU
         const res = await axios.post(
           "http://localhost:3000/menu/add-menu",
           formData,
@@ -61,19 +80,21 @@ const Menu = () => {
             },
           },
         );
-        console.log(res.data);
 
-        toast.success("Menu Add Sucessfully..");
-      } catch (err) {
-        console.log("error", err);
+        toast.success("Menu Add Successfully");
+
+        setMenu((prev) => [res.data.menu, ...prev]);
       }
-    }
 
-    (setMenuName(""), setPrice(""), setCategory(""), setAvailable(""));
-    setPhoto(null);
-
-    if (fileReset.current) {
-      fileReset.current.value = "";
+      // Clear form
+      setMenuName("");
+      setPrice("");
+      setCategory("");
+      setAvailable("");
+      setPhoto(null);
+    } catch (err: any) {
+      toast.error("Something went wrong");
+      console.log(err);
     }
   };
 
@@ -95,8 +116,19 @@ const Menu = () => {
 
   const deleteMenu = async (id: any) => {
     try {
-      await axios.delete(`http://localhost:3000/menu/${id}`);
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast.error("Please login first");
+        return;
+      }
+      await axios.delete(`http://localhost:3000/menu/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       toast.success("delete menu");
+
+      setMenu((prevMenu)=> prevMenu.filter((menus)=>menus._id !==id))
     } catch (err) {
       console.log(err);
     }
@@ -130,7 +162,9 @@ const Menu = () => {
               onSubmit={formHandle}
               className="bg-white w-full md:w-250 h-full mt-5 rounded-md p-5"
             >
-              <h1 className="text-2xl font-medium mb-3">Menu Add</h1>
+              <h1 className="text-2xl font-medium mb-3">
+                {editMenu?"Update Menu":"Menu"}
+              </h1>
               <input
                 type="text"
                 placeholder="Enter Menu Name"
@@ -232,11 +266,15 @@ const Menu = () => {
                           <SquarePen
                             className="text-black cursor-pointer transform hover:-translate-y-0.5 duration-300"
                             onClick={() => {
+
+                              setEditMenu(m)
                               setMenuName(m.menuName);
+                              console.log(m.menuName);
+                              
                               setCategory(m.category);
                               setAvailable(m.available);
                               setPrice(m.price);
-                              // setPhoto(m.photo)
+                              
                             }}
                           />
                           <span
