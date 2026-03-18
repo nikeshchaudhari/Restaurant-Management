@@ -62,12 +62,16 @@ const Menu = () => {
           },
         );
 
+        console.log("Update", res.data);
+
+        const updateItem = res.data.menu || res.data.updateData|| res.data;
+
         toast.success("Menu Updated Successfully");
 
         setMenu((prev) =>
-          prev.map((m) => (m._id === editMenu._id ? res.data.menu : m)),
+          prev.map((m) => (m._id === editMenu._id ? updateItem: m)),
         );
-
+        console.log("Before:", menu);
         setEditMenu(null);
       } else {
         // ADD MENU
@@ -128,7 +132,7 @@ const Menu = () => {
       });
       toast.success("delete menu");
 
-      setMenu((prevMenu)=> prevMenu.filter((menus)=>menus._id !==id))
+      setMenu((prevMenu) => prevMenu.filter((menus) => menus._id !== id));
     } catch (err) {
       console.log(err);
     }
@@ -163,7 +167,7 @@ const Menu = () => {
               className="bg-white w-full md:w-250 h-full mt-5 rounded-md p-5"
             >
               <h1 className="text-2xl font-medium mb-3">
-                {editMenu?"Update Menu":"Menu"}
+                {editMenu ? "Update Menu" : "Menu"}
               </h1>
               <input
                 type="text"
@@ -223,7 +227,7 @@ const Menu = () => {
                   type="submit"
                   className="w-full bg-[#080833] p-2 rounded text-white md:font-bold cursor-pointer transition hover:bg-[#232341] duration-300"
                 >
-                  Add Menu
+                  {editMenu ? "Update Menu" : "Add Menu"}
                 </button>
               </div>
             </form>
@@ -266,15 +270,13 @@ const Menu = () => {
                           <SquarePen
                             className="text-black cursor-pointer transform hover:-translate-y-0.5 duration-300"
                             onClick={() => {
-
-                              setEditMenu(m)
+                              setEditMenu(m);
                               setMenuName(m.menuName);
                               console.log(m.menuName);
-                              
+
                               setCategory(m.category);
                               setAvailable(m.available);
                               setPrice(m.price);
-                              
                             }}
                           />
                           <span
