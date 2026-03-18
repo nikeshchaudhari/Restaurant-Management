@@ -98,7 +98,7 @@ route.get("/all-menu", async (req, res) => {
 route.put("/:id", async (req, res) => {
   try {
     const menu = await Menu.find({ _id: req.params.id });
-    console.log(menu);
+    // console.log(menu);
 
     if (req.files && req.files.photo) {
       await cloudinary.uploader.destroy(menu[0].imageId);
@@ -122,7 +122,7 @@ route.put("/:id", async (req, res) => {
         returnDocument: "after",
       });
 
-      res.status(400).json({
+      res.status(200).json({
         updateData: findData,
       });
     }

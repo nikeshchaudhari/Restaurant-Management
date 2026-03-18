@@ -32,6 +32,10 @@ const Menu = () => {
   const dispatch: AppDispatch = useDispatch();
   const Open = useSelector((state: RootState) => state.menu.isOpen);
 
+  // reset file
+
+  const resetFile = useRef<HTMLInputElement>(null)
+
   // form handle
   const formHandle = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -96,6 +100,11 @@ const Menu = () => {
       setCategory("");
       setAvailable("");
       setPhoto(null);
+
+
+      if(resetFile.current){
+        resetFile.current.value="";
+      }
     } catch (err: any) {
       toast.error("Something went wrong");
       console.log(err);
@@ -218,6 +227,8 @@ const Menu = () => {
               <input
                 type="file"
                 className="border border-gray-300 outline-none cursor-pointer  w-full p-2  rounded mb-3 focus:ring-1 focus:ring-blue-500 "
+
+                ref={resetFile}
                 onChange={(e) => {
                   if (e.target.files) setPhoto(e.target.files[0]);
                 }}
@@ -264,7 +275,9 @@ const Menu = () => {
                       <td className=" px-2 md:px-4 py-2">{m.menuName}</td>
                       <td className=" px-2 md:px-4 py-2">{m.category}</td>
                       <td className=" px-2 md:px-4 py-2">{m.price}</td>
-                      <td className=" px-2 md:px-4 py-2">Photo</td>
+                      <td className=" px-2 md:px-4 py-2">
+                        <a href={m.imageUrl} target="_blank" className="text-blue-600 underline" >View Photo</a>
+                      </td>
                       <td className="flex gap-5 justify-start items-center px-2 md:px-4 py-2 text-[20px] ">
                         <div className="relative  group">
                           <SquarePen
@@ -277,6 +290,7 @@ const Menu = () => {
                               setCategory(m.category);
                               setAvailable(m.available);
                               setPrice(m.price);
+                              setPhoto(null)
                             }}
                           />
                           <span
