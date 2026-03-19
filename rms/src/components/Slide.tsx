@@ -11,7 +11,7 @@ import { Settings2 } from "lucide-react";
 const Slide = () => {
   return (
     <>
-      <aside className="hidden md:block py-5 w-70 bg-[rgb(16,34,55)] h-screen sticky top-0 flex-shrink-0 overflow-y-auto">
+      <aside className="hidden md:block py-5 w-70 bg-[rgb(16,34,55)] h-screen sticky top-0 shrink-0 overflow-y-auto">
         <div className="py-2 flex justify-center items-center gap-2">
           <img src={adminLogo} alt="" className="w-10 h-10" />
           <h1 className="text-white text-[30px] font-bold"> RMS Admin </h1>
