@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import MobileDashboard from "../components/MobileDashboard";
 import Slide from "../components/Slide";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import type { AppDispatch, RootState } from "../store/store";
 import { MenuIcon, X } from "lucide-react";
 import { menuOpen } from "../features/menuSlice";
@@ -12,6 +12,7 @@ import { Trash2 } from "lucide-react";
 
 import { SquarePen } from "lucide-react";
 interface menuAdd {
+  imageUrl: string | undefined;
   _id: any;
   menuName: string;
   price: string;
@@ -27,6 +28,8 @@ const Menu = () => {
   const [photo, setPhoto] = useState<File | null>(null);
   const [editMenu, setEditMenu] = useState<menuAdd | null>(null);
   const [menu, setMenu] = useState<menuAdd[]>([]);
+
+  const navigate = useNavigate()
 
   // state
   const dispatch: AppDispatch = useDispatch();
@@ -147,6 +150,18 @@ const Menu = () => {
     }
   };
 
+
+  // logout
+
+  const logoutHandle =()=>{
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+
+
+    navigate("/login");
+
+   
+  }
   return (
     <>
       <main className="md:flex">
@@ -158,12 +173,11 @@ const Menu = () => {
             <h1 className="mx-2 md:text-[20px] font-bold">
               {editMenu ? "Edit Menu" : "Menu"}
             </h1>
-            <Link to="/login">
-              {" "}
-              <button className="hidden md:block rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300">
+            
+              <button className="hidden md:block rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300" onClick={logoutHandle}>
                 Logout
               </button>
-            </Link>
+           
             <span className="md:hidden" onClick={() => dispatch(menuOpen())}>
               {Open ? <X /> : <MenuIcon />}
             </span>
