@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { menuOpen } from "../features/menuSlice";
 const TableBooks = () => {
   interface tableData {
-    id: any;
+    _id: any;
     tableNumber: string;
     capacity: string;
     status: string;
@@ -30,10 +30,15 @@ const TableBooks = () => {
   const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+
+
     try {
+      const token = localStorage.getItem("token") 
+      console.log(token);
+      
       if (editTable) {
         const updateTable = await axios.put(
-          `http://localhost:3000/tables/${editTable.id}`,
+          `http://localhost:3000/tables/${editTable._id}`,
           {
             tableNumber,
             capacity,
@@ -42,17 +47,23 @@ const TableBooks = () => {
         );
         toast.success("Table update Sucessfully!!");
         setTable((prev) =>
-          prev.map((t) => (t.id === editTable.id ? updateTable.data : t)),
+          prev.map((t) => (t._id === editTable._id ? updateTable.data : t)),
         );
       } else {
-        const postData = await axios.post("http://localhost:3000/tables", {
+
+
+        const postData = await axios.post("http://localhost:3000/table/add-table", {
           tableNumber,
           capacity,
           status,
+        },{
+          headers:{
+            Authorization:`Bearer ${token}`
+          }
         });
 
         toast.success("Table Added Sucessfully!");
-        setTable((prev) => [postData.data, ...prev]);
+        setTable((prev) => [postData.data.addData, ...prev]);
       }
     } catch (err) {
       console.log(err);
@@ -67,13 +78,13 @@ const TableBooks = () => {
   useEffect(() => {
     const dataFetch = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/tables");
-        setTable(res.data.reverse());
-        console.log(res.data);
+        const res = await axios.get("http://localhost:3000/table/all-table");
+        setTable(res.data.allData.reverse());
+        console.log(res.data.allData);
       } catch (err) {
         console.log(err);
       }
-    };
+    };    
     dataFetch();
   }, []);
 
@@ -83,7 +94,7 @@ const TableBooks = () => {
     try {
       await axios.delete(`http://localhost:3000/tables/${id}`);
       toast.success("Table deleted");
-      setTable((prevTable) => prevTable.filter((table) => table.id !== id));
+      setTable((prevTable) => prevTable.filter((table) => table._id !== id));
     } catch (err) {
       console.log(err);
     }
@@ -205,7 +216,7 @@ const TableBooks = () => {
                         <div className="relative group">
                           <Trash2
                             className="text-black cursor-pointer transform hover:-translate-y-0.5 duration-300"
-                            onClick={() => deleteTable(items.id)}
+                            onClick={() => deleteTable(items._id)}
                           />
                           <span className="absolute left-1/2 bottom-full bg-red-600 text-white text-sm rounded px-2 py-1 mb-2 hidden group-hover:block">
                             Delete
