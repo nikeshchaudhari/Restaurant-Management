@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import MobileDashboard from "../components/MobileDashboard";
 import Slide from "../components/Slide";
 import { useEffect, useState } from "react";
