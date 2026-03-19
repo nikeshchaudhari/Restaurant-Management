@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import MobileDashboard from "../components/MobileDashboard";
 import Slide from "../components/Slide";
 import { useEffect, useState } from "react";
@@ -25,6 +25,7 @@ const TableBooks = () => {
   const [capacity, setCapacity] = useState<string>("");
   const [status, setStatus] = useState<string>("");
   const [editTable, setEditTable] = useState<tableData | null>(null);
+  const navigate = useNavigate()
 
   // post data
   const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -38,7 +39,7 @@ const TableBooks = () => {
       
       if (editTable) {
         const updateTable = await axios.put(
-          `http://localhost:3000/tables/${editTable._id}`,
+          `http://localhost:3000/table/${editTable._id}`,
           {
             tableNumber,
             capacity,
@@ -47,7 +48,7 @@ const TableBooks = () => {
         );
         toast.success("Table update Sucessfully!!");
         setTable((prev) =>
-          prev.map((t) => (t._id === editTable._id ? updateTable.data : t)),
+          prev.map((t) => (t._id === editTable._id ? updateTable.data.updateData : t)),
         );
       } else {
 
@@ -92,13 +93,28 @@ const TableBooks = () => {
 
   const deleteTable = async (id: any) => {
     try {
-      await axios.delete(`http://localhost:3000/tables/${id}`);
+
+      const token = localStorage.getItem("token")
+      await axios.delete(`http://localhost:3000/table/${id}`,{
+        headers:{
+          Authorization:`Bearer ${token}`
+        }
+      });
       toast.success("Table deleted");
       setTable((prevTable) => prevTable.filter((table) => table._id !== id));
     } catch (err) {
       console.log(err);
     }
   };
+
+  // logout
+
+  const logoutHandle=()=>{
+    localStorage.removeItem("token")
+    localStorage.removeItem("role")
+
+    navigate("/login");
+  }
   return (
     <>
       <main className="flex">
@@ -108,12 +124,11 @@ const TableBooks = () => {
         <section className="w-screen  bg-[#E9E9E9] min-h-screen ">
           <div className=" flex justify-between mx-5 mt-5 bg-white p-2 rounded-full items-center">
             <h1 className="mx-2 md:text-[20px] font-bold">Tables</h1>
-            <Link to="/login">
-              {" "}
-              <button className="hidden md:block rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300">
+            
+              <button className="hidden md:block rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300" onClick={logoutHandle}>
                 Logout
               </button>
-            </Link>
+          
 
             <span className="md:hidden" onClick={()=>dispatch(menuOpen())}>{Open ? <X /> : <Menu />}</span>
           </div>
