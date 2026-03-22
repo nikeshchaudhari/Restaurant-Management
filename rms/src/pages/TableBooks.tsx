@@ -1,10 +1,10 @@
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import MobileDashboard from "../components/MobileDashboard";
 import Slide from "../components/Slide";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Menu, Trash2 } from "lucide-react";
-import {  X } from "lucide-react";
+import { X } from "lucide-react";
 
 import { SquarePen } from "lucide-react";
 import { toast } from "react-toastify";
@@ -25,18 +25,16 @@ const TableBooks = () => {
   const [capacity, setCapacity] = useState<string>("");
   const [status, setStatus] = useState<string>("");
   const [editTable, setEditTable] = useState<tableData | null>(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // post data
   const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-
-
     try {
-      const token = localStorage.getItem("token") 
+      const token = localStorage.getItem("token");
       console.log(token);
-      
+
       if (editTable) {
         const updateTable = await axios.put(
           `http://localhost:3000/table/${editTable._id}`,
@@ -48,20 +46,24 @@ const TableBooks = () => {
         );
         toast.success("Table update Sucessfully!!");
         setTable((prev) =>
-          prev.map((t) => (t._id === editTable._id ? updateTable.data.updateData : t)),
+          prev.map((t) =>
+            t._id === editTable._id ? updateTable.data.updateData : t,
+          ),
         );
       } else {
-
-
-        const postData = await axios.post("http://localhost:3000/table/add-table", {
-          tableNumber,
-          capacity,
-          status,
-        },{
-          headers:{
-            Authorization:`Bearer ${token}`
-          }
-        });
+        const postData = await axios.post(
+          "http://localhost:3000/table/add-table",
+          {
+            tableNumber,
+            capacity,
+            status,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
 
         toast.success("Table Added Sucessfully!");
         setTable((prev) => [postData.data.addData, ...prev]);
@@ -81,11 +83,11 @@ const TableBooks = () => {
       try {
         const res = await axios.get("http://localhost:3000/table/all-table");
         setTable(res.data.allData.reverse());
-        console.log(res.data.allData);
+        // console.log(res.data.allData);
       } catch (err) {
         console.log(err);
       }
-    };    
+    };
     dataFetch();
   }, []);
 
@@ -93,12 +95,11 @@ const TableBooks = () => {
 
   const deleteTable = async (id: any) => {
     try {
-
-      const token = localStorage.getItem("token")
-      await axios.delete(`http://localhost:3000/table/${id}`,{
-        headers:{
-          Authorization:`Bearer ${token}`
-        }
+      const token = localStorage.getItem("token");
+      await axios.delete(`http://localhost:3000/table/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       toast.success("Table deleted");
       setTable((prevTable) => prevTable.filter((table) => table._id !== id));
@@ -109,12 +110,12 @@ const TableBooks = () => {
 
   // logout
 
-  const logoutHandle=()=>{
-    localStorage.removeItem("token")
-    localStorage.removeItem("role")
+  const logoutHandle = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
 
     navigate("/login");
-  }
+  };
   return (
     <>
       <main className="flex">
@@ -124,13 +125,17 @@ const TableBooks = () => {
         <section className="w-screen  bg-[#E9E9E9] min-h-screen ">
           <div className=" flex justify-between mx-5 mt-5 bg-white p-2 rounded-full items-center">
             <h1 className="mx-2 md:text-[20px] font-bold">Tables</h1>
-            
-              <button className="hidden md:block rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300" onClick={logoutHandle}>
-                Logout
-              </button>
-          
 
-            <span className="md:hidden" onClick={()=>dispatch(menuOpen())}>{Open ? <X /> : <Menu />}</span>
+            <button
+              className="hidden md:block rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300"
+              onClick={logoutHandle}
+            >
+              Logout
+            </button>
+
+            <span className="md:hidden" onClick={() => dispatch(menuOpen())}>
+              {Open ? <X /> : <Menu />}
+            </span>
           </div>
           {/* UserAdd  */}
           <div className=" flex justify-center p-2 md:p-0 mx-5 md:mx-2 lg:mx-0">
@@ -170,13 +175,29 @@ const TableBooks = () => {
                 <option value="reserved">Reserved</option>
                 <option value="occupied">Occupied</option>
               </select>
-              <div className="w-full flex justify-center">
+              <div className="w-full flex ">
                 <button
                   type="submit"
-                  className="w-full bg-[#080833] p-2 rounded text-white md:font-bold cursor-pointer transition hover:bg-[#232341] duration-300"
+                  className=" bg-[#080833] px-6 py-2  rounded text-white  cursor-pointer transition hover:bg-[#232341] duration-300 mr-4"
                 >
                   {editTable ? "Update Table" : "Add Table"}
                 </button>
+
+                {editTable && (
+                  <button type="button"
+                  
+                  onClick={()=>{
+                    setEditTable(null);
+                   setTableNumber("");
+                   setCapacity("");
+                   setStatus("")
+
+                   toast.info("Table Cancel")
+                  }}
+                  className=" bg-[#080833] px-6 py-2  rounded text-white  cursor-pointer transition hover:bg-[#232341] duration-300">
+                    Cancel
+                  </button>
+                )}
               </div>
             </form>
           </div>
