@@ -168,7 +168,7 @@ const Menu = () => {
         <MobileDashboard />
 
         <Slide />
-        <section className="w-full  bg-[#E9E9E9] min-h-screen  ">
+        <section className="w-screen bg-[#E9E9E9] min-h-screen  ">
           <div className="flex justify-between mx-5 mt-5 bg-white p-2 rounded-full items-center">
             <h1 className="mx-2 md:text-[20px] font-bold">
               {editMenu ? "Edit Menu" : "Menu"}
@@ -184,10 +184,10 @@ const Menu = () => {
           </div>
 
           {/* Add Menu Form */}
-          <div className=" flex justify-center p-2 md:p-0 mx-5 md:mx-2 lg:mx-0">
+          <div className="max-w-full flex justify-center p-2 md:p-0 mx-5 md:mx-2 lg:mx-0">
             <form
               onSubmit={formHandle}
-              className="bg-white w-full md:w-250 h-full mt-5 rounded-md p-5"
+              className="bg-white w-full md:w-full h-full md:mx-5 mt-5 rounded-md p-5"
             >
               <h1 className="text-2xl font-medium mb-3">
                 {editMenu ? "Update Menu" : "Menu"}
@@ -240,7 +240,7 @@ const Menu = () => {
 
               <input
                 type="file"
-                className="border border-gray-300 outline-none cursor-pointer  w-full p-2  rounded mb-3 focus:ring-1 focus:ring-blue-500 "
+                className="border border-gray-300 outline-none cursor-pointer  w-full p-2  rounded mb-3 focus:ring-1 focus:ring-blue-500 bg-[#e7e6e6]"
 
                 ref={resetFile}
                 onChange={(e) => {
@@ -260,7 +260,7 @@ const Menu = () => {
 
           {/* View All Menu */}
           <div className=" md:flex justify-center  overflow-x-auto p-5">
-            <table className="bg-white min-w-50 w-full md:w-250 h-full mt-5 rounded-md ">
+            <table className="bg-white min-w-50 w-full md:w-full h-full mt-5 rounded-md ">
               <thead className="bg-gray-100 ">
                 <tr>
                   <th className=" px-4 py-2 text-left ">No</th>
