@@ -236,14 +236,36 @@ const UserAdd = () => {
               <option value="admin">Admin</option>
               <option value="waiter">Waiter</option>
             </select>
-            <div className="w-full flex justify-center">
+            <div className="w-full ">
               <button
                 type="submit"
-                className="w-full bg-[#080833] p-2 rounded text-white md:font-bold cursor-pointer transition hover:bg-[#232341] duration-300"
+                className=" bg-[#080833] px-6 py-2 rounded text-white  cursor-pointer transition hover:bg-[#232341] duration-300 mr-5"
               >
                 {editUser ? "Update User" : "Add User"}
               </button>
+
+              {editUser && (
+                <button type="button"
+                onClick={()=>{
+                  setEditUser(null);
+                  // reset field
+
+                  SetfullName("");
+                  SetEmail("");
+                  SetPassword("");
+                  SetRole("")
+
+                  toast.info("Edit Cancel")
+                  
+                }}
+                
+                
+                className=" bg-[#080833] px-6 py-2  rounded text-white  cursor-pointer transition hover:bg-[#232341] duration-300">Cancel</button>
+                
+              )}
+              
             </div>
+           
           </form>
         </div>
 
