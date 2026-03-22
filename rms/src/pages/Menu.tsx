@@ -29,7 +29,7 @@ const Menu = () => {
   const [editMenu, setEditMenu] = useState<menuAdd | null>(null);
   const [menu, setMenu] = useState<menuAdd[]>([]);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // state
   const dispatch: AppDispatch = useDispatch();
@@ -37,7 +37,7 @@ const Menu = () => {
 
   // reset file
 
-  const resetFile = useRef<HTMLInputElement>(null)
+  const resetFile = useRef<HTMLInputElement>(null);
 
   // form handle
   const formHandle = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -71,12 +71,12 @@ const Menu = () => {
 
         console.log("Update", res.data);
 
-        const updateItem = res.data.menu || res.data.updateData|| res.data;
+        const updateItem = res.data.menu || res.data.updateData || res.data;
 
         toast.success("Menu Updated Successfully");
 
         setMenu((prev) =>
-          prev.map((m) => (m._id === editMenu._id ? updateItem: m)),
+          prev.map((m) => (m._id === editMenu._id ? updateItem : m)),
         );
         console.log("Before:", menu);
         setEditMenu(null);
@@ -104,9 +104,8 @@ const Menu = () => {
       setAvailable("");
       setPhoto(null);
 
-
-      if(resetFile.current){
-        resetFile.current.value="";
+      if (resetFile.current) {
+        resetFile.current.value = "";
       }
     } catch (err: any) {
       toast.error("Something went wrong");
@@ -150,18 +149,14 @@ const Menu = () => {
     }
   };
 
-
   // logout
 
-  const logoutHandle =()=>{
+  const logoutHandle = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
 
-
     navigate("/login");
-
-   
-  }
+  };
   return (
     <>
       <main className="md:flex">
@@ -173,11 +168,14 @@ const Menu = () => {
             <h1 className="mx-2 md:text-[20px] font-bold">
               {editMenu ? "Edit Menu" : "Menu"}
             </h1>
-            
-              <button className="hidden md:block rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300" onClick={logoutHandle}>
-                Logout
-              </button>
-           
+
+            <button
+              className="hidden md:block rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300"
+              onClick={logoutHandle}
+            >
+              Logout
+            </button>
+
             <span className="md:hidden" onClick={() => dispatch(menuOpen())}>
               {Open ? <X /> : <MenuIcon />}
             </span>
@@ -241,19 +239,36 @@ const Menu = () => {
               <input
                 type="file"
                 className="border border-gray-300 outline-none cursor-pointer  w-full p-2  rounded mb-3 focus:ring-1 focus:ring-blue-500 bg-[#e7e6e6]"
-
                 ref={resetFile}
                 onChange={(e) => {
                   if (e.target.files) setPhoto(e.target.files[0]);
                 }}
               />
-              <div className="w-full flex justify-center">
+              <div className="w-full flex ">
                 <button
                   type="submit"
-                  className="w-full bg-[#080833] p-2 rounded text-white md:font-bold cursor-pointer transition hover:bg-[#232341] duration-300"
+                  className=" bg-[#080833] px-6 py-2 rounded text-white cursor-pointer transition hover:bg-[#232341] duration-300 mr-4"
                 >
                   {editMenu ? "Update Menu" : "Add Menu"}
                 </button>
+
+                {editMenu && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEditMenu(null);
+                      setMenuName("");
+                      setPrice("");
+                      setCategory("");
+                      setAvailable("");
+
+                      toast.info("Menu Cancel")
+                    }}
+                    className=" bg-[#080833] px-6 py-2 rounded text-white cursor-pointer transition hover:bg-[#232341] duration-300 "
+                  >
+                    Cancel
+                  </button>
+                )}
               </div>
             </form>
           </div>
@@ -290,7 +305,13 @@ const Menu = () => {
                       <td className=" px-2 md:px-4 py-2">{m.category}</td>
                       <td className=" px-2 md:px-4 py-2">{m.price}</td>
                       <td className=" px-2 md:px-4 py-2">
-                        <a href={m.imageUrl} target="_blank" className="text-blue-600 underline" >View Photo</a>
+                        <a
+                          href={m.imageUrl}
+                          target="_blank"
+                          className="text-blue-600 underline"
+                        >
+                          View Photo
+                        </a>
                       </td>
                       <td className="flex gap-5 justify-start items-center px-2 md:px-4 py-2 text-[20px] ">
                         <div className="relative  group">
@@ -304,7 +325,7 @@ const Menu = () => {
                               setCategory(m.category);
                               setAvailable(m.available);
                               setPrice(m.price);
-                              setPhoto(null)
+                              setPhoto(null);
                             }}
                           />
                           <span
