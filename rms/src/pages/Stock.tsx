@@ -40,6 +40,20 @@ const Stock = () => {
               </div>
             </form>
           </div>
+
+          
+        {/* Data View */}
+        <div className=" md:flex justify-center  overflow-x-auto p-5">
+            <table className="bg-white w-full  h-full mt-5 rounded-md ">
+                <thead  className="bg-gray-100 ">
+                    <tr>
+                        <th className=" px-4 py-2 text-left ">Material Name</th>
+                        <th className=" px-4 py-2 text-left ">Quantity</th>
+                        <th className=" px-4 py-2 text-left ">Action</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
         </section>
       </main>
     </>
