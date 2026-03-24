@@ -26,7 +26,7 @@ const UserAdd = () => {
   const [role, SetRole] = useState<string>("waiter");
   const [users, setUser] = useState<User[]>([]);
   const [editUser, setEditUser] = useState<User | null>(null);
-  const [showDelete, setShowDelete] = useState(true);
+  const [showDelete, setShowDelete] = useState(false);
   const navigate = useNavigate();
 
   const data = {
@@ -160,8 +160,15 @@ const UserAdd = () => {
    
       <main className="flex relative ">
        {showDelete &&(
-        <div className="bg-white/50 border w-120 h-60 rounded absolute top-1/3 right-1/3">
-         <h1 className="text-center">Delete</h1>
+        <div className="bg-black/50 inset-0 border w-screen h-full rounded absolute top-0 z-10 flex justify-center items-center">
+         <div className="bg-white w-100 md:w-120  h-50 rounded">
+          <h1 className="text-center pt-8 mb-2 text-[20px] md:text-[30px] font-bold">Delete Confirmation</h1>
+          <p className="text-center">Are You sure you want to delete user</p>
+         <div className="flex justify-center gap-10 py-5">
+           <button className="bg-black/20 py-2 px-4 rounded-3xl cursor-pointer hover:bg-black/40 " onClick={()=>setShowDelete(false)}>Cancel</button>
+          <button  className="bg-red-600 py-2 px-6 rounded-3xl text-white hover:bg-red-700 cursor-pointer " onClick={deleteUser}>Delete</button>
+         </div>
+         </div>
         </div>
        )}
         <MobileDashboard />
@@ -335,7 +342,10 @@ const UserAdd = () => {
                         <div className="relative group">
                           <Trash2
                             className="text-black cursor-pointer transform hover:-translate-y-0.5 duration-300"
-                            onClick={() => deleteUser(user._id)}
+                            onClick={() =>{
+                              //  deleteUser(user._id),
+                               setShowDelete(true)
+                            }}
                           />
 
                           <span className="absolute left-1/2 bottom-full bg-red-600 text-white text-sm rounded px-2 py-1 mb-2 hidden group-hover:block">
