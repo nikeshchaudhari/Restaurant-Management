@@ -291,7 +291,7 @@ const Menu = () => {
                 {menu.length === 0 ? (
                   <tr>
                     <td
-                      colSpan={5}
+                      colSpan={6}
                       className="text-center p-5 text-[20px] font-bold"
                     >
                       Data Not Found
