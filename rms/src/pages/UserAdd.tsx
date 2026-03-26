@@ -138,6 +138,7 @@ const UserAdd = () => {
 
       setUser((prevUser) => prevUser.filter((users) => users._id !== id));
     } catch (err) {
+      
       console.log(err);
     }
   };
