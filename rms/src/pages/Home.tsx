@@ -40,13 +40,42 @@ const Home = () => {
 
         <section className="w-screen relative mt-2  flex items-center overflow-hidden">
           <img src={herobg} alt="" className="w-screen h-[300px] md:h-130" />
-          <div className="absolute left-10 top-5 md:top-10 md: md:left-15 lg:left-40 ">
-            <h1 className=" text-[20px] md:text-[40px] lg:text-[50px] font-extrabold font-['poppins]">Enjoy <span className="text-[#FF8000]">Delicious</span> </h1>
-            <h1 className="text-[20px] md:text-[40px] lg:text-[50px] font-extrabold font-['poppins]">Food In Your  </h1>
-            <h1 className=" text-base md:text-[40px] lg:text-[50px] font-extrabold font-['poppins]">Healthy Life  </h1>
-            <p className="w-40 md:w-[400px] lg:w-[500px] text-justify mt-4 md:mt-5 text-[12px] md:text-[15px] lg:text-2xl font-[poppins]">Our touchless menu seamlessly provides you a fantastic experience in food ordering.And keeping track of your food expenses will no longer be a hassle.</p>
-          </div>
-          <img src={food} alt=""  className="absolute w-[200px]  md:w-[500px] lg:w-[600px] md:right-1 lg:left-1/2 md:-top-1 right-1 top-5"/>
+           <div className="absolute inset-0 flex items-center">
+    
+    <div className="max-w-7xl mx-auto w-full px-4 flex items-center justify-between">
+      
+      <div className="max-w-xl">
+        <h1 className="text-[clamp(18px,4vw,50px)] font-extrabold font-poppins">
+          Enjoy <span className="text-[#FF8000]">Delicious</span>
+        </h1>
+
+        <h1 className="text-[clamp(18px,4vw,50px)] font-extrabold font-poppins">
+          Food In Your  
+        </h1>
+
+        <h1 className="text-[clamp(18px,4vw,50px)] font-extrabold font-poppins">
+          Healthy Life
+        </h1>
+
+        <p className="mt-4 text-[clamp(12px,2vw,18px)] text-gray-700">
+          Our touchless menu seamlessly provides you a fantastic experience in
+          food ordering. And keeping track of your food expenses will no longer
+          be a hassle.
+        </p>
+      </div>
+
+      {/* Food Image */}
+      <div className="">
+        <img
+          src={food}
+          alt=""
+          className="w-[500px] md:w-[500px] xl:w-[600px]"
+        />
+      </div>
+
+    </div>
+
+  </div>
         </section>
       </main>
     </>
