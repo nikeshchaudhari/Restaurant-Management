@@ -40,42 +40,41 @@ const Home = () => {
 
         <section className="w-screen relative mt-2  flex items-center overflow-hidden">
           <img src={herobg} alt="" className="w-screen h-[300px] md:h-130" />
-           <div className="absolute inset-0 flex items-center">
-    
-    <div className="max-w-7xl mx-auto w-full px-4 flex items-center justify-between">
-      
-      <div className="max-w-xl">
-        <h1 className="text-[clamp(18px,4vw,50px)] font-extrabold font-poppins">
-          Enjoy <span className="text-[#FF8000]">Delicious</span>
-        </h1>
+          <div className="absolute inset-0 flex items-center">
+            <div className="max-w-7xl mx-auto w-full px-4 flex items-center justify-between">
+              <div className="max-w-xl">
+                <h1 className="text-[clamp(18px,4vw,50px)] font-extrabold font-poppins">
+                  Enjoy <span className="text-[#FF8000]">Delicious</span>
+                </h1>
 
-        <h1 className="text-[clamp(18px,4vw,50px)] font-extrabold font-poppins">
-          Food In Your  
-        </h1>
+                <h1 className="text-[clamp(18px,4vw,50px)] font-extrabold font-poppins">
+                  Food In Your
+                </h1>
 
-        <h1 className="text-[clamp(18px,4vw,50px)] font-extrabold font-poppins">
-          Healthy Life
-        </h1>
+                <h1 className="text-[clamp(18px,4vw,50px)] font-extrabold font-poppins">
+                  Healthy Life
+                </h1>
 
-        <p className="mt-4 text-[clamp(12px,2vw,18px)] text-gray-700">
-          Our touchless menu seamlessly provides you a fantastic experience in
-          food ordering. And keeping track of your food expenses will no longer
-          be a hassle.
-        </p>
-      </div>
+                <p className="mt-4 text-[clamp(12px,2vw,18px)] text-gray-700">
+                  Our touchless menu seamlessly provides you a fantastic
+                  experience in food ordering. And keeping track of your food
+                  expenses will no longer be a hassle.
+                </p>
+              </div>
 
-      {/* Food Image */}
-      <div className="">
-        <img
-          src={food}
-          alt=""
-          className="w-[500px] md:w-[500px] xl:w-[600px]"
-        />
-      </div>
-
-    </div>
-
-  </div>
+              {/* Food Image */}
+              <div className="">
+                <img
+                  src={food}
+                  alt=""
+                  className="w-[500px] md:w-[500px] xl:w-[600px]"
+                />
+              </div>
+            </div>
+            <div className="absolute bottom-5 left-[50%] -translate-x-1/2">
+            <button className="bg-[#FF8000] py-2 px-6 rounded text-[20px] text-white font-poppins font-bold cursor-pointer">Order Now</button>
+            </div>
+          </div>
         </section>
       </main>
     </>
