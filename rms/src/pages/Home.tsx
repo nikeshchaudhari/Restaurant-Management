@@ -40,7 +40,7 @@ const Home = () => {
 
         <section className="w-screen relative mt-2  flex items-center overflow-hidden">
           <img src={herobg} alt="" className="w-screen h-[300px] md:h-130" />
-          <div className="absolute left-10 top-5 md:top-10 md: md:left-15 lg:left-64 ">
+          <div className="absolute left-10 top-5 md:top-10 md: md:left-15 lg:left-40 ">
             <h1 className=" text-[20px] md:text-[40px] lg:text-[50px] font-extrabold font-['poppins]">Enjoy <span className="text-[#FF8000]">Delicious</span> </h1>
             <h1 className="text-[20px] md:text-[40px] lg:text-[50px] font-extrabold font-['poppins]">Food In Your  </h1>
             <h1 className=" text-base md:text-[40px] lg:text-[50px] font-extrabold font-['poppins]">Healthy Life  </h1>
