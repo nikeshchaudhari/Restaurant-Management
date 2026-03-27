@@ -1,9 +1,11 @@
-import { Search } from "lucide-react";
+import {  ArrowDown, ArrowDownToDot, Search } from "lucide-react";
 import logo from "../assets/logo.png";
 import herobg from "../assets/herobg.png";
 import food from "../assets/food.png";
 import { RxHamburgerMenu } from "react-icons/rx";
+import { Link, useNavigate } from "react-router-dom";
 const Home = () => {
+  const navigate = useNavigate();
   return (
     <>
       <main className="overflow-x-hidden">
@@ -12,9 +14,9 @@ const Home = () => {
             <img
               src={logo}
               alt=""
-              className="ml:10 lg:ml-20 w-15 h-15 p-2 hidden md:block"
+              className="ml:10 lg:ml-20 w-15 h-15 p-2 hidden md:block cursor-pointer "
             />
-            <h1 className="font-['poppins'] md:text-[20px] lg:text-[40px] font-bold hidden md:block">
+            <h1 className="font-['poppins'] md:text-[20px] lg:text-[40px] font-bold hidden md:block cursor-pointer  ">
               End RMS
             </h1>
           </div>
@@ -26,12 +28,14 @@ const Home = () => {
             <Search className="absolute top-3 left-5" />
           </div>
           <div className="hidden md:flex gap-4 mr-8 ">
-            <button className="px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition cursor-pointer">
+            <Link to="/signup"><button className="px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition cursor-pointer">
               Register
-            </button>
-            <button className="px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition cursor-pointer">
+            </button></Link>
+            
+            <Link to="/login"> <button className="px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition cursor-pointer" >
               Login
-            </button>
+            </button></Link>
+           
           </div>
           <RxHamburgerMenu className="block md:hidden text-50 hover:bg-gray-100 mr-5" />
         </nav>
@@ -39,7 +43,7 @@ const Home = () => {
         {/* Hero section--- */}
 
         <section className="w-screen relative mt-2  flex items-center overflow-hidden">
-          <img src={herobg} alt="" className="w-screen h-[300px] md:h-130" />
+          <img src={herobg} alt="" className="w-screen h-75 md:h-130" />
           <div className="absolute inset-0 flex items-center">
             <div className="max-w-7xl mx-auto w-full px-4 flex items-center justify-between">
               <div className="max-w-xl">
@@ -67,12 +71,17 @@ const Home = () => {
                 <img
                   src={food}
                   alt=""
-                  className="w-[500px] md:w-[500px] xl:w-[600px]"
+                  className="w-125  xl:w-150"
                 />
               </div>
             </div>
             <div className="absolute bottom-5 left-[50%] -translate-x-1/2">
-            <button className="bg-[#FF8000] py-2 px-6 rounded text-[20px] text-white font-poppins font-bold cursor-pointer">Order Now</button>
+           <div className="w-30 md:w-48 bg-[#FF8000] hover:bg-amber-600 transition duration-500 py-1 md:py-3 px-3 rounded md:text-[20px] text-white font-poppins font-bold cursor-pointer flex justify-center gap-2 md:gap-3 items-center">
+             <button className="text-[clamp(12px,2vw,20px)] cursor-pointer">Order Now</button>
+              <ArrowDownToDot className=" md:w-8 md:h-8 animate-bounce bg-black/20 rounded-full "/>
+             
+           </div>
+          
             </div>
           </div>
         </section>
