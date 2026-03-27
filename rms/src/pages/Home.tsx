@@ -1,11 +1,45 @@
-import {  ArrowDown, ArrowDownToDot, Search } from "lucide-react";
+import { ArrowDownToDot, Search } from "lucide-react";
 import logo from "../assets/logo.png";
 import herobg from "../assets/herobg.png";
 import food from "../assets/food.png";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 const Home = () => {
-  const navigate = useNavigate();
+  interface MenuItems {
+    name: string;
+    category: string;
+  }
+  const [menu, setMenu] = useState<MenuItems[]>([]);
+  const [category, setCategory] = useState<string[]>([]);
+
+  // category fetch
+
+  useEffect(() => {
+    // const token = localStorage.getItem("token");
+    const fetchData = async () => {
+      try {
+        const res = await axios.get("http://localhost:3000/menu/all-menu");
+        setMenu(res.data);
+        // console.log(res.data.allMenu);
+        const menuData: MenuItems[] = res.data.allMenu;
+        setMenu(menuData);
+        // console.log("allData",menuData);
+
+        const uniqueCategory = [
+          ...new Set(menuData.map((items) => items.category)),
+        ];
+        setCategory(uniqueCategory);
+        console.log(uniqueCategory);
+      } catch (err) {
+        console.log("error", err);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <>
       <main className="overflow-x-hidden">
@@ -28,14 +62,18 @@ const Home = () => {
             <Search className="absolute top-3 left-5" />
           </div>
           <div className="hidden md:flex gap-4 mr-8 ">
-            <Link to="/signup"><button className="px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition cursor-pointer">
-              Register
-            </button></Link>
-            
-            <Link to="/login"> <button className="px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition cursor-pointer" >
-              Login
-            </button></Link>
-           
+            <Link to="/signup">
+              <button className="px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition cursor-pointer">
+                Register
+              </button>
+            </Link>
+
+            <Link to="/login">
+              {" "}
+              <button className="px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition cursor-pointer">
+                Login
+              </button>
+            </Link>
           </div>
           <RxHamburgerMenu className="block md:hidden text-50 hover:bg-gray-100 mr-5" />
         </nav>
@@ -68,23 +106,41 @@ const Home = () => {
 
               {/* Food Image */}
               <div className="">
-                <img
-                  src={food}
-                  alt=""
-                  className="w-125  xl:w-150"
-                />
+                <img src={food} alt="" className="w-125  xl:w-150" />
               </div>
             </div>
             <div className="absolute bottom-5 left-[50%] -translate-x-1/2">
-           <div className="w-30 md:w-48 bg-[#FF8000] hover:bg-amber-600 transition duration-500 py-1 md:py-3 px-3 rounded md:text-[20px] text-white font-poppins font-bold cursor-pointer flex justify-center gap-2 md:gap-3 items-center">
-             <button className="text-[clamp(12px,2vw,20px)] cursor-pointer">Order Now</button>
-              <ArrowDownToDot className=" md:w-8 md:h-8 animate-bounce bg-black/20 rounded-full "/>
-             
-           </div>
-          
+              <div className="w-30 md:w-48 bg-[#FF8000] hover:bg-amber-600 transition duration-500 py-1 md:py-3 px-3 rounded md:text-[20px] text-white font-poppins font-bold cursor-pointer flex justify-center gap-2 md:gap-3 items-center">
+                <button className="text-[clamp(12px,2vw,20px)] font-['poppins'] cursor-pointer">
+                  Order Now
+                </button>
+                <ArrowDownToDot className=" md:w-8 md:h-8 animate-bounce bg-black/20 rounded-full " />
+              </div>
             </div>
           </div>
         </section>
+
+        {/* category */}
+
+        <div>
+          <h1 className="text-center mt-10 text-[30px] font-bold font-['poppins']">
+            All Category
+          </h1>
+          <div className="w-screen flex justify-center">
+          <div className="flex gap-2 justify-center mt-5 w-1/2 overflow-x-hidden ">
+            {category.map((items, index) => (
+              <button
+                key={index}
+                className="  py-2 px-10 font-[poppins] rounded-full border border-amber-500 cursor-pointer hover:bg-[#FF8000] hover:text-white"
+              >
+                {items}
+              </button>
+              
+
+            ))}
+          </div>
+          </div>
+        </div>
       </main>
     </>
   );
