@@ -46,15 +46,17 @@ const AllMenu = () => {
                 </h3>
                 <p className="text-gray-500">Please try again later</p>
 
-                <button className="mt-4 px-5 py-2 bg-black text-white rounded cursor-pointer" onClick={()=> window.location.reload()}>
+                <button
+                  className="mt-4 px-5 py-2 bg-black text-white rounded cursor-pointer"
+                  onClick={() => window.location.reload()}
+                >
                   Try Again
                 </button>
               </div>
             )}
             {loading ? (
               <div className="">
-              <h2>Loading..</h2>
-
+                <h2>Loading..</h2>
               </div>
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-5 ">
@@ -73,6 +75,12 @@ const AllMenu = () => {
                       <h1 className="font-[poppins] text-[18px] font-bold">
                         {items.menuName}
                       </h1>
+                    </div>
+                    <div className="absolute left-5 top-4 bg-[#FF8000] rounded-2xl py-1 px-3 text-white font-['poppins']">
+                      <h2>{items.available}</h2>
+                    </div>
+                    <div className="absolute right-5 top-4 bg-[#3a230c] rounded-2xl py-1 px-3 text-white font-['poppins']">
+                      <h2>{items.price}</h2>
                     </div>
                   </div>
                 ))}
