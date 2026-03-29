@@ -63,23 +63,28 @@ const AllMenu = () => {
                 {Menu.map((items, index) => (
                   <div
                     key={index}
-                    className="h-60 w-auto shadow-2xl rounded-2xl flex justify-center relative cursor-pointer "
+                    className="h-60 w-auto shadow-2xl rounded-2xl flex justify-center relative cursor-pointer group "
                   >
                     <img
                       src={items.imageUrl}
                       alt={items.menuName}
                       className=" w-full h-48 object-cover rounded-2xl transform hover:scale-95 duration-500 p-2"
                     />
+                    <div className="absolute w-full bottom-0 z-10 lg:opacity-0 lg:group-hover:opacity-100 duration-500 ">
+                      <div className="text-center flex items-center justify-center bg-black text-white h-14   ">
+                        <h2 className="lg:text-[20px] font-['poppins'] font-semibold ">Order Now</h2>
+                      </div>
+                    </div>
 
                     <div className="absolute bottom-3">
-                      <h1 className="font-[poppins] text-[18px] font-bold">
+                      <h1 className="font-[poppins] lg:text-[18px] font-bold">
                         {items.menuName}
                       </h1>
                     </div>
-                    <div className="absolute left-5 top-4 bg-[#FF8000] rounded-2xl py-1 px-3 text-white font-['poppins']">
+                    <div className="absolute top-3 text-[10px] md:text-[12px] lg:text-[16px] md:left-3   md:top-3 lg:left-5 lg:top-4 bg-[#FF8000] rounded-2xl px-3  md:px-2 py-1 lg:px-3 text-white font-['poppins']">
                       <h2>{items.available}</h2>
                     </div>
-                    <div className="absolute right-5 top-4 bg-[#3a230c] rounded-2xl py-1 px-3 text-white font-['poppins']">
+                    <div className="absolute top-10 text-[10px] md:text-[12px] lg:text-[16px] md:right-3 md:top-3  lg:right-5 lg:top-4 bg-[#3a230c] rounded-2xl px-3  md:px-2 py-1 lg:px-3 text-white font-['poppins']">
                       <h2>{items.price}</h2>
                     </div>
                   </div>
