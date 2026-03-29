@@ -71,7 +71,7 @@ const AllMenu = () => {
                       className=" w-full h-48 object-cover rounded-2xl transform hover:scale-95 duration-500 p-2"
                     />
                     <div className="absolute w-full bottom-0 z-10 lg:opacity-0 lg:group-hover:opacity-100 duration-500 ">
-                      <div className="text-center flex items-center justify-center bg-black text-white h-14   ">
+                      <div className="text-center flex items-center justify-center bg-[#3a230c] text-white h-14   ">
                         <h2 className="lg:text-[20px] font-['poppins'] font-semibold ">Order Now</h2>
                       </div>
                     </div>
