@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-
 const AllMenu = () => {
   interface AllMenu {
     menuName: string;
@@ -53,12 +52,9 @@ const AllMenu = () => {
               </div>
             )}
             {loading ? (
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {[...Array(6)].map((_, i) => (
-                  <div key={i} className="animate-pulse">
-                    <div className="bg-gray-300 h-40 rounded"></div>
-                  </div>
-                ))}
+              <div className="">
+              <h2>Loading..</h2>
+
               </div>
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-5 ">
