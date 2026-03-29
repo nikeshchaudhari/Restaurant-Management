@@ -6,6 +6,7 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import AllMenu from "./ui/AllMenu";
 const Home = () => {
   interface MenuItems {
     name: string;
@@ -110,7 +111,7 @@ const Home = () => {
               </div>
             </div>
             <div className="absolute bottom-5 left-[50%] -translate-x-1/2">
-              <div className="w-30 md:w-48 bg-[#FF8000] hover:bg-amber-600 transition duration-500 py-1 md:py-3 px-3 rounded md:text-[20px] text-white font-poppins font-bold cursor-pointer flex justify-center gap-2 md:gap-3 items-center">
+              <div className="w-32 md:w-40 lg:w-48 bg-[#FF8000] hover:bg-amber-600 transition duration-500 py-1 md:py-3 px-3 rounded md:text-[20px] text-white font-poppins font-bold cursor-pointer flex justify-center gap-2 md:gap-3 items-center">
                 <button className="text-[clamp(12px,2vw,20px)] font-['poppins'] cursor-pointer">
                   Order Now
                 </button>
@@ -123,24 +124,24 @@ const Home = () => {
         {/* category */}
 
         <div>
-          <h1 className="text-center mt-10 text-[30px] font-bold font-['poppins']">
+          <h1 className="text-center  mt-10 text-[18px] md:text-[25px] lg:text-[30px] font-bold font-['poppins']">
             All Category
           </h1>
-          <div className="w-screen flex justify-center">
-          <div className="flex gap-2 justify-center mt-5 w-1/2 overflow-x-hidden ">
-            {category.map((items, index) => (
-              <button
-                key={index}
-                className="  py-2 px-10 font-[poppins] rounded-full border border-amber-500 cursor-pointer hover:bg-[#FF8000] hover:text-white"
-              >
-                {items}
-              </button>
-              
-
-            ))}
-          </div>
+          <div className="w-screen grid justify-items-center ">
+            <div className="grid grid-cols-4 md:grid-cols-5 lg:grid-cols-6  gap-4 justify-items-center  mt-5 lg:w-2/3 overflow-x-hidden px-5 py-2 ">
+              {category.map((items, index) => (
+                <button
+                  key={index}
+                  className="px-2 md:py-2 md:px-5 lg:px-8 font-[poppins] rounded-full border border-amber-500 cursor-pointer hover:bg-[#FF8000] hover:text-white transition duration-500  "
+                >
+                  {items}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
+
+       <AllMenu/>
       </main>
     </>
   );
