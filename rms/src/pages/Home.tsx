@@ -3,10 +3,11 @@ import logo from "../assets/logo.png";
 import herobg from "../assets/herobg.png";
 import food from "../assets/food.png";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import AllMenu from "./ui/AllMenu";
+import MenuSlide from "../components/MenuSlide";
 
 interface MenuItems {
     menuName: string;
@@ -26,7 +27,7 @@ const Home = () => {
 
   const allMenuRef = useRef<HTMLDivElement>(null) 
   const menuScroll = ()=>{{
-    allMenuRef.current?.scrollIntoView({behavior:"smooth",color:"red"});
+    allMenuRef.current?.scrollIntoView({behavior:"smooth"});
   }};
   // category fetch
 
@@ -71,13 +72,14 @@ const Home = () => {
 
   return (
     <>
-      <main className="overflow-x-hidden">
-        <nav className="shadow-lg w-screen h-20 flex items-center md:justify-around z-10">
-          <div className="hidden md:flex items-center ">
+      <main className="overflow-x-hidden w-full max-w-full">
+        <MenuSlide/>
+        <nav className="shadow-lg bg-white h-20 md:h-20 flex items-center md:justify-around sticky top-0 z-50 w-full">
+          <div className="hidden md:flex items-center  ">
             <img
               src={logo}
               alt=""
-              className="ml:10 lg:ml-20 w-15 h-15 p-2 hidden md:block cursor-pointer "
+              className="ml:10 lg:ml-20 w-15 h-15 p-2 hidden md:block cursor-pointer   "
             />
             <h1 className="font-['poppins'] md:text-[20px] lg:text-[40px] font-bold hidden md:block cursor-pointer  ">
               End RMS
@@ -107,9 +109,15 @@ const Home = () => {
           <RxHamburgerMenu className="block md:hidden text-50 hover:bg-gray-100 mr-5" />
         </nav>
 
+        
+        {/* mobile view */}
+
+        <div>
+
+        </div>
         {/* Hero section--- */}
 
-        <section className="w-screen relative mt-2  flex items-center overflow-hidden">
+        <section className="relative mt-2  flex items-center overflow-hidden">
           <img src={herobg} alt="" className="w-screen h-75 md:h-130" />
           <div className="absolute inset-0 flex items-center">
             <div className="max-w-7xl mx-auto w-full px-4 flex items-center justify-between">
