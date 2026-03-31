@@ -4,20 +4,30 @@ import herobg from "../assets/herobg.png";
 import food from "../assets/food.png";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import AllMenu from "./ui/AllMenu";
-const Home = () => {
-  interface MenuItems {
-    name: string;
+
+interface MenuItems {
+    menuName: string;
+    price: string;
     category: string;
+    available: string;
+    description: string;
+    imageUrl: string;
   }
+const Home = () => {
+  
   const [menu, setMenu] = useState<MenuItems[]>([]);
   const [category, setCategory] = useState<string[]>([]);
   const [active, setActive] = useState<number | null>(null);
   const [filterMenu, setFilterMenu] = useState<MenuItems[]>([]);
-  const navigate = useNavigate()
+  
 
+  const allMenuRef = useRef<HTMLDivElement>(null) 
+  const menuScroll = ()=>{{
+    allMenuRef.current?.scrollIntoView({behavior:"smooth",color:"red"});
+  }};
   // category fetch
 
   useEffect(() => {
@@ -52,15 +62,13 @@ const Home = () => {
     if (menus === "All") {
       setFilterMenu(menu);
       console.log(menu);
-      
     } else {
-      const filterMenu = menu.filter((item)=>item.category === menus)
-      setFilterMenu(filterMenu)
+      const filterMenu = menu.filter((item) => item.category === menus);
+      setFilterMenu(filterMenu);
       console.log(filterMenu);
-      
     }
-    
   };
+
   return (
     <>
       <main className="overflow-x-hidden">
@@ -132,9 +140,11 @@ const Home = () => {
             </div>
             <div className="absolute bottom-5 left-[50%] -translate-x-1/2">
               <div className="w-32 md:w-40 lg:w-48 bg-[#FF8000] hover:bg-amber-600 transition duration-500 py-1 md:py-3 px-3 rounded md:text-[20px] text-white font-poppins font-bold cursor-pointer flex justify-center gap-2 md:gap-3 items-center">
-                <Link to="all-menu"><button className="text-[clamp(12px,2vw,20px)] font-['poppins'] cursor-pointer">
-                  Order Now
-                </button></Link>
+                
+                  <button className="text-[clamp(12px,2vw,20px)] font-['poppins'] cursor-pointer" onClick={menuScroll}>
+                    Order Now
+                  </button>
+              
                 <ArrowDownToDot className=" md:w-8 md:h-8 animate-bounce bg-black/20 rounded-full " />
               </div>
             </div>
@@ -152,7 +162,7 @@ const Home = () => {
               {category.map((items, index) => (
                 <button
                   key={index}
-                  onClick={() => showCategory(items,index)}
+                  onClick={() => showCategory(items, index)}
                   className={`px-2 md:py-2 md:px-5 lg:px-8 font-[poppins] rounded-full border border-amber-500 cursor-pointer hover:bg-[#FF8000] hover:text-white transition duration-500 ${active === index ? "bg-[#FF8000] text-white" : "border border-[#FF8000]"}`}
                 >
                   {items}
@@ -162,7 +172,9 @@ const Home = () => {
           </div>
         </div>
 
-        <AllMenu menu={filterMenu.length ? filterMenu :menu} />
+       <div ref={allMenuRef}>
+         <AllMenu menu={filterMenu.length ?filterMenu:menu} />
+       </div>
       </main>
     </>
   );
