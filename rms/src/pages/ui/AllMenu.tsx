@@ -1,25 +1,29 @@
-import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
-
-type props ={
-menu:{
+interface MenuItems {
   menuName: string;
-    price: string;
-    category: string;
-    available: string;
-    description: string;
-    imageUrl: string;
-
-}[];
+  price: string;
+  category: string;
+  available: string;
+  description: string;
+  imageUrl: string;
+  length: number;
 }
-const AllMenu = ({menu}:props) => {
+type props = {
+  menu: MenuItems[];
+};
+const AllMenu = ({ menu }: props) => {
+  const location = useLocation();
+
+  const finalMenu:MenuItems[]=menu|| location.state?.menu || [];
+
   // interface AllMenu {
-    
+
   // }
 
   // const [Menu, setMenu] = useState<AllMenu[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<boolean>(false);
+  // const [loading, setLoading] = useState<boolean>(true);
+  // const [error, setError] = useState<boolean>(false);
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -45,8 +49,8 @@ const AllMenu = ({menu}:props) => {
             Menu
           </h1>
           <div className="mt-5 ">
-            {menu.length === 0 ? (
-               <div className="flex flex-col items-center   justify-center mb-10 ">
+            {finalMenu.length === 0 ? (
+              <div className="flex flex-col items-center   justify-center mb-10 ">
                 <h3 className="text-xl font-bold text-red-500">
                   {" "}
                   Oops! Something went wrong
@@ -74,7 +78,9 @@ const AllMenu = ({menu}:props) => {
                     />
                     <div className="absolute w-full bottom-0 z-10 lg:opacity-0 lg:group-hover:opacity-100 duration-500 ">
                       <div className="text-center flex items-center justify-center bg-[#3a230c] text-white h-12   ">
-                        <h2 className="lg:text-[18px] font-['poppins'] font-semibold ">Order Now</h2>
+                        <h2 className="lg:text-[18px] font-['poppins'] font-semibold ">
+                          Order Now
+                        </h2>
                       </div>
                     </div>
 
