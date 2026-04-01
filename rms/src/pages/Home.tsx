@@ -8,6 +8,9 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import AllMenu from "./ui/AllMenu";
 import MenuSlide from "../components/MenuSlide";
+import type { AppDispatch, RootState } from "../store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { menuOpen } from "../features/menuSlice";
 
 interface MenuItems {
     menuName: string;
@@ -23,7 +26,8 @@ const Home = () => {
   const [category, setCategory] = useState<string[]>([]);
   const [active, setActive] = useState<number | null>(null);
   const [filterMenu, setFilterMenu] = useState<MenuItems[]>([]);
-  
+  const dispatch:AppDispatch = useDispatch()
+  // const Open = useSelector((state:RootState)=>state.menu.isOpen)
 
   const allMenuRef = useRef<HTMLDivElement>(null) 
   const menuScroll = ()=>{{
@@ -73,7 +77,7 @@ const Home = () => {
   return (
     <>
       <main className="overflow-x-hidden w-full max-w-full">
-        <MenuSlide/>
+        <MenuSlide />
         <nav className="shadow-lg bg-white h-20 md:h-20 flex items-center md:justify-around sticky top-0 z-50 w-full">
           <div className="hidden md:flex items-center  ">
             <img
@@ -106,7 +110,7 @@ const Home = () => {
               </button>
             </Link>
           </div>
-          <RxHamburgerMenu className="block md:hidden text-50 hover:bg-gray-100 mr-5" />
+          <RxHamburgerMenu className="block md:hidden text-50 hover:bg-gray-100 mr-5" onClick={()=>dispatch(menuOpen())}/>
         </nav>
 
         
