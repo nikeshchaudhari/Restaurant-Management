@@ -76,9 +76,9 @@ const Home = () => {
 
   return (
     <>
-      <main className="overflow-x-hidden w-full max-w-full">
-        <MenuSlide />
-        <nav className="shadow-lg bg-white h-20 md:h-20 flex items-center md:justify-around sticky top-0 z-50 w-full">
+      <main className="overflow-x-auto w-full max-w-full">
+        <MenuSlide onMenuClick={menuScroll}/>
+        <nav className="shadow-lg bg-white h-20  md:h-20 flex items-center md:justify-around sticky top-0 z-50 w-full ">
           <div className="hidden md:flex items-center  ">
             <img
               src={logo}
