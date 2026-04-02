@@ -11,28 +11,35 @@ import MenuSlide from "../components/MenuSlide";
 import type { AppDispatch, RootState } from "../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { menuOpen } from "../features/menuSlice";
+import { jwtDecode } from "jwt-decode";
 
 interface MenuItems {
-    menuName: string;
-    price: string;
-    category: string;
-    available: string;
-    description: string;
-    imageUrl: string;
-  }
+  menuName: string;
+  price: string;
+  category: string;
+  available: string;
+  description: string;
+  imageUrl: string;
+}
+
+interface UserProfile {
+  fullName: string;
+  imgageUrl: string;
+}
 const Home = () => {
-  
   const [menu, setMenu] = useState<MenuItems[]>([]);
   const [category, setCategory] = useState<string[]>([]);
   const [active, setActive] = useState<number | null>(null);
   const [filterMenu, setFilterMenu] = useState<MenuItems[]>([]);
-  const dispatch:AppDispatch = useDispatch()
-  // const Open = useSelector((state:RootState)=>state.menu.isOpen)
-
-  const allMenuRef = useRef<HTMLDivElement>(null) 
-  const menuScroll = ()=>{{
-    allMenuRef.current?.scrollIntoView({behavior:"smooth"});
-  }};
+  const [user, setUser] = useState<string |null>(null);
+  const dispatch: AppDispatch = useDispatch();
+  const auth = useSelector((state: RootState) => state.auth);
+  const allMenuRef = useRef<HTMLDivElement>(null);
+  const menuScroll = () => {
+    {
+      allMenuRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  };
   // category fetch
 
   useEffect(() => {
@@ -74,10 +81,17 @@ const Home = () => {
     }
   };
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decoded: any = jwtDecode(token);
+      setUser(decoded);
+    }
+  }, []);
   return (
     <>
       <main className="overflow-x-auto w-full max-w-full">
-        <MenuSlide onMenuClick={menuScroll}/>
+        <MenuSlide onMenuClick={menuScroll} />
         <nav className="shadow-lg bg-white h-20  md:h-20 flex items-center md:justify-around sticky top-0 z-50 w-full ">
           <div className="hidden md:flex items-center  ">
             <img
@@ -97,7 +111,14 @@ const Home = () => {
             <Search className="absolute top-3 left-5" />
           </div>
           <div className="hidden md:flex gap-4 mr-8 ">
-            <Link to="/signup">
+         {
+          auth.isLoggedIn ?(
+         <>
+          <img src={user.imageUrl} alt="" />
+         </>
+          ):(
+            <>
+   <Link to="/signup">
               <button className="px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition cursor-pointer">
                 Register
               </button>
@@ -109,16 +130,19 @@ const Home = () => {
                 Login
               </button>
             </Link>
+            </>
+          )
+         }
           </div>
-          <RxHamburgerMenu className="block md:hidden text-50 hover:bg-gray-100 mr-5" onClick={()=>dispatch(menuOpen())}/>
+          <RxHamburgerMenu
+            className="block md:hidden text-50 hover:bg-gray-100 mr-5"
+            onClick={() => dispatch(menuOpen())}
+          />
         </nav>
 
-        
         {/* mobile view */}
 
-        <div>
-
-        </div>
+        <div></div>
         {/* Hero section--- */}
 
         <section className="relative mt-2  flex items-center overflow-hidden">
@@ -152,11 +176,13 @@ const Home = () => {
             </div>
             <div className="absolute bottom-5 left-[50%] -translate-x-1/2">
               <div className="w-32 md:w-40 lg:w-48 bg-[#FF8000] hover:bg-amber-600 transition duration-500 py-1 md:py-3 px-3 rounded md:text-[20px] text-white font-poppins font-bold cursor-pointer flex justify-center gap-2 md:gap-3 items-center">
-                
-                  <button className="text-[clamp(12px,2vw,20px)] font-['poppins'] cursor-pointer" onClick={menuScroll}>
-                    Order Now
-                  </button>
-              
+                <button
+                  className="text-[clamp(12px,2vw,20px)] font-['poppins'] cursor-pointer"
+                  onClick={menuScroll}
+                >
+                  Order Now
+                </button>
+
                 <ArrowDownToDot className=" md:w-8 md:h-8 animate-bounce bg-black/20 rounded-full " />
               </div>
             </div>
@@ -184,9 +210,9 @@ const Home = () => {
           </div>
         </div>
 
-       <div ref={allMenuRef}>
-         <AllMenu menu={filterMenu.length ?filterMenu:menu} />
-       </div>
+        <div ref={allMenuRef}>
+          <AllMenu menu={filterMenu.length ? filterMenu : menu} />
+        </div>
       </main>
     </>
   );
