@@ -5,10 +5,18 @@ import { FiEyeOff } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+// import { AppDispatch, type RootState } from '../store/store';
+import { useDispatch, useSelector } from "react-redux";
+import { jwtDecode } from "jwt-decode";
+import { login } from "../features/Auth";
+import type { AppDispatch } from "../store/store";
 const SignIn = () => {
   const [passwordshow, SetpasswordShow] = useState(false);
   const [email, SetEmail] = useState<string>("");
   const [password, SetPassword] = useState<string>("");
+
+  const dispatch:AppDispatch = useDispatch()
+const auth = useSelector((state:RootState)=>state.auth.isLoggedIn)
 
   const navigate = useNavigate();
 
@@ -21,11 +29,25 @@ const SignIn = () => {
         password,
       });
       if (response.data.token) {
+        const token = response.data.token
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("role", response.data.role);
         localStorage.setItem("FullName", response.data.fullName);
+        // localStorage.setItem("ImageUrl", response.data.imageUrl);
 
-        console.log(response.data);
+
+const payload =JSON.parse(atob(token.split(".")[1]))
+console.log(payload);
+dispatch(
+  login({
+    name:payload.fullName,
+    profileImage:payload.imageUrl
+  })
+)
+
+
+
+        // console.log(response.data);
         toast.success("Login Sucessfully..");
 
         if (response.data.role === "admin") {
@@ -35,7 +57,10 @@ const SignIn = () => {
         } else {
           toast.error("Invalid");
         }
+
       }
+
+     
     } catch (err) {
       toast.error("Failed to login");
     }

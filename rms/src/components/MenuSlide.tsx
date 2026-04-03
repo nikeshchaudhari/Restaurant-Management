@@ -3,14 +3,25 @@ import { RxCross2 } from "react-icons/rx";
 import type { AppDispatch, RootState } from "../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { menuClose } from "../features/menuSlice";
+import { Link } from "react-router-dom";
 
-const MenuSlide = () => {
+interface props {
+onMenuClick:()=>void
+}
+const MenuSlide = ({onMenuClick}:props) => {
   const token = localStorage.getItem("token");
   // console.log(token);
   // const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const dispatch: AppDispatch = useDispatch();
   const Open = useSelector((state: RootState) => state.menu.isOpen);
+
+
+  // handle mobile view
+  const handle =()=>{
+    onMenuClick();
+    dispatch(menuClose());
+  }
   return (
     <>
       {Open && (
@@ -34,8 +45,8 @@ const MenuSlide = () => {
 
         <div className="flex justify-center w-full ">
           <ul className="mt-5 text-lg font-['poppins'] ">
-            <li className=" mb-3">Home</li>
-            <li className=" mb-3">All Menu</li>
+           <Link to="/home" onClick={()=>dispatch(menuClose())}> <li className=" mb-3">Home</li></Link>
+            <li className=" mb-3" onClick={handle}>All Menu</li>
             <li className="  mb-3">About Us</li>
             <li className="mb-3">Contact Us</li>
           </ul>

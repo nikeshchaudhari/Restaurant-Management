@@ -7,11 +7,11 @@ import { Table } from "lucide-react";
 import { HandPlatter } from "lucide-react";
 import { MessageCircleWarning } from "lucide-react";
 import { Settings2 } from "lucide-react";
-
+import { SquareStack } from 'lucide-react';
 const Slide = () => {
   return (
     <>
-      <aside className="hidden md:block py-5 w-70 bg-[rgb(16,34,55)] h-screen sticky top-0 shrink-0 overflow-y-auto">
+      <aside className="hidden md:block py-5 w-75 bg-[rgb(16,34,55)] h-screen sticky top-0 shrink-0 overflow-y-auto">
         <div className="py-2 flex justify-center items-center gap-2">
           <img src={adminLogo} alt="" className="w-10 h-10" />
           <h1 className="text-white text-[30px] font-bold"> RMS Admin </h1>
@@ -47,6 +47,12 @@ const Slide = () => {
               <h1 className="text-[20px] pl-2 font-normal ">Orders</h1>
             </Link>
           </div>
+             <div className="bg-[#1F354D] md:w-60 ml-2   lg:w-65  p-2 rounded transition-all  hover:bg-[#445971]  duration-300 cursor-pointer mb-5">
+            <Link to="/dashboard/stocks" className="flex pl-10 items-center">
+              <SquareStack />
+              <h1 className="text-[20px] pl-2 font-normal ">Stocks</h1>
+            </Link>
+          </div>
           <div className="bg-[#1F354D]  md:w-60  ml-2  lg:w-65  p-2 rounded transition-all  hover:bg-[#445971]  duration-300 cursor-pointer mb-5">
             <Link to="" className="flex pl-10 items-center">
               <MessageCircleWarning />
@@ -54,7 +60,7 @@ const Slide = () => {
             </Link>
           </div>
           <div className="bg-[#1F354D]  md:w-60 ml-2   lg:w-65  p-2 rounded transition-all  hover:bg-[#445971]  duration-300 cursor-pointer mb-5">
-            <Link to="" className="flex pl-10 items-center">
+            <Link to="/dashboard/setting" className="flex pl-10 items-center">
               <Settings2 />
               <h1 className="text-[20px] pl-2 font-normal ">Setting</h1>
             </Link>

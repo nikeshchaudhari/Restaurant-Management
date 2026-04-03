@@ -14,8 +14,10 @@ type props = {
 };
 const AllMenu = ({ menu }: props) => {
   const location = useLocation();
+  
 
   const finalMenu:MenuItems[]=menu|| location.state?.menu || [];
+  
 
   // interface AllMenu {
 

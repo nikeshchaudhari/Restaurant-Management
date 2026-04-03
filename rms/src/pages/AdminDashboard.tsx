@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // import adminLogo from "../assets/adminlogo.png"
 import { useEffect, useState } from "react";
 // import axios from "axios";
@@ -30,6 +30,7 @@ const AdminDashboard = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const [fullName,SetFullName]=useState<string>("")
+  const navigate = useNavigate()
 
   useEffect(() => {
     const dataFetch = async () => {
@@ -65,6 +66,15 @@ const AdminDashboard = () => {
   //    total Add
 
   const totalSales = todaySales.reduce((sum, sale) => sum + sale.total, 0);
+
+
+  const handleLogout =()=>{
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    navigate("/login");
+     
+  }
+
   return (
     <>
       <main className="md:flex ">
@@ -77,7 +87,7 @@ const AdminDashboard = () => {
             <h1 className="mx-2 md:text-[20px] font-bold">Welcome, {fullName}</h1>
             <Link to="/login" className="">
               {" "}
-              <button className="rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300 hidden md:block">
+              <button className="rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300 hidden md:block" onClick={handleLogout}>
                 Logout
               </button>
             </Link>

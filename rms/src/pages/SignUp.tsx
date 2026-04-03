@@ -37,9 +37,14 @@ const SignUp = () => {
     }
 
     try {
+      const token = localStorage.getItem("token")
 
-      const response = await axios.post("http://localhost:3000/users",
-        data
+      const response = await axios.post("http://localhost:3000/user/add-user",
+        data,{
+          headers:{
+            Authorization:`Bear ${token}`
+          }
+        }
       )
       console.log("User Add", response.data);
       toast.success("Data Add Sucessfully...")
