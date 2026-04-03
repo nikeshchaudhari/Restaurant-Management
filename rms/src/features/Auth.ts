@@ -18,9 +18,9 @@ export const authSlice = createSlice({
 
   },
   reducers:{
-    login:(state:AuthState,action:PayloadAction<{name:string,profileImage:string}>)=>{
-      state.isLoggedIn=false,
-      state.user=action.payload
+    login:(state:AuthState,action:PayloadAction<{name:string;profileImage:string}>)=>{
+      state.isLoggedIn=true,
+      state.user={...state.user,...action.payload}
 
     },
 
@@ -28,11 +28,13 @@ export const authSlice = createSlice({
       state.isLoggedIn=false,
       state.user=null
     },
-    // updateProfileImage:(state,action:PayloadAction<string>)=>{
-    //   if(state.user){
-    //     state.user.profileImage=action.payload
-    //   }
-    // }
+    
+    updateProfile:(state,action:PayloadAction<{profileImage?:string; name:string;}>)=>{
+      if(state.user){
+        state.user={...state.user,...action.payload};
+      }
+
+    }
   }
 })
 
