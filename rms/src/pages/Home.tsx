@@ -32,8 +32,13 @@ const Home = () => {
   const [active, setActive] = useState<number | null>(null);
   const [filterMenu, setFilterMenu] = useState<MenuItems[]>([]);
   const [user, setUser] = useState<string |null>(null);
-  const dispatch: AppDispatch = useDispatch();
-  const auth = useSelector((state: RootState) => state.auth);
+  const dispatch:AppDispatch = useDispatch();
+  const auth = useSelector((state: RootState) => state.auth.isLoggedIn);
+  console.log(auth);
+  
+  const users = useSelector((state:RootState)=>state.auth.user)
+  console.log(users);
+  
   const allMenuRef = useRef<HTMLDivElement>(null);
   const menuScroll = () => {
     {
@@ -77,16 +82,29 @@ const Home = () => {
     } else {
       const filterMenu = menu.filter((item) => item.category === menus);
       setFilterMenu(filterMenu);
-      console.log(filterMenu);
+      console.log("FilterData",filterMenu);
     }
   };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) {
-      const decoded: any = jwtDecode(token);
-      setUser(decoded);
+    if(token){
+      // console.log("Token is comming");
+     const splitToken = token.split(".")[1]
+     const decode = atob(splitToken)
+    //  console.log(decode);
+     
+     const payload = JSON.parse(decode)
+    //  console.log(payload);
+
+     
+     
+     
+     
+     
+      
     }
+    
   }, []);
   return (
     <>
@@ -112,9 +130,9 @@ const Home = () => {
           </div>
           <div className="hidden md:flex gap-4 mr-8 ">
          {
-          auth.isLoggedIn ?(
+         users?(
          <>
-          <img src={user.imageUrl} alt="" />
+          <img src={users.UserProfile} alt="" className="w-10"/>
          </>
           ):(
             <>
