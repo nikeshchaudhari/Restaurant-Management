@@ -34,7 +34,7 @@ const Home = () => {
   const [filterMenu, setFilterMenu] = useState<MenuItems[]>([]);
   // const [user, setUser] = useState<string | null>(null);
   const dispatch: AppDispatch = useDispatch();
-  const auth = useSelector((state: RootState) => state.auth.isLoggedIn);
+  const auth = useSelector((state: RootState) => state.auth);
   const user:any = useSelector((state: RootState) => state.auth.user);
   console.log(user);
 
@@ -112,10 +112,10 @@ const Home = () => {
   }, [dispatch]);
   return (
     <>
-      <main className="overflow-x-auto w-full max-w-full">
+      <main className="w-full max-w-full">
         <MenuSlide onMenuClick={menuScroll} />
         <nav className="shadow-lg bg-white h-20  md:h-20 flex items-center md:justify-around sticky top-0 z-50 w-full ">
-          <div className="hidden md:flex items-center  ">
+          <div className="hidden md:flex items-center overflow-x-hidden  ">
             <img
               src={logo}
               alt=""
@@ -133,10 +133,10 @@ const Home = () => {
             <Search className="absolute top-3 left-5" />
           </div>
           <div className="hidden md:flex gap-4 mr-8 ">
-            {users ? (
+            {auth.isLoggedIn? (
               <>
                <div >
-                 <img src={user.profileImage} alt="" className="w-12 rounded-full h-12 border border-sky-100"/>
+                 <img src={auth.user?.profileImage} alt="" className="w-12 rounded-full h-12 border border-sky-100"/>
                </div>
               </>
             ) : (
@@ -167,7 +167,7 @@ const Home = () => {
         <div></div>
         {/* Hero section--- */}
 
-        <section className="relative mt-2  flex items-center overflow-hidden">
+        <section className="relative flex items-center ">
           <img src={herobg} alt="" className="w-screen h-75 md:h-130" />
           <div className="absolute inset-0 flex items-center">
             <div className="max-w-7xl mx-auto w-full px-4 flex items-center justify-between">
@@ -213,7 +213,7 @@ const Home = () => {
 
         {/* category */}
 
-        <div>
+        <div className="overflow-x-hidden">
           <h1 className="text-center  mt-10 text-[18px] md:text-[25px] lg:text-[30px] font-bold font-['poppins']">
             All Category
           </h1>
