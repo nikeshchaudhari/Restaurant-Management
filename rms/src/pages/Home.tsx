@@ -12,6 +12,7 @@ import type { AppDispatch, RootState } from "../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { menuOpen } from "../features/menuSlice";
 import { jwtDecode } from "jwt-decode";
+import { login } from "../features/Auth";
 
 interface MenuItems {
   menuName: string;
@@ -31,14 +32,16 @@ const Home = () => {
   const [category, setCategory] = useState<string[]>([]);
   const [active, setActive] = useState<number | null>(null);
   const [filterMenu, setFilterMenu] = useState<MenuItems[]>([]);
-  const [user, setUser] = useState<string |null>(null);
-  const dispatch:AppDispatch = useDispatch();
+  // const [user, setUser] = useState<string | null>(null);
+  const dispatch: AppDispatch = useDispatch();
   const auth = useSelector((state: RootState) => state.auth.isLoggedIn);
-  console.log(auth);
-  
-  const users = useSelector((state:RootState)=>state.auth.user)
+  const user:any = useSelector((state: RootState) => state.auth.user);
+  console.log(user);
+
+
+  const users = useSelector((state: RootState) => state.auth.user);
   console.log(users);
-  
+
   const allMenuRef = useRef<HTMLDivElement>(null);
   const menuScroll = () => {
     {
@@ -82,30 +85,31 @@ const Home = () => {
     } else {
       const filterMenu = menu.filter((item) => item.category === menus);
       setFilterMenu(filterMenu);
-      console.log("FilterData",filterMenu);
+      console.log("FilterData", filterMenu);
     }
   };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if(token){
+    if (token) {
       // console.log("Token is comming");
-     const splitToken = token.split(".")[1]
-     const decode = atob(splitToken)
-    //  console.log(decode);
-     
-     const payload = JSON.parse(decode)
-    //  console.log(payload);
+      try {
+        const splitToken = token.split(".")[1];
+        const decode = atob(splitToken);
+        //  console.log(decode);
 
-     
-     
-     
-     
-     
-      
+        const payload = JSON.parse(decode);
+        //  console.log(payload);
+
+        dispatch(
+          login({
+            name:payload.fullName,
+            profileImage:payload.imageUrl
+          })
+        )
+      } catch (err) {}
     }
-    
-  }, []);
+  }, [dispatch]);
   return (
     <>
       <main className="overflow-x-auto w-full max-w-full">
@@ -129,28 +133,28 @@ const Home = () => {
             <Search className="absolute top-3 left-5" />
           </div>
           <div className="hidden md:flex gap-4 mr-8 ">
-         {
-         users?(
-         <>
-          <img src={users.UserProfile} alt="" className="w-10"/>
-         </>
-          ):(
-            <>
-   <Link to="/signup">
-              <button className="px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition cursor-pointer">
-                Register
-              </button>
-            </Link>
+            {users ? (
+              <>
+               <div >
+                 <img src={user.profileImage} alt="" className="w-12 rounded-full h-12 border border-sky-100"/>
+               </div>
+              </>
+            ) : (
+              <>
+                <Link to="/signup">
+                  <button className="px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition cursor-pointer">
+                    Register
+                  </button>
+                </Link>
 
-            <Link to="/login">
-              {" "}
-              <button className="px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition cursor-pointer">
-                Login
-              </button>
-            </Link>
-            </>
-          )
-         }
+                <Link to="/login">
+                  {" "}
+                  <button className="px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition cursor-pointer">
+                    Login
+                  </button>
+                </Link>
+              </>
+            )}
           </div>
           <RxHamburgerMenu
             className="block md:hidden text-50 hover:bg-gray-100 mr-5"
