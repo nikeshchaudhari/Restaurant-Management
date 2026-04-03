@@ -8,6 +8,8 @@ route.post("/add-res", Auth,async (req, res) => {
     const addRestaurant = await new Restaurant({
       name: req.body.name,
       address: req.body.address,
+      phone:req.body.phone,
+      email:req.body.email,
       createdBy: req.user.id,
     });
 

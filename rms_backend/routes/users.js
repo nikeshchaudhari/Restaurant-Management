@@ -57,21 +57,15 @@ route.post("/admin", async (req, res) => {
 });
 // post_user_data
 
-route.post("/add-user", Auth, async (req, res) => {
+route.post("/add-user", async (req, res) => {
   try {
-    let ImageId = null;
+    let ImageId = "";
     let ImageUrl = "https://freesvg.org/img/abstract-user-flat-4.png";
     let uploadPhoto = null;
-    // check main
+    // check mail
 
     const user = await User.find({ email: req.body.email });
-    if(user.length>0){
-      return res.status(401).json({
-        msg:"Email already register"
-      })
-    }
-
-    console.log(user[0]);
+ 
 
     if (user.length > 0) {
       return res.status(500).json({
@@ -79,22 +73,17 @@ route.post("/add-user", Auth, async (req, res) => {
       });
     }
 
-    if(req.user.role !=="admin"){
-      return res.status(401).json({
-        msg:"Only admin user add"
-      })
-    }
-    // if (req.body.password !== req.body.confirm_password) {
-    //   return res.status(400).json({
-    //     msg: "Password not match",
-    //   });
+    // if(req.user.role !=="admin"){
+    //   return res.status(401).json({
+    //     msg:"Only admin user add"
+    //   })
     // }
 
-    if (req.files && req.files.photo) {
-      uploadPhoto = await cloudinary.uploader.upload(
+    if ( req.files?.photo) {
+     const  uploadPhoto = await cloudinary.uploader.upload(
         req.files.photo.tempFilePath,
         {
-          folder: `rms_photo`,
+          folder: "rms_user",
         },
       );
 
@@ -102,7 +91,7 @@ route.post("/add-user", Auth, async (req, res) => {
       ImageUrl = uploadPhoto.secure_url;
     }
 
-    console.log(uploadPhoto);
+    // console.log("upload folder", uploadPhoto);
 
     const hash = await bcrypt.hash(req.body.password, 10);
 
@@ -114,12 +103,12 @@ route.post("/add-user", Auth, async (req, res) => {
       role: req.body.role || "waiter",
       ImageId: ImageId,
       ImageUrl: ImageUrl,
-      createdBy: new mongoose.Types.ObjectId(req.user.uId),
+      createdBy: new mongoose.Types.ObjectId(req.user?.uId || null),
     });
 
     // User-Add & save
 
-    const userAdd = await addUser.save();
+     const userAdd = await addUser.save();
 
     res.status(200).json({
       msg: "Data Add Successfully...",
@@ -161,7 +150,8 @@ route.post("/login", async (req, res) => {
         fullName: user[0].fullName,
         email: user[0].email,
         role: user[0].role,
-        resturantId :user[0].restaurantId
+        // resturantId :user[0].restaurantId
+        imageUrl:user[0].ImageUrl
       },
       "rmskey",
       {
@@ -176,6 +166,7 @@ route.post("/login", async (req, res) => {
       fullName: user[0].fullName,
       email: user[0].email,
       role: user[0].role,
+      imageUrl:user[0].ImageUrl,
       token: token,
     });
   } catch (err) {
@@ -228,14 +219,7 @@ route.get("/all-user", async (req, res) => {
 
 route.put("/:id", Auth, async (req, res) => {
   try {
-    const email = await User.find({email:req.body.email})
-    if(email.length >0){
-      return res.status(401).json({
-        msg:"Email already register"
-      })
-     
-    }
-
+   
       
     const user = await User.find({ _id: req.params.id });
     console.log(user[0]);
@@ -309,5 +293,23 @@ route.delete("/:id",Auth, async (req, res) => {
     });
   }
 });
+
+//user-profile
+
+route.get("/profile",Auth,async(req,res)=>{
+  try{
+   const userId = req.uId
+    
+    
+
+  }catch(err){
+    console.log("error");
+    res.status(400).json({
+      error:err
+    })
+    
+  }
+
+})
 
 module.exports = route;
