@@ -36,11 +36,11 @@ const Home = () => {
   const dispatch: AppDispatch = useDispatch();
   const auth = useSelector((state: RootState) => state.auth);
   const user:any = useSelector((state: RootState) => state.auth.user);
-  console.log(user);
+  console.log("Hii",user);
 
 
-  const users = useSelector((state: RootState) => state.auth.user);
-  console.log(users);
+  // const users = useSelector((state: RootState) => state.auth.user);
+  // // console.log(users);
 
   const allMenuRef = useRef<HTMLDivElement>(null);
   const menuScroll = () => {
@@ -93,23 +93,38 @@ const Home = () => {
     const token = localStorage.getItem("token");
     if (token) {
       // console.log("Token is comming");
-      try {
-        const splitToken = token.split(".")[1];
-        const decode = atob(splitToken);
-        //  console.log(decode);
 
-        const payload = JSON.parse(decode);
+      const fetchData = async()=>{
+        try{
+          const res  = await axios.get("http://localhost:3000/user/all-user")
+
+          console.log(res.data);
+          
+
+        }catch(err){
+
+        }
+      }
+     
+        // const splitToken = token.split(".")[1];
+        // const decode = atob(splitToken);
+        // //  console.log(decode);
+
+        // const payload = JSON.parse(decode);
         //  console.log(payload);
 
-        dispatch(
-          login({
-            name:payload.fullName,
-            profileImage:payload.imageUrl
-          })
-        )
-      } catch (err) {}
+        // dispatch(
+        //   login({
+        //     name:payload.fullName,
+        //     profileImage:payload.imageUrl
+        //   })
+        // )
+     
+
+  fetchData();
     }
-  }, [dispatch]);
+  
+  },[]);
   return (
     <>
       <main className="w-full max-w-full">
