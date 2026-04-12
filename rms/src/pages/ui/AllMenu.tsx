@@ -33,10 +33,10 @@ const AllMenu = ({ menu }: props) => {
   const [selectedItem, setSelectedItem] = useState<any>(null);
   const [tables, setTables] = useState<Table[]>([]);
   const [selectedTable, setSelectedTable] = useState<any>(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const dispatch:AppDispatch = useDispatch()
-  const Cart  = useSelector((state:RootState)=>state.cart.items)
+  const dispatch: AppDispatch = useDispatch();
+  const Cart = useSelector((state: RootState) => state.cart.items);
 
   // fetchTable
   useEffect(() => {
@@ -52,22 +52,22 @@ const AllMenu = ({ menu }: props) => {
   const handleClickOrder = (item: any) => {
     const token = localStorage.getItem("token");
 
-    if (!token ) {
+    if (!token) {
       alert("Please login first");
-      navigate("/login"); 
+      navigate("/login");
       return;
     }
 
-   setSelectedItem(item)
+    setSelectedItem(item);
   };
 
-// Table Handle
+  // Table Handle
 
-const handleTable =(table:Table)=>{
-  if (!selectedItem) return;
+  const handleTable = (table: Table) => {
+    if (!selectedItem) return;
 
-  dispatch(
-    addToCart({
+    dispatch(
+      addToCart({
         menuId: selectedItem._id,
         name: selectedItem.menuName,
         price: selectedItem.price,
@@ -77,16 +77,16 @@ const handleTable =(table:Table)=>{
         tableNumber: table.tableNumber,
 
         quantity: 1,
-    })
-  );
-  dispatch(openCart());
+      }),
+    );
+    dispatch(openCart());
     setSelectedItem(null);
-}
+  };
   return (
     <>
       <main className="flex justify-center">
-      <CartUi/>
-    <section className=" w-[90%]  ">
+        <CartUi />
+        <section className=" w-[90%]  ">
           <h1 className="text-center font-['poppins'] text-[18px] md:text-[25px] lg:text-[30px] font-bold mt-10">
             Menu
           </h1>
@@ -124,7 +124,6 @@ const handleTable =(table:Table)=>{
                         onClick={() => {
                           handleClickOrder(items);
                           setSelectedTable(null);
-                          
                         }}
                       >
                         <h2 className="lg:text-[18px] font-['poppins'] font-semibold ">
@@ -142,7 +141,7 @@ const handleTable =(table:Table)=>{
                       <h2>{items.available}</h2>
                     </div>
                     <div className="absolute top-10 text-[10px] md:text-[12px]  md:right-3 md:top-3  lg:right-5 lg:top-4 bg-[#3a230c] rounded-2xl px-3  md:px-2 py-1  text-white font-['poppins']">
-                      <h2>{items.price}</h2>
+                      <h2>Rs. {items.price}</h2>
                     </div>
                   </div>
                 ))}
@@ -156,39 +155,40 @@ const handleTable =(table:Table)=>{
         {selectedItem && !selectedTable && (
           <div className="fixed inset-0 bg-black/80 bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white p-5 rounded w-1/2">
-              <h2 className="text-xl font-bold font-['poppins']">Select Table</h2>
+              <h2 className="text-xl font-bold font-['poppins']">
+                Select Table
+              </h2>
 
-              <div className="flex shrink gap-2 mt-3">
+              <div className="grid grid-cols-4 md:grid-cols-4 lg:grid-cols-7 gap-3 mt-3">
                 {tables.map((table, index) => (
                   <button
                     disabled={table.status === "unavailable"}
                     key={table._id}
-                    onClick={()=>handleTable(table)}
-                    className={`border p-1 rounded font-['poppins'] text-[12px] ${
+                    onClick={() => handleTable(table)}
+                    className={`border md:p-4 rounded font-['poppins'] text-[12px] md:w-20 cursor-pointer ${
                       table.status === "unavailable"
-                        ? "bg-gray-300 cursor-not-allowed"
+                        ? "bg-black/80 cursor-not-allowed"
                         : "hover:bg-gray-200"
                     }`}
                   >
                     {table.tableNumber}
                     <br />
-                    {table.capacity} Person
+                    {/* {table.capacity} Person */}
                   </button>
                 ))}
               </div>
 
-              <div className="flex justify-center ">
+              <div className=" ">
                 <button
-                className="mt-3  px-5 py-2 hover:bg-amber-700 text-white cursor-pointer transition duration-500 bg-amber-600"
-                onClick={() => setSelectedItem(null)}
-              >
-                Close
-              </button>
+                  className="mt-3  px-5 py-2 hover:bg-amber-700 text-white cursor-pointer transition duration-500 bg-amber-600 rounded"
+                  onClick={() => setSelectedItem(null)}
+                >
+                  Close
+                </button>
               </div>
             </div>
           </div>
         )}
-
       </main>
     </>
   );
