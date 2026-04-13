@@ -7,6 +7,7 @@ import { addToCart } from "../../features/CartSlice";
 
 import { openCart } from "../../features/CartOpen";
 import CartUi from "./CartUi";
+import { Table } from 'lucide-react';
 interface MenuItems {
   menuName: string;
   price: string;
@@ -79,9 +80,21 @@ const AllMenu = ({ menu }: props) => {
         quantity: 1,
       }),
     );
+
     dispatch(openCart());
     setSelectedItem(null);
   };
+  // console.log(handleTable);
+  
+// useEffect(()=>{
+
+//   const fetchTable =async ()=>{
+//     const res = await axios.get("http://localhost:3000/table/all-table");
+//     setTables(res.data.Table)
+//   }
+
+//   fetchTable()
+// },[])
   return (
     <>
       <main className="flex justify-center">
