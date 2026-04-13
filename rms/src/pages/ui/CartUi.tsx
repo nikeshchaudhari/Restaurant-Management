@@ -1,41 +1,67 @@
-import { Minus, Plus, X } from "lucide-react";
+import { Minus, Plus, X, Table } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import cartUi, { closeCart, openCart } from "../../features/CartOpen";
 import type { AppDispatch, RootState } from "../../store/store";
-import { decreaseQty, increaseQty, removeCart } from "../../features/CartSlice";
+import {
+  clearCart,
+  decreaseQty,
+  increaseQty,
+  removeCart,
+} from "../../features/CartSlice";
 import { RiAddLine } from "react-icons/ri";
 import { FaMinus } from "react-icons/fa6";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 const CartUi = () => {
   const dispatch: AppDispatch = useDispatch();
   const cartUi = useSelector((state: RootState) => state.cartUi.isCartOpen);
   const cart = useSelector((state: RootState) => state.cart.items);
-  const [quantity, setQuantity] = useState<number>(1);
+  const [quantity, setQuantity] = useState<number>(1);  
 
-  // handle quantity
+  const handleOrder = async () => {
+    if (cart.length === 0) return;
 
-  // const handleIncrease = () => {
-  //   setQuantity((add) => Math.min(add + 1, 10));
-  // };
+    const orderId = "Ord" + Date.now();
+    const totalAmount = cart.reduce((total, item) => {
+      return total + Number(item.price) * item.quantity;
+    }, 0);
 
-  // const handleDecrease = () => {
-  //   setQuantity((sub) => Math.max(sub - 1, 1));
-  // };
+    const orderPayload = {
+      tableId:cart[0]?.tableId,
+      orderId,
+      tableNumber: cart[0]?.tableNumber,
+      items: cart,
+      totalAmount,
+      status: "pending",
+      createdAt: new Date().toISOString(),
+    };
 
-  // const handleAddCart = (item: any) => {
-  //   const alreadyAdd = cart.find((f: any) => f.menuId === item._id);
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/order/order",
+        orderPayload,
+      );
+      console.log(res.data);
+      
 
-  //   if (alreadyAdd) {
-  //     toast.error("Already Add Products..");
-  //   } else {
-  //     toast.success("Add to cart");
+      toast.success("Order Placed Successfully..");
+      dispatch(clearCart());
+      dispatch(closeCart());
 
-  //     console.log(quantity);
-  //   }
-  // };
+     
 
+     window.location.reload()
+      
+    } catch (err) {
+      toast.error("Error");
+    }
+
+    
+
+    console.log("All order",orderPayload);
+  };
   return (
     <>
       {/* Overlay */}
@@ -112,27 +138,34 @@ const CartUi = () => {
                 </div>
               );
             })
-    )}
-  </div>
-
-  {/* confirm order */}
-  <div className="border-t p-4 bg-white sticky  bottom-0">
-    {(() => {
-      const grandTotal = cart.reduce((total, item) => {
-        return total + item.quantity * Number(item.price);
-      }, 0);
-
-      return (
-        <div className="flex justify-between text-lg font-bold">
-          <span>Total:</span>
-          <span>Rs. {grandTotal}</span>
+          )}
         </div>
-      );
-    })()}
-    
-  </div>
 
+        {/* confirm order */}
 
+        {cart.length > 0 && (
+          <div className="border-t p-4 w-full bg-white sticky  bottom-0">
+            {(() => {
+              const grandTotal = cart.reduce((total, item) => {
+                return total + item.quantity * Number(item.price);
+              }, 0);
+
+              return (
+                <div className="flex justify-between text-lg font-bold">
+                  <span>Total:</span>
+                  <span>Rs. {grandTotal}</span>
+                </div>
+              );
+            })()}
+            <button
+              className="w-full mt-3 bg-black text-white py-2 rounded cursor-pointer"
+              onClick={handleOrder}
+            >
+              {" "}
+              Confirm Order
+            </button>
+          </div>
+        )}
       </div>
     </>
   );
