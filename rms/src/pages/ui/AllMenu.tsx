@@ -7,7 +7,8 @@ import { addToCart } from "../../features/CartSlice";
 
 import { openCart } from "../../features/CartOpen";
 import CartUi from "./CartUi";
-import { Table } from 'lucide-react';
+import { Table } from "lucide-react";
+import { setTable } from "../../features/TableSlice";
 interface MenuItems {
   menuName: string;
   price: string;
@@ -24,7 +25,7 @@ type props = {
 interface Table {
   _id: string;
   tableNumber: string;
-  capacity: string;
+  capacity?: string;
   status: "available" | "unavailable";
 }
 const AllMenu = ({ menu }: props) => {
@@ -32,20 +33,21 @@ const AllMenu = ({ menu }: props) => {
 
   const finalMenu: MenuItems[] = menu || location.state?.menu || [];
   const [selectedItem, setSelectedItem] = useState<any>(null);
-  const [tables, setTables] = useState<Table[]>([]);
+  // const [tables, setTables] = useState<Table[]>([]);
   const [selectedTable, setSelectedTable] = useState<any>(null);
   const navigate = useNavigate();
 
   const dispatch: AppDispatch = useDispatch();
   const Cart = useSelector((state: RootState) => state.cart.items);
+  const tables = useSelector((state: RootState) => state.table.tables);
 
   // fetchTable
+  const fetchTable = async () => {
+    const res = await axios.get("http://localhost:3000/table/all-table");
+    dispatch(setTable(res.data.allData));
+    console.log(res.data.allData);
+  };
   useEffect(() => {
-    const fetchTable = async () => {
-      const res = await axios.get("http://localhost:3000/table/all-table");
-      setTables(res.data.allData);
-      console.log(res.data.allData);
-    };
     fetchTable();
   }, []);
 
@@ -85,16 +87,16 @@ const AllMenu = ({ menu }: props) => {
     setSelectedItem(null);
   };
   // console.log(handleTable);
-  
-// useEffect(()=>{
 
-//   const fetchTable =async ()=>{
-//     const res = await axios.get("http://localhost:3000/table/all-table");
-//     setTables(res.data.Table)
-//   }
+  // useEffect(()=>{
 
-//   fetchTable()
-// },[])
+  //   const fetchTable =async ()=>{
+  //     const res = await axios.get("http://localhost:3000/table/all-table");
+  //     setTables(res.data.Table)
+  //   }
+
+  //   fetchTable()
+  // },[])
   return (
     <>
       <main className="flex justify-center">
@@ -173,7 +175,7 @@ const AllMenu = ({ menu }: props) => {
               </h2>
 
               <div className="grid grid-cols-4 md:grid-cols-4 lg:grid-cols-7 gap-3 mt-3">
-                {tables.map((table, index) => (
+                {tables?.map((table, index) => (
                   <button
                     disabled={table.status === "unavailable"}
                     key={table._id}
