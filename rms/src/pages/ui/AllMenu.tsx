@@ -125,9 +125,7 @@ const AllMenu = () => {
                 );
               })}
             </div>
-            <CartUi/>
-
-            
+            <CartUi />
           </section>
         </div>
       </main>
