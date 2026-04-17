@@ -5,6 +5,8 @@ import type { AppDispatch, RootState } from "../../store/store";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { addToCart, cartSlice } from "../../features/CartSlice";
+import { openCart } from "../../features/CartOpen";
+import CartUi from "./CartUi";
 
 interface MenuItems {
   menuName: string;
@@ -46,6 +48,13 @@ const AllMenu = () => {
     };
     fetchMenu();
   }, []);
+
+  // cart
+
+  const handleCart = (item: any) => {
+    dispatch(addToCart(item));
+    dispatch(openCart(item));
+  };
 
   return (
     <>
@@ -104,7 +113,7 @@ const AllMenu = () => {
                       <div className=" absolute w-full bottom-0 z-10 lg:opacity-0 lg:group-hover:opacity-100 duration-500">
                         <div
                           className="text-center flex items-center justify-center bg-[#3a230c] text-white h-8 md:h-12"
-                          onClick={() => dispatch(addToCart(items))}
+                          onClick={() => handleCart(items)}
                         >
                           <h1 className="font-[poppins] text-[12px] lg:text-[18px] md:font-bold">
                             Order Now
@@ -116,6 +125,9 @@ const AllMenu = () => {
                 );
               })}
             </div>
+            <CartUi/>
+
+            
           </section>
         </div>
       </main>
