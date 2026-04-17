@@ -1,4 +1,4 @@
-import React from "react";
+
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../store/store";
 import { closeCart } from "../../features/CartOpen";
@@ -8,7 +8,8 @@ const CartUi = () => {
   const dispatch: AppDispatch = useDispatch();
   const isOpen = useSelector((state: RootState) => state.cartUi.isCartOpen);
 
-
+  const cart = useSelector((state:RootState)=>state.cart.items)
+  console.log(cart);
   
 
   return (
@@ -23,13 +24,38 @@ const CartUi = () => {
 
       {/* drawer */}
 
-      <div className={`flex justify-between items fixed top-0 right-0 w-[40vw] bg-white h-full z-50 transition transform duration-700 p-2 ${
-        isOpen?"translate-x-0":"translate-x-full"}`}>
+      <div
+        className={`  items fixed top-0 right-0 w-[40vw] bg-white h-full z-50 transition transform duration-700 p-2 ${
+          isOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+       <div className="flex justify-between px-5 py-4 border-b">
+         <h2 className=" text-[20px] font-['poppins'] font-semibold">
+          Add Items
+        </h2>
+        <X
+          className="hover:bg-gray-100  cursor-pointer transform transition hover:rotate-90 duration-200 rounded-full"
+          size={30}
+          onClick={() => dispatch(closeCart())}
+        />
+       </div>
 
-          <h2 className=" text-[20px] font-['poppins'] font-semibold">Add Items</h2>
-          <X className="hover:bg-gray-100  cursor-pointer transform transition hover:rotate-90 duration-200 rounded-full" size={30} onClick={()=>dispatch(closeCart())}/>
+       {/* items list */}
 
+       {cart.map((items:any)=>{
+        return(
+          <>
+          <div key={items} >
+            {items.menuName}
+          </div>
+          
+          </>
+        )
+       })}
 
+       <div>
+
+       </div>
 
 
 
