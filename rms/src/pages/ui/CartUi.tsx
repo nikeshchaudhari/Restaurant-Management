@@ -17,7 +17,11 @@ const totalPrice = cart.reduce(
 );
   console.log(totalPrice);
   
+// confirm order
 
+const confirmOrder =()=>{
+  
+}
   return (
     <>
       {/* OVERLAY */}
@@ -47,7 +51,7 @@ const totalPrice = cart.reduce(
 
         {/* ITEMS (SCROLL AREA) */}
         <div className="flex-1 overflow-y-auto">
-          {cart.map((items: any, index: any) => (
+          {cart.map((items: any) => (
             <div
               key={items._id}
               className="flex justify-between items-center p-2 "
