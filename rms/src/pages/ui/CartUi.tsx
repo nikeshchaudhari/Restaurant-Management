@@ -2,26 +2,68 @@ import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../store/store";
 import { closeCart } from "../../features/CartOpen";
 import { Minus, Plus, X } from "lucide-react";
-import { decreaseQty, increaseQty, removeCart } from "../../features/CartSlice";
+import {
+  clearCart,
+  decreaseQty,
+  increaseQty,
+  removeCart,
+} from "../../features/CartSlice";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const CartUi = () => {
   const dispatch: AppDispatch = useDispatch();
   const isOpen = useSelector((state: RootState) => state.cartUi.isCartOpen);
 
   const cart = useSelector((state: RootState) => state.cart.items);
-  console.log(cart);
+  // console.log(cart);
+  const selectTable = useSelector(
+    (state: RootState) => state.table.selectedTable,
+  );
+  console.log("Table", selectTable);
 
-const totalPrice = cart.reduce(
-  (t,i:any) => t+i.price* i.quantity  ,
-  0
-);
+  const totalPrice = cart.reduce((t, i: any) => t + i.price * i.quantity, 0);
   console.log(totalPrice);
-  
-// confirm order
 
-const confirmOrder =()=>{
-  
-}
+  // confirm order
+
+  const confirmOrder = async () => {
+    if (!selectTable) {
+      toast.error("Select a table first");
+      return;
+    }
+
+    const payload = {
+      tableId: selectTable?._id,
+      tableNumber: selectTable?.tableNumber,
+      items: cart.map((i: any) => ({
+        menuId: i._id,
+        menuName: i.menuName,
+        price: i.price,
+        qty: i.quantity,
+        totalAmount: i.price * i.quantity,
+      })),
+      totalAmount: totalPrice,
+
+      status: "pending",
+    };
+
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/order/order",
+        payload,
+      );
+      dispatch(clearCart());
+      dispatch(closeCart());
+
+      toast.success("Order Successfully !");
+
+      console.log(res.data);
+    } catch (err) {
+      toast.error("Order Failed");
+      console.log("error");
+    }
+  };
   return (
     <>
       {/* OVERLAY */}
@@ -66,7 +108,7 @@ const confirmOrder =()=>{
                   <div className="flex flex-col gap-2">
                     <h2 className="font-medium">{items.menuName}</h2>
                     <h2 className="font-['poppins']">
-                      {items.quantity} * {items.price} ={" "}
+                      {items.quantity} X {items.price} ={" "}
                       <span className="text-red-900 ">
                         {items.price * items.quantity}
                       </span>
@@ -104,11 +146,18 @@ const confirmOrder =()=>{
           <h2 className="font-['poppins'] font-bold">Total Price : </h2>
           <h2 className="font-['poppins'] text-red-900">Rs.{totalPrice}</h2>
         </div>
-        <button className={` p-2 mx-4 md:mx-2 mb-10 md:mb-2 rounded text-white font-['poppins']  transition-all transform  text-[18px] font-medium  ${
-          cart.length === 0 ?"bg-gray-400 cursor-not-allowed":"bg-red-900 cursor-pointer hover:bg-red-800 transition-all transform hover:-translate-y-1 duration-500"
-          
-          }`} disabled={cart.length === 0}>Order Confirm</button>
-      </div>  
+        <button
+          className={` p-2 mx-4 md:mx-2 mb-10 md:mb-2 rounded text-white font-['poppins']  transition-all transform  text-[18px] font-medium  ${
+            cart.length === 0
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-red-900 cursor-pointer hover:bg-red-800 transition-all transform hover:-translate-y-1 duration-500"
+          }`}
+          disabled={cart.length === 0}
+          onClick={confirmOrder}
+        >
+          Order Confirm
+        </button>
+      </div>
     </>
   );
 };
