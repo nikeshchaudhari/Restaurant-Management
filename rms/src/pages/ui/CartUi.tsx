@@ -10,6 +10,7 @@ import {
 } from "../../features/CartSlice";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const CartUi = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -20,10 +21,14 @@ const CartUi = () => {
   const selectTable = useSelector(
     (state: RootState) => state.table.selectedTable,
   );
-  console.log("Table", selectTable);
+  // console.log("Table", selectTable);
+
+  const navigate = useNavigate()
 
   const totalPrice = cart.reduce((t, i: any) => t + i.price * i.quantity, 0);
-  console.log(totalPrice);
+  // console.log(totalPrice);
+
+
 
   // confirm order
 
@@ -57,13 +62,19 @@ const CartUi = () => {
       dispatch(closeCart());
 
       toast.success("Order Successfully !");
+      navigate("/food-order")
 
-      console.log(res.data);
+      setTimeout(()=>{
+        window.print()
+      },1000)
+
+      // console.log(res.data);
     } catch (err) {
       toast.error("Order Failed");
       console.log("error");
     }
   };
+ 
   return (
     <>
       {/* OVERLAY */}
@@ -157,6 +168,11 @@ const CartUi = () => {
         >
           Order Confirm
         </button>
+      </div>
+
+      <div id="invoice"  >
+        {/* <h2>Table: heelo table</h2> */}
+       
       </div>
     </>
   );
