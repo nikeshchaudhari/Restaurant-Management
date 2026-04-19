@@ -6,15 +6,17 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import AllMenu from "./ui/AllMenu";
+// import AllMenu from "./ui/AllMenu";
 import MenuSlide from "../components/MenuSlide";
 import type { AppDispatch, RootState } from "../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { menuOpen } from "../features/menuSlice";
-import { jwtDecode } from "jwt-decode";
-import { login } from "../features/Auth";
+// import { jwtDecode } from "jwt-decode";
+// import { login } from "../features/Auth";
+// import ListTabel from "./ui/ListTabel";
 
 interface MenuItems {
+  _id:  | null | undefined;
   menuName: string;
   price: string;
   category: string;
@@ -33,11 +35,12 @@ const Home = () => {
   const [active, setActive] = useState<number | null>(null);
   const [filterMenu, setFilterMenu] = useState<MenuItems[]>([]);
   // const [user, setUser] = useState<string | null>(null);
+
+  const [search, setSearch] = useState<string>("");
   const dispatch: AppDispatch = useDispatch();
   const auth = useSelector((state: RootState) => state.auth);
-  const user:any = useSelector((state: RootState) => state.auth.user);
-  console.log("Hii",user);
-
+  const user: any = useSelector((state: RootState) => state.auth.user);
+  // console.log("Hii",user);
 
   // const users = useSelector((state: RootState) => state.auth.user);
   // // console.log(users);
@@ -48,6 +51,8 @@ const Home = () => {
       allMenuRef.current?.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+
   // category fetch
 
   useEffect(() => {
@@ -75,6 +80,8 @@ const Home = () => {
     fetchData();
   }, []);
 
+
+
   // category show only
 
   const showCategory = (menus: string, index: number) => {
@@ -89,42 +96,42 @@ const Home = () => {
     }
   };
 
+
+  // fetchUser
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       // console.log("Token is comming");
 
-      const fetchData = async()=>{
-        try{
-          const res  = await axios.get("http://localhost:3000/user/all-user")
+      const fetchData = async () => {
+        try {
+          const res = await axios.get("http://localhost:3000/user/all-user");
 
           console.log(res.data);
-          
+        } catch (err) {}
+      };
 
-        }catch(err){
+      // const splitToken = token.split(".")[1];
+      // const decode = atob(splitToken);
+      // //  console.log(decode);
 
-        }
-      }
-     
-        // const splitToken = token.split(".")[1];
-        // const decode = atob(splitToken);
-        // //  console.log(decode);
+      // const payload = JSON.parse(decode);
+      //  console.log(payload);
 
-        // const payload = JSON.parse(decode);
-        //  console.log(payload);
+      // dispatch(
+      //   login({
+      //     name:payload.fullName,
+      //     profileImage:payload.imageUrl
+      //   })
+      // )
 
-        // dispatch(
-        //   login({
-        //     name:payload.fullName,
-        //     profileImage:payload.imageUrl
-        //   })
-        // )
-     
-
-  fetchData();
+      fetchData();
     }
-  
-  },[]);
+  }, []);
+
+// search logic
+
+const filter = menu.filter((item)=>item.menuName.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
   return (
     <>
       <main className="w-full max-w-full">
@@ -144,15 +151,22 @@ const Home = () => {
             <input
               type="text"
               className="w-full h-12 rounded-full bg-[#E2E2E2] py-3 px-12 outline-none focus:ring-1 focus:ring-[#FF8000] font-poppins transition-all"
+
+              value={search}
+              onChange={(e)=>setSearch(e.target.value)}
             />
             <Search className="absolute top-3 left-5" />
           </div>
           <div className="hidden md:flex gap-4 mr-8 ">
-            {auth.isLoggedIn? (
+            {auth.isLoggedIn ? (
               <>
-               <div >
-                 <img src={auth.user?.profileImage} alt="" className="w-12 rounded-full h-12 border border-sky-100"/>
-               </div>
+                <div>
+                  <img
+                    src=""
+                    alt=""
+                    className="w-12 rounded-full h-12 border border-sky-100"
+                  />
+                </div>
               </>
             ) : (
               <>
@@ -179,7 +193,6 @@ const Home = () => {
 
         {/* mobile view */}
 
-        <div></div>
         {/* Hero section--- */}
 
         <section className="relative flex items-center ">
@@ -248,7 +261,11 @@ const Home = () => {
         </div>
 
         <div ref={allMenuRef}>
-          <AllMenu menu={filterMenu.length ? filterMenu : menu} />
+          {/* <AllMenu menu={filterMenu.length ? filterMenu : menu} /> */}
+
+      
+
+
         </div>
       </main>
     </>
