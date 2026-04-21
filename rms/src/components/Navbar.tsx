@@ -1,9 +1,24 @@
+import axios from "axios";
 import { Search, ShoppingBag, User2Icon } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
+const Navbar = ({ search, setSearch }: any) => {
+  const [user, setUser] = useState<any>(null);
+  const token = localStorage.getItem("token");
 
-const Navbar = ({ search,setSearch }: any) => {
-  
+  useEffect(() => {
+    const fetechUser = async () => {
+      const res = await axios.get("http://localhost:3000/user/profile", {
+        headers: {
+          Authorization: `Bearer ${token} `,
+        },
+      });
+
+      setUser(res.data);
+    };
+
+    fetechUser();
+  }, []);
 
   return (
     <>
@@ -16,7 +31,7 @@ const Navbar = ({ search,setSearch }: any) => {
           </div>
           <div className="relative flex items-center h-full  px-4 md:px-0">
             <input
-            value={search}
+              value={search}
               type="text"
               placeholder="Search Items..."
               onChange={(e) => setSearch(e.target.value)}
@@ -25,12 +40,13 @@ const Navbar = ({ search,setSearch }: any) => {
             <Search className="absolute left-8  md:left-5" />
           </div>
 
-        <div className="">
-          <ShoppingBag/>
-        </div>
-        <div className="pr-10">
-          <User2Icon/>
-        </div>
+          <div className="">
+            <ShoppingBag />
+          </div>
+          <div className="pr-10 bg-red-600">
+            <img src={user?.imageUrl} alt="" />
+            <h2>{user.fullName}</h2>
+          </div>
         </div>
       </>
     </>
