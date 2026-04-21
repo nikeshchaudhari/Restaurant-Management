@@ -20,7 +20,7 @@ const ListTabel = () => {
   const [selected, setSelected] = useState<Table | null>(null);
 
   const dispatch: AppDispatch = useDispatch();
-  const open = useSelector((state: RootState) => state.menu.isOpen);
+  // const open = useSelector((state: RootState) => state.menu.isOpen);
 
   const navigate = useNavigate();
 
@@ -62,16 +62,16 @@ const ListTabel = () => {
               </h2>
               <div className="w-full bg-white border border-amber-500/20 rounded-2xl h-full flex items-center justify-center md:justify-start p-2 md:p-5 gap-4 mb-5">
                 <div className="bg-amber-500 px-2 py-1 md:px-5 md:py-2 rounded-full text-white transition transform hover:-translate-x-1 duration-300 font-['poppins']">
-                  <h2 className=" text-[12px] md:text-[18px]">Available</h2>
+                  <h2 className=" text-[12px] md:text-[16px]">Available</h2>
                 </div>
-                <div className="bg-red-400 px-2 py-1 md:px-5 md:py-2 rounded-full text-white transition transform hover:-translate-x-1 duration-300 font-['poppins']">
+                {/* <div className="bg-red-400 px-2 py-1 md:px-5 md:py-2 rounded-full text-white transition transform hover:-translate-x-1 duration-300 font-['poppins']">
                   <h2 className="text-[12px] md:text-[18px]">Reserved</h2>
-                </div>
+                </div> */}
                 <div className="bg-amber-500/40 px-2 py-1 md:px-5 md:py-2 rounded-full text-white transition transform hover:-translate-x-1 duration-300 font-['poppins']">
-                  <h2 className="text-[12px] md:text-[18px]">Unavailable</h2>
+                  <h2 className="text-[12px] md:text-[16px]">Unavailable</h2>
                 </div>
                 <div className="bg-[#360404] px-5 py-2 rounded-full text-white transition transform hover:-translate-x-1 duration-300 font-['poppins']">
-                  <h2 className="">Selected</h2>
+                  <h2 className="text-[12px] md:text-[16px]">Selected</h2>
                 </div>
               </div>
             </div>
