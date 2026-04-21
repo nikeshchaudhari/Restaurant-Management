@@ -80,13 +80,6 @@ const AllMenu = () => {
 
   // pagination
 
-  // const indexOfLasItems = currentPage * rowPage;
-  // const indexOfFirstItems = indexOfLasItems - rowPage;
-  // const currentItems = filterMenu.slice(indexOfFirstItems,indexOfLasItems)
-  // console.log(currentItems);
-
-  // const totalPage = Math.ceil(filterMenu.length/rowPage)
-
   const indexOfLastPage = currentPage * rowPage;
   const indexOfFirstPage = indexOfLastPage - rowPage;
   const currentItems = filterMenu.slice(indexOfFirstPage, indexOfLastPage);
