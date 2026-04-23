@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { menuOpen } from "../../features/menuSlice";
 import { useNavigate } from "react-router-dom";
 import { setSelectedTable } from "../../features/TableSlice";
+import CartUi from "./CartUi";
 
 interface Table {
   _id: string;
@@ -52,8 +53,10 @@ const ListTabel = () => {
     <>
       <main>
         <Navbar />
-        <div className="md:flex ">
-          <UiSlider />
+        <div className="md:flex  ">
+          <div className="hidden md:block  ">
+            <UiSlider />
+          </div>
 
           <section className="px-5 w-full">
             <div>
@@ -109,6 +112,7 @@ const ListTabel = () => {
                 </div>
               )}
             </div>
+            <CartUi/>
           </section>
         </div>
       </main>
