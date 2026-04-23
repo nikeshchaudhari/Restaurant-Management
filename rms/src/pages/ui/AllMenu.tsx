@@ -84,15 +84,17 @@ const AllMenu = () => {
   const indexOfFirstPage = indexOfLastPage - rowPage;
   const currentItems = filterMenu.slice(indexOfFirstPage, indexOfLastPage);
   const totalPage = Math.ceil(filterMenu.length / rowPage);
-  console.log(indexOfLastPage, indexOfFirstPage, totalPage, currentItems);
+  // console.log(indexOfLastPage, indexOfFirstPage, totalPage, currentItems);
 
   return (
     <>
       <main className="">
         <Navbar search={search} setSearch={setSearch} />
-        <div className="md:flex ">
-          <UiSlider />
-
+        <div className=" md:flex  ">
+          
+<div className="hidden md:block">
+  <UiSlider/>
+</div>
           <section className="px-5 overflow-hidden  relative ">
             <div>
               <h2 className=" py-5  lg:text-[22px] font-['poppins'] font-semibold">
