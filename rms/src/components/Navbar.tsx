@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import type { AppDispatch, RootState } from "../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { openCart } from "../features/CartOpen";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = ({ search, setSearch }: any) => {
   // const [user, setUser] = useState<any>(null);
@@ -14,12 +15,26 @@ const Navbar = ({ search, setSearch }: any) => {
   // const user: any = useSelector((state: RootState) => state.auth.user);
   const userProfile: any = useSelector((state: RootState) => state.auth.user);
   const dispatch: AppDispatch = useDispatch();
+  const navigate = useNavigate()
 
+  const profileHandle =()=>{
+    navigate("/food-order/profile");
+    
+  }
+
+
+  // 
+const cartHandle =()=>{
+  if(cart.length===0) return;
+  dispatch(openCart())
+}
+  const cart = useSelector((state:RootState)=>state.cart.items)
+  const cartCount = cart.length
 
   return (
     <>
       <>
-        <div className=" w-full h-15 bg-white shadow-lg flex items-center md:justify-around sticky top-0 z-40  ">
+        <div className=" w-full h-16 bg-white shadow-lg flex items-center md:justify-around fixed top-0 z-40  ">
           <div className="md:px-4 w-auto">
             <h2 className="font-['poppins']  lg:text-[25px] font-bold hidden md:block">
               Hamro Restor
@@ -36,19 +51,28 @@ const Navbar = ({ search, setSearch }: any) => {
             <Search className="absolute left-8  md:left-5" />
           </div>
 
-          <div className="cursor-pointer md:pr-5 lg:pr-0 hidden md:block" onClick={() => dispatch(openCart())}>
+          <div className="cursor-pointer md:px-5 lg:px-0 hidden md:block hover:text-red-900 transation duration-300 relative " onClick={cartHandle}>
             <ShoppingBag />
+            <span>{
+              cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-800 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                  {cartCount}
+                </span>
+
+              )
+              
+}
+            </span>
           </div>
-          <div className="pr-5 hidden lg:block">
-            {isLoggedIn ? (
+          <div className="pr-5 hidden lg:block" onClick={profileHandle}>
+            {isLoggedIn &&(
               <div className="relative  group cursor-pointer">
                 <div className=" " >
-                  <img src={userProfile.profileImage} alt="" className=" md:w-5 lg:w-8 border rounded-full border-b-amber-900/60 " />
+                  <img src={userProfile.profileImage} alt="" className=" md:w-5 lg:w-8 border rounded-full border-amber-900/60  hover:border-amber-700 " />
                 </div>
               </div>
-            ) : (
-              <p>gfdgfdg</p>
-            )}
+            )
+            }
           </div>
         </div>
       </>
