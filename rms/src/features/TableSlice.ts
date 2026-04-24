@@ -1,33 +1,28 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
-interface Table {
-  _id: string;
-  tableNumber: string;
-  status: "available" | "unavailable";
+
+interface Table{
+  _id:string,
+  tableNumber:number
 }
 
 interface TableState {
-  tables: Table[];
+  selectedTable:Table | null
 }
-const initialState: TableState = {
-  tables: [],
-};
+
+const initialState:TableState = {
+    selectedTable: null,
+  }
 export const tableSlice = createSlice({
   name: "table",
   initialState,
   reducers: {
-    setTable: (state, action: PayloadAction<Table[]>) => {
-      state.tables = action.payload;
-    },
-
-    updateTable: (state, action:PayloadAction<{tableId:string,status:"available"|"unavailable"}>) => {
-      const table = state.tables.find((t) => t._id === action.payload.tableId);
-
-      if (!table) return;
-    },
+    setSelectedTable :(state,action)=>{
+      state.selectedTable = action.payload
+    }
   },
 });
 
-
-export const{setTable,updateTable}=tableSlice.actions
+export const{setSelectedTable} = tableSlice.actions;
 export default tableSlice.reducer
+

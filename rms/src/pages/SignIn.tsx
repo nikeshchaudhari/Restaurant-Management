@@ -15,8 +15,8 @@ const SignIn = () => {
   const [email, SetEmail] = useState<string>("");
   const [password, SetPassword] = useState<string>("");
 
-  const dispatch:AppDispatch = useDispatch()
-const auth = useSelector((state:RootState)=>state.auth.isLoggedIn)
+  const dispatch: AppDispatch = useDispatch();
+  // const auth = useSelector((state:RootState)=>state.auth.isLoggedIn)
 
   const navigate = useNavigate();
 
@@ -28,39 +28,42 @@ const auth = useSelector((state:RootState)=>state.auth.isLoggedIn)
         email,
         password,
       });
-      if (response.data.token) {
-        const token = response.data.token
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem("role", response.data.role);
-        localStorage.setItem("FullName", response.data.fullName);
+
+      console.log(response.data);
+
+      const data = response.data;
+
+      if (data.token) {
+        const token = data.token;
+        localStorage.setItem("token", token);
+        localStorage.setItem("role", data.role);
+        localStorage.setItem("FullName", data.fullName);
+        localStorage.setItem("Image", data.imageUrl);
         // localStorage.setItem("ImageUrl", response.data.imageUrl);
 
+        // const payload = JSON.parse(atob(token.split(".")[1]));
+        // console.log("Payload", payload);
+        // console.log("Data0", response);
+        // console.log(token);
+        dispatch(
+          login({
+            token,
+            fullName: data.fullName,
+            profileImage: data.imageUrl,
+            role: data.role,
+          }),
+        );
 
-const payload =JSON.parse(atob(token.split(".")[1]))
-console.log(payload);
-dispatch(
-  login({
-    name:payload.fullName,
-    profileImage:payload.imageUrl
-  })
-)
-
-
-
-        // console.log(response.data);
         toast.success("Login Sucessfully..");
 
         if (response.data.role === "admin") {
           navigate("/dashboard");
         } else if (response.data.role === "waiter") {
-          navigate("/");
+          navigate("/food-order");
         } else {
-          toast.error("Invalid");
+          navigate("/")
         }
-
       }
-
-     
     } catch (err) {
       toast.error("Failed to login");
     }

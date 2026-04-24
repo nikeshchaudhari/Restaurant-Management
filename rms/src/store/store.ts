@@ -6,6 +6,7 @@ import { cartUi } from "../features/CartOpen";
 import { persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'
 import persistReducer from 'redux-persist/es/persistReducer';
+import { tableSlice } from "../features/TableSlice";
 
 
 const rootReducer = combineReducers({
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
     auth: authSlice.reducer,
     cart: cartSlice.reducer,
     cartUi:cartUi.reducer,
+    table:tableSlice.reducer
 
 });
 

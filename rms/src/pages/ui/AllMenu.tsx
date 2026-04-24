@@ -1,13 +1,13 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Navbar from "../../components/Navbar";
 import UiSlider from "../../components/UiSlider";
-import type { AppDispatch, RootState } from "../../store/store";
+import type { AppDispatch } from "../../store/store";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { addToCart } from "../../features/CartSlice";
 import { openCart } from "../../features/CartOpen";
 import CartUi from "./CartUi";
-import { Bold, ChevronLeft, ChevronRight, CircleArrowLeft, CircleArrowRight, MoveRight, Underline } from "lucide-react";
+import {  ChevronLeft, ChevronRight } from "lucide-react";
 
 interface MenuItems {
   menuName: string;
@@ -31,9 +31,9 @@ const AllMenu = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [rowPage, setRowPage] = useState(15);
 
-  const table: any = useSelector(
-    (state: RootState) => state.table.selectedTable,
-  );
+  // const table: any = useSelector(
+  //   (state: RootState) => state.table.selectedTable,
+  // );
   // console.log(table);
 
   const dispatch: AppDispatch = useDispatch();

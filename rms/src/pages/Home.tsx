@@ -1,4 +1,6 @@
-import { ArrowDownToDot, Search } from "lucide-react";
+import { ArrowDownToDot, RefreshCcwDot, RefreshCcwIcon, Search } from "lucide-react";
+import { RotateCw } from 'lucide-react';
+
 import logo from "../assets/logo.png";
 import herobg from "../assets/herobg.png";
 import food from "../assets/food.png";
@@ -11,12 +13,9 @@ import MenuSlide from "../components/MenuSlide";
 import type { AppDispatch, RootState } from "../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { menuOpen } from "../features/menuSlice";
-// import { jwtDecode } from "jwt-decode";
-// import { login } from "../features/Auth";
-// import ListTabel from "./ui/ListTabel";
 
 interface MenuItems {
-  _id:  | null | undefined;
+  _id: null | undefined;
   menuName: string;
   price: string;
   category: string;
@@ -32,14 +31,14 @@ interface UserProfile {
 const Home = () => {
   const [menu, setMenu] = useState<MenuItems[]>([]);
   const [category, setCategory] = useState<string[]>([]);
-  const [active, setActive] = useState<number | null>(null);
-  const [filterMenu, setFilterMenu] = useState<MenuItems[]>([]);
+  const [selected, setSelected] = useState<string>("All");
+  // const [filterMenu, setFilterMenu] = useState<MenuItems[]>([]);
   // const [user, setUser] = useState<string | null>(null);
 
   const [search, setSearch] = useState<string>("");
   const dispatch: AppDispatch = useDispatch();
   const auth = useSelector((state: RootState) => state.auth);
-  const user: any = useSelector((state: RootState) => state.auth.user);
+  // const user: any = useSelector((state: RootState) => state.auth.user);
   // console.log("Hii",user);
 
   // const users = useSelector((state: RootState) => state.auth.user);
@@ -52,7 +51,6 @@ const Home = () => {
     }
   };
 
-
   // category fetch
 
   useEffect(() => {
@@ -63,8 +61,8 @@ const Home = () => {
         setMenu(res.data);
         // console.log(res.data.allMenu);
         const menuData: MenuItems[] = res.data.allMenu;
-        setMenu(menuData);
-        // console.log("allData",menuData);
+        setMenu(menuData.reverse());
+        console.log("allData", menuData);
 
         const uniqueCategory = [
           "All",
@@ -80,58 +78,82 @@ const Home = () => {
     fetchData();
   }, []);
 
-
-
   // category show only
 
-  const showCategory = (menus: string, index: number) => {
-    setActive(index);
-    if (menus === "All") {
-      setFilterMenu(menu);
-      console.log(menu);
-    } else {
-      const filterMenu = menu.filter((item) => item.category === menus);
-      setFilterMenu(filterMenu);
-      console.log("FilterData", filterMenu);
-    }
+  // const showCategory = (menus: string, index: number) => {
+  //   setActive(index);
+  //   if (menus === "All") {
+  //     setFilterMenu(menu);
+  //     // console.log(menu);
+  //   } else {
+  //     const filterMenu = menu.filter((item) => item.category === menus).filter((item)=>item.menuName.toLocaleLowerCase().includes(search.toLocaleLowerCase()));
+
+  //     setFilterMenu(filterMenu);
+  //     console.log("FilterData", filterMenu);
+
+  //   }
+  // };
+
+  const filterItems = menu
+    .filter((items) =>
+      selected === "All" ? true : items.category === selected,
+    )
+    .filter((items) =>
+      items.menuName.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
+    );
+
+  const handleCategory = (item: any) => {
+    console.log(item);
+
+    setSelected(item);
   };
 
-
   // fetchUser
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      // console.log("Token is comming");
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   if (token) {
+  //     // console.log("Token is comming");
 
-      const fetchData = async () => {
-        try {
-          const res = await axios.get("http://localhost:3000/user/all-user");
+  //     const fetchData = async () => {
+  //       try {
+  //         const res = await axios.get("http://localhost:3000/user/all-user");
 
-          console.log(res.data);
-        } catch (err) {}
-      };
+  //         // console.log(res.data);
+  //       } catch (err) {}
+  //     };
 
-      // const splitToken = token.split(".")[1];
-      // const decode = atob(splitToken);
-      // //  console.log(decode);
+  //     // const splitToken = token.split(".")[1];
+  //     // const decode = atob(splitToken);
+  //     // //  console.log(decode);
 
-      // const payload = JSON.parse(decode);
-      //  console.log(payload);
+  //     // const payload = JSON.parse(decode);
+  //     //  console.log(payload);
 
-      // dispatch(
-      //   login({
-      //     name:payload.fullName,
-      //     profileImage:payload.imageUrl
-      //   })
-      // )
+  //     // dispatch(
+  //     //   login({
+  //     //     name:payload.fullName,
+  //     //     profileImage:payload.imageUrl
+  //     //   })
+  //     // )
 
-      fetchData();
-    }
-  }, []);
+  //     fetchData();
+  //   }
+  // }, []);
 
-// search logic
+  // search logic
 
-const filter = menu.filter((item)=>item.menuName.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
+  // const filter = menu.filter((item) =>
+  //   item.menuName.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
+  // );
+
+  // console.log(filter);
+
+  // reload
+
+  const refresh = ()=>{
+    window.location.reload()
+  }
+
   return (
     <>
       <main className="w-full max-w-full">
@@ -151,26 +173,13 @@ const filter = menu.filter((item)=>item.menuName.toLocaleLowerCase().includes(se
             <input
               type="text"
               className="w-full h-12 rounded-full bg-[#E2E2E2] py-3 px-12 outline-none focus:ring-1 focus:ring-[#FF8000] font-poppins transition-all"
-
               value={search}
-              onChange={(e)=>setSearch(e.target.value)}
+              onChange={(e) => setSearch(e.target.value)}
             />
             <Search className="absolute top-3 left-5" />
           </div>
           <div className="hidden md:flex gap-4 mr-8 ">
-            {auth.isLoggedIn ? (
-              <>
-                <div>
-                  <img
-                    src=""
-                    alt=""
-                    className="w-12 rounded-full h-12 border border-sky-100"
-                  />
-                </div>
-              </>
-            ) : (
-              <>
-                <Link to="/signup">
+            <Link to="/signup">
                   <button className="px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition cursor-pointer">
                     Register
                   </button>
@@ -182,8 +191,6 @@ const filter = menu.filter((item)=>item.menuName.toLocaleLowerCase().includes(se
                     Login
                   </button>
                 </Link>
-              </>
-            )}
           </div>
           <RxHamburgerMenu
             className="block md:hidden text-50 hover:bg-gray-100 mr-5"
@@ -250,8 +257,8 @@ const filter = menu.filter((item)=>item.menuName.toLocaleLowerCase().includes(se
               {category.map((items, index) => (
                 <button
                   key={index}
-                  onClick={() => showCategory(items, index)}
-                  className={`px-2 md:py-2 md:px-5 lg:px-8 font-[poppins] rounded-full border border-amber-500 cursor-pointer hover:bg-[#FF8000] hover:text-white transition duration-500 ${active === index ? "bg-[#FF8000] text-white" : "border border-[#FF8000]"}`}
+                  onClick={() => handleCategory(items)}
+                  className={`px-2 md:py-2 md:px-5 lg:px-8 font-[poppins] rounded-full border border-amber-500 cursor-pointer hover:bg-[#FF8000] hover:text-white transition duration-500 ${selected === items ? "bg-[#FF8000] text-white" : "border border-[#FF8000]"}`}
                 >
                   {items}
                 </button>
@@ -261,11 +268,41 @@ const filter = menu.filter((item)=>item.menuName.toLocaleLowerCase().includes(se
         </div>
 
         <div ref={allMenuRef}>
-          {/* <AllMenu menu={filterMenu.length ? filterMenu : menu} /> */}
+          <h1 className="text-center  my-10 text-[18px] md:text-[25px] lg:text-[30px] font-bold font-['poppins']">
+            All Category
+          </h1>
+          <div>
+            {filterItems.length === 0 ? (
+              <div className="w-full pb-5  flex flex-col justify-center items-center ">
+                <h2 className="text-[20px]">No items Founds</h2>
 
-      
-
-
+<RotateCw className="cursor-pointer mt-2  hover:text-amber-600" onClick={refresh}/>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 w-[80vw] justify-self-center">
+                {filterItems.map((items, index) => (
+                  <div
+                    key={index}
+                    className="w-full h-56 md:h-64  shadow-2xl rounded-2xl flex justify-center relative cursor-pointer group "
+                  >
+                    <img
+                      src={items.imageUrl}
+                      alt=""
+                      className="w-full h-40 lg:h-48 object-cover rounded-2xl transform hover:scale-95 duration-500 p-2"
+                    />
+                    <div className="absolute bottom-3 md:bottom-10 lg:bottom-3">
+                      <h1 className="font-[poppins] lg:text-[18px] font-bold">
+                        {items.menuName}
+                      </h1>
+                      <h1 className="font-[poppins] lg:text-[16px] font-medium text-red-900">
+                        Rs. {items.price}
+                      </h1>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </main>
     </>

@@ -21,7 +21,7 @@ const UiSlider = () => {
     },
     {
       name: "My Orders",
-      path: "/food-order/all-order",
+      path: "/food-order/my-order",
       icon: <SendToBack size={18} />,
     },
     {
@@ -51,8 +51,8 @@ const UiSlider = () => {
   };
   return (
     <>
-      <div className=" sticky top-0 h-screen ">
-        <aside className="hidden md:block md:w-[15vw] lg:w-[16vw] sticky top-10 h-[calc(100vh-4rem)] border-r border-gray-300 p-4 shadow bg-white">
+      <div className=" sticky top-0 min-h-screen ">
+        <aside className="hidden md:block md:w-[15vw] lg:w-[16vw] sticky top-10 h-[calc(100vh-4rem)] border-r border-gray-300 p-3  bg-white">
           <div>
             <h3 className="text-center md:p-5 md:text-[12px] lg:text-[15px] font-['poppins'] text-gray-400">
               Waiter Menu

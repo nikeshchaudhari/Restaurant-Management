@@ -31,6 +31,7 @@ const CartUi = () => {
 
 
   // confirm order
+const token = localStorage.getItem("token");
 
   const confirmOrder = async () => {
     if (!selectTable) {
@@ -50,13 +51,17 @@ const CartUi = () => {
       })),
       totalAmount: totalPrice,
 
-      status: "pending",
+      status: "preparing",
     };
 
     try {
       const res = await axios.post(
         "http://localhost:3000/order/order",
-        payload,
+        payload,{
+          headers:{
+            Authorization:`Bearer ${token}`
+          }
+        }
       );
       dispatch(clearCart());
       dispatch(closeCart());
