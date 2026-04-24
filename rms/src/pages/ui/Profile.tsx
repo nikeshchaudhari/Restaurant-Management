@@ -4,6 +4,7 @@ import UiSlider from "../../components/UiSlider";
 import axios from "axios";
 import { useEffect, useState, type FormEvent } from "react";
 import CartUi from "./CartUi";
+import OrderSlide from "../../components/OrderSlide";
 
 const Profile = () => {
   interface User {
@@ -102,9 +103,9 @@ const Profile = () => {
         <div className="w-full mt-20  md:mx-10 lg:mx-10">
           <h2 className="text-center mt-5 font-bold font-['poppins'] text-[20px]">
             Update Your Profile
-          </h2>
+          </h2> 
 
-          <form onSubmit={formHandle} className="mt-5">
+          <form onSubmit={formHandle} className="mt-5 mx-5">
 
            
             <input
@@ -157,6 +158,7 @@ const Profile = () => {
           </form>
         </div>
         <CartUi/>
+        <OrderSlide/>
       </div>
     </main>
   );
