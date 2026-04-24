@@ -8,6 +8,8 @@ import { addToCart } from "../../features/CartSlice";
 import { openCart } from "../../features/CartOpen";
 import CartUi from "./CartUi";
 import {  ChevronLeft, ChevronRight } from "lucide-react";
+import MenuSlide from "../../components/MenuSlide";
+import OrderSlide from "../../components/OrderSlide";
 
 interface MenuItems {
   menuName: string;
@@ -194,6 +196,7 @@ const AllMenu = () => {
               )}
             </div>
             <CartUi />
+            <OrderSlide/>
           </section>
         </div>
       </main>
