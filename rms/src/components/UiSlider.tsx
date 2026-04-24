@@ -1,22 +1,57 @@
-
-import { ChefHat, LogOut, SendToBack, Table, TableOfContents, UserRoundPen } from "lucide-react";
+import {
+  ChefHat,
+  LogOut,
+  SendToBack,
+  Table,
+  TableOfContents,
+  UserRoundPen,
+} from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 const UiSlider = () => {
   const buttons = [
-    {name:"Select Table",path:"/food-order",icon:<TableOfContents size={18}/>},
-    {name:"Take Order",path:"/food-order/all-menu",icon:<ChefHat size={18}/>},
-    {name:"My Orders",path:"/food-order/all-order",icon:<SendToBack size={18}/>},
-    {name:"Profile",path:"/food-order/profile",icon:<UserRoundPen size={18}/>},
-    {name:"Logout",path:"/food-order",icon:<LogOut size={18}/>},
-    
-    
+    {
+      name: "Select Table",
+      path: "/food-order",
+      icon: <TableOfContents size={18} />,
+    },
+    {
+      name: "Take Order",
+      path: "/food-order/all-menu",
+      icon: <ChefHat size={18} />,
+    },
+    {
+      name: "My Orders",
+      path: "/food-order/all-order",
+      icon: <SendToBack size={18} />,
+    },
+    {
+      name: "Profile",
+      path: "/food-order/profile",
+      icon: <UserRoundPen size={18} />,
+    },
+    { name: "Logout", action: "logout", icon: <LogOut size={18} /> },
   ];
   // const [active, setActive] = useState<null>(null);
-  const navigate = useNavigate()
-  const location = useLocation()
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleLogout = (item: any) => {
+    if (item.action === "logout") {
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
+      localStorage.removeItem("Image");
+      localStorage.removeItem("FullName");
+
+      navigate("/", { replace: true });
+
+      return;
+    }
+
+    navigate(item.path);
+  };
   return (
     <>
-      <div className=" sticky top-0 h-screen " >
+      <div className=" sticky top-0 h-screen ">
         <aside className="hidden md:block md:w-[15vw] lg:w-[16vw] sticky top-10 h-[calc(100vh-4rem)] border-r border-gray-300 p-4 shadow bg-white">
           <div>
             <h3 className="text-center md:p-5 md:text-[12px] lg:text-[15px] font-['poppins'] text-gray-400">
@@ -29,20 +64,17 @@ const UiSlider = () => {
                 <div>
                   <li
                     key={index}
-                    
                     onClick={() => {
-                      // setActive(index);
-                      navigate(item.path)
-                      
+                      handleLogout(item);
                     }}
                     className={` flex  items-center  gap-2 lg:py-2 bg-[#faefee] hover:bg-[#e0e0e0]/30 w-full rounded  cursor-pointer md:mb-3 lg:mb-1 font-['poppins'] md:text-[12px] lg:text-[16px]  font-semibold ${
-                     location.pathname === item.path
+                      location.pathname === item.path
                         ? "bg-[#eb9e95] text-red-800"
                         : "bg-white"
-                    }`} 
+                    }`}
                   >
                     {item.icon}
-                   <span> {item.name}</span>
+                    <span> {item.name}</span>
                   </li>
                 </div>
               ))}
