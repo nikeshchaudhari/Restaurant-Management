@@ -36,7 +36,6 @@ route.post("/admin", async (req, res) => {
       email: req.body.email,
       password: hash,
       role: "admin",
-     
     });
     const admin = await createAdmin.save();
 
@@ -45,8 +44,7 @@ route.post("/admin", async (req, res) => {
       _id: admin._id,
       fullName: admin.fullName,
       email: admin.email,
-      role:admin.role,
-      
+      role: admin.role,
     });
   } catch (err) {
     console.log("error");
@@ -65,7 +63,6 @@ route.post("/add-user", async (req, res) => {
     // check mail
 
     const user = await User.find({ email: req.body.email });
- 
 
     if (user.length > 0) {
       return res.status(500).json({
@@ -79,8 +76,8 @@ route.post("/add-user", async (req, res) => {
     //   })
     // }
 
-    if ( req.files?.photo) {
-     const  uploadPhoto = await cloudinary.uploader.upload(
+    if (req.files?.photo) {
+      const uploadPhoto = await cloudinary.uploader.upload(
         req.files.photo.tempFilePath,
         {
           folder: "rms_user",
@@ -108,7 +105,7 @@ route.post("/add-user", async (req, res) => {
 
     // User-Add & save
 
-     const userAdd = await addUser.save();
+    const userAdd = await addUser.save();
 
     res.status(200).json({
       msg: "Data Add Successfully...",
@@ -151,9 +148,9 @@ route.post("/login", async (req, res) => {
         email: user[0].email,
         role: user[0].role,
         // resturantId :user[0].restaurantId
-        imageUrl:user[0].ImageUrl
+        imageUrl: user[0].ImageUrl,
       },
-      "rmskey",
+      process.env.SECRET_KEY,
       {
         expiresIn: "365d",
       },
@@ -166,7 +163,7 @@ route.post("/login", async (req, res) => {
       fullName: user[0].fullName,
       email: user[0].email,
       role: user[0].role,
-      imageUrl:user[0].ImageUrl,
+      imageUrl: user[0].ImageUrl,
       token: token,
     });
   } catch (err) {
@@ -219,19 +216,17 @@ route.get("/all-user", async (req, res) => {
 
 route.put("/:id", Auth, async (req, res) => {
   try {
-   
-      
     const user = await User.find({ _id: req.params.id });
     console.log(user[0]);
 
     let ImageId = user[0].ImageId;
     let ImageUrl = user[0].ImageUrl;
 
-    if (req.user.role !== "admin") {
-      return res.status(401).json({
-        msg: "Only admin can edid or update",
-      });
-    }
+    // if (req.user.role !== "admin") {
+    //   return res.status(401).json({
+    //     msg: "Only admin can edid or update",
+    //   });
+    // }
     if (req.files && req.files.photo) {
       if (user[0].ImageId) {
         await cloudinary.uploader.destroy(user[0].ImageId);
@@ -273,14 +268,14 @@ route.put("/:id", Auth, async (req, res) => {
 
 // delete user
 
-route.delete("/:id",Auth, async (req, res) => {
+route.delete("/:id", Auth, async (req, res) => {
   try {
     const deleteUser = await User.find({ _id: req.params.id });
     console.log(deleteUser[0]);
 
-   if(deleteUser.ImageId){
-     await cloudinary.uploader.destroy(deleteUser[0].ImageId);
-   }
+    if (deleteUser.ImageId) {
+      await cloudinary.uploader.destroy(deleteUser[0].ImageId);
+    }
     const deleteData = await User.findByIdAndDelete(req.params.id);
 
     res.status(200).json({
@@ -296,20 +291,26 @@ route.delete("/:id",Auth, async (req, res) => {
 
 //user-profile
 
-route.get("/profile",Auth,async(req,res)=>{
-  try{
-   const userId = req.uId
+route.get("/profile", Auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.uId);
     
+    console.log(user);
     
 
-  }catch(err){
-    console.log("error");
-    res.status(400).json({
-      error:err
-    })
-    
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    return res.status(200).json({
+      profile: user
+    });
+
+  } catch (err) {
+    return res.status(500).json({
+      msg: err.message
+    });
   }
-
-})
+});
 
 module.exports = route;

@@ -16,16 +16,18 @@ cloudinary.config({
 route.post("/add-menu",Auth, async (req, res) => {
   try {
 
-    if(!req.files && !req.files.photo){
+    if(!req.files || !req.files.photo){
       return res.status(400).json({
         msg:"Photo is required"
       })
     }
 
 const photo = req.files.photo
+console.log("photo",photo);
+
 
 // photo type check
-const allowedType = ["image/jpeg","imahe/png","image/jpg"];
+const allowedType = ["image/jpeg","image/png","image/jpg"];
 
 if(!allowedType.includes(photo.mimetype)){
   return res.status(400).json({
@@ -64,6 +66,8 @@ if(photo.size>maxSize){
     });
 
     const menuAdd = await addMenu.save();
+    console.log(menuAdd);
+    
 
     res.status(200).json({
       menu: menuAdd,

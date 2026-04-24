@@ -1,11 +1,14 @@
 // middleware/auth.js
 const jwt = require("jsonwebtoken");
 
+
+require("dotenv").config();
+
 const auth =async (req, res, next) => {
   try {
 const token = await req.headers.authorization.split(" ")[1] 
 // console.log(token);
-const verifyToken = await jwt.verify(token,"rmskey")
+const verifyToken = await jwt.verify(token,process.env.SECRET_KEY)
 // console.log(verifyToken);
 console.log("token verify__middleware ");
 
