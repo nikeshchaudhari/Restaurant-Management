@@ -7,6 +7,9 @@ import Order from "../Order";
 import type { JSX } from "react/jsx-runtime";
 import { toast } from "react-toastify";
 import OrderSlide from "../../components/OrderSlide";
+import type { AppDispatch } from "../../store/store";
+import { useDispatch } from "react-redux";
+import { clearSelectedTable } from "../../features/TableSlice";
 
 const ViewOrder = () => {
   interface OrderItem {
@@ -24,6 +27,9 @@ const ViewOrder = () => {
     items: OrderItem[];
     totalAmount: number;
   }
+
+  const dispatch:AppDispatch = useDispatch()
+
 
   const [order, setOrder] = useState<Order[]>([]);
   console.log(order);
@@ -60,6 +66,7 @@ const ViewOrder = () => {
 
       toast.success("Order Updated");
       fetchOrder();
+      dispatch(clearSelectedTable())
     } catch (err) {
       toast.error("Update failed");
       console.log(err);
