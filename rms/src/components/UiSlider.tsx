@@ -6,8 +6,12 @@ import {
   TableOfContents,
   UserRoundPen,
 } from "lucide-react";
+import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
+import type { RootState } from "../store/store";
 const UiSlider = () => {
+
+  const menuOpen = useSelector((state:RootState)=>(state.menu.isOpen))
   const buttons = [
     {
       name: "Select Table",
@@ -51,8 +55,8 @@ const UiSlider = () => {
   };
   return (
     <>
-      <div className=" sticky top-0 min-h-screen ">
-        <aside className="hidden md:block md:w-[15vw] lg:w-[16vw] sticky top-10 h-[calc(100vh-4rem)] border-r border-gray-300 p-3  bg-white">
+      <div className="sticky top-0 min-h-screen ">
+        <aside className=" md:w-[15vw] lg:w-[16vw] sticky top-10 h-[calc(100vh-4rem)] border-r border-gray-300 p-3  bg-white">
           <div>
             <h3 className="text-center md:p-5 md:text-[12px] lg:text-[15px] font-['poppins'] text-gray-400">
               Waiter Menu
@@ -79,8 +83,12 @@ const UiSlider = () => {
                 </div>
               ))}
             </ul>
+            
           </div>
+        
         </aside>
+
+
       </div>
     </>
   );
