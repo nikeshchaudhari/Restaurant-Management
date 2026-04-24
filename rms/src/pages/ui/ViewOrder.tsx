@@ -6,6 +6,7 @@ import axios from "axios";
 import Order from "../Order";
 import type { JSX } from "react/jsx-runtime";
 import { toast } from "react-toastify";
+import OrderSlide from "../../components/OrderSlide";
 
 const ViewOrder = () => {
   interface OrderItem {
@@ -68,87 +69,96 @@ const ViewOrder = () => {
     <>
       <main>
         <Navbar />
+<div className="md:flex min-h-screen bg-gray-50">
+  {/* Desktop Sidebar */}
+  <div className="hidden md:block">
+    <UiSlider />
+  </div>
 
-        <div className="md:flex min-h-screen ">
-          <div className="hidden md:block ">
-            <UiSlider />
-          </div>
+  {/* Main Content */}
+  <div className="w-full flex justify-center px-3 md:px-5 py-20">
+    <div className="shadow rounded w-full max-w-[1200px] bg-white p-3 md:p-5">
+      <h2 className="text-[18px] md:text-[22px] font-['poppins'] font-semibold">
+        My Orders
+      </h2>
 
-          <div className="w-full h-scren flex justify-center relative">
-            <div className=" absolute top-20 shadow rounded  w-[80vw] h-auto p-5">
-              <h2 className="text-[18px] font-['poppins']">My Orders</h2>
+      {/* Mobile scroll */}
+      <div className="overflow-x-auto mt-5 rounded">
+        <table className="min-w-[900px] md:min-w-full ">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="px-4 py-3 text-left">Order Id</th>
+              <th className="px-4 py-3 text-left">Table No</th>
+              <th className="px-4 py-3 text-left">Items</th>
+              <th className="px-4 py-3 text-left">Price</th>
+              <th className="px-4 py-3 text-left">Total Price</th>
+              <th className="px-4 py-3 text-left">Status</th>
+            </tr>
+          </thead>
 
-              <table className="bg-white  w-full  h-full mt-5  ">
-                <thead className="bg-gray-100">
-                  <tr>
-                    <th className=" px-4 py-2 text-left ">Order Id</th>
-                    <th className=" px-4 py-2 text-left ">Table No</th>
-                    <th className=" px-4 py-2 text-left ">Items</th>
+          <tbody>
+            {order.length === 0 ? (
+              <tr>
+                <td
+                  colSpan={6}
+                  className="text-center p-5 text-[18px] font-semibold"
+                >
+                  No Order Found
+                </td>
+              </tr>
+            ) : (
+              order.map((order) => (
+                <tr
+                  key={order._id}
+                  className="border-b hover:bg-gray-50 transition"
+                >
+                  <td className="px-4 py-3">{order.orderId}</td>
 
-                    <th className=" px-4 py-2 text-left ">Price</th>
-                    <th className=" px-4 py-2 text-left ">Total Price</th>
-                    <th className=" px-4 py-2 text-left ">Status</th>
-                  </tr>
-                </thead>
+                  <td className="px-4 py-3">{order.tableNumber}</td>
 
-                <tbody>
-                  {order.length === 0 ? (
-                    <tr>
-                      <td
-                        colSpan={5}
-                        className="text-center p-5 text-[20px] font-bold"
-                      >
-                        No Order Found
-                      </td>
-                    </tr>
-                  ) : (
-                    order.map((order) => (
-                      <tr key={order._id}>
-                        <td className=" px-4 py-2 text-left ">
-                          {order.orderId}
-                        </td>
-                        <td className=" px-4 py-2 text-left ">
-                          {order.tableNumber}
-                        </td>
-                        <td>
-                          {order.items.map((item: any, index) => (
-                            <div key={index}>
-                              {item.menuName} X {item.qty}
-                            </div>
-                          ))}
-                        </td>
+                  <td className="px-4 py-3">
+                    {order.items.map((item: any, index) => (
+                      <div key={index}>
+                        {item.menuName} × {item.qty}
+                      </div>
+                    ))}
+                  </td>
 
-                        <td className=" px-4 py-2 text-left ">
-                          {order.items.map((item, index) => (
-                            <div key={index}>Rs. {item.price}</div>
-                          ))}
-                        </td>
-                        <td className=" px-4 py-2 text-left ">
-                          Rs. {order.totalAmount}
-                        </td>
-                        <td>
-                          <select
-                            value={order.status}
-                            onChange={(e) =>
-                              updateTable(order._id, e.target.value)
-                            }
-                            className="border p-1 rounded cursor-pointer"
-                          >
-                            <option value="preparing">Preparing</option>
-                            <option value="completed">Completed</option>
-                            <option value="paid">Paid</option>
-                          </select>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
+                  <td className="px-4 py-3">
+                    {order.items.map((item, index) => (
+                      <div key={index}>Rs. {item.price}</div>
+                    ))}
+                  </td>
 
-          <CartUi />
-        </div>
+                  <td className="px-4 py-3 font-semibold">
+                    Rs. {order.totalAmount}
+                  </td>
+
+                  <td className="px-4 py-3">
+                    <select
+                      value={order.status}
+                      onChange={(e) =>
+                        updateTable(order._id, e.target.value)
+                      }
+                      className="border p-2 rounded cursor-pointer text-sm"
+                    >
+                      <option value="preparing">Preparing</option>
+                      <option value="completed">Completed</option>
+                      <option value="paid">Paid</option>
+                    </select>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <CartUi />
+  <OrderSlide />
+</div>
       </main>
     </>
   );
