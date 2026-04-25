@@ -6,149 +6,206 @@ import { Link, useNavigate } from "react-router-dom";
 
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useFormik } from "formik";
+import { Register } from "../schemas/RegisterSchema";
 
 const SignUp = () => {
+  const [passwordshow, SetpasswordShow] = useState<boolean>(false);
+  const [confirmshow, Setconfirmshow] = useState<boolean>(false);
 
-  const [passwordshow, SetpasswordShow] = useState<boolean>(false)
-  const [confirmshow, Setconfirmshow] = useState<boolean>(false)
-
-  const [fullName, SetfullName] = useState<string>("");
-  const [email, SetEmail] = useState<string>("");
-  const [password, SetPassword] = useState<string>("");
-  const [confirmPassword, SetconfirmPassword] = useState<string>("");
+  // const [fullName, SetfullName] = useState<string>("");
+  // const [email, SetEmail] = useState<string>("");
+  // const [password, SetPassword] = useState<string>("");
+  // const [confirmPassword, SetconfirmPassword] = useState<string>("");
 
   const navigate = useNavigate();
 
+  const{values,errors,resetForm,touched,handleBlur,handleChange,handleSubmit}=useFormik({
+    initialValues: {
+      fullName: "",
+      email: "",
+      password: "",
+      confirm_password: "",
+    },
+    validationSchema: Register,
+    onSubmit: async (values) => {
+      console.log(values);
+      try {
+      const token = localStorage.getItem("token");
 
-  const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // console.log("Data insert");
-
-    if (password != confirmPassword) {
-      alert("password do not match");
-      return;
-    }
-
-    const data = {
-      fullName,
-      email,
-      password,
-      confirmPassword
-    }
-
-    try {
-      const token = localStorage.getItem("token")
-
-      const response = await axios.post("http://localhost:3000/user/add-user",
-        data,{
-          headers:{
-            Authorization:`Bear ${token}`
-          }
-        }
-      )
+      const response = await axios.post(
+        "http://localhost:3000/user/add-user",
+        values,
+        {
+          headers: {
+            Authorization: `Bear ${token}`,
+          },
+        },
+      );
       console.log("User Add", response.data);
-      toast.success("Data Add Sucessfully...")
-      navigate("/login")
-
-
+      toast.success("Data Add Sucessfully...");
+      resetForm();
+      navigate("/login");
+      
+    } catch (err) {
+      toast.error("Error ");
     }
-    catch (err) {
-      toast.error("Error ")
-    }
 
-    SetfullName("");
-    SetEmail("");
-    SetPassword("");
-    SetconfirmPassword("");
+    },
+  });
 
-
-
-
-
-
+  function SetconfirmPassword(value: string): void {
+    throw new Error("Function not implemented.");
   }
 
+  // const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   // console.log("Data insert");
 
+  //   if (password != confirmPassword) {
+  //     alert("password do not match");
+  //     return;
+  //   }
+
+  //   const data = {
+  //     fullName,
+  //     email,
+  //     password,
+  //     confirmPassword,
+  //   };
+
+  //   try {
+  //     const token = localStorage.getItem("token");
+
+  //     const response = await axios.post(
+  //       "http://localhost:3000/user/add-user",
+  //       data,
+  //       {
+  //         headers: {
+  //           Authorization: `Bear ${token}`,
+  //         },
+  //       },
+  //     );
+  //     console.log("User Add", response.data);
+  //     toast.success("Data Add Sucessfully...");
+  //     navigate("/login");
+  //   } catch (err) {
+  //     toast.error("Error ");
+  //   }
+
+  //   SetfullName("");
+  //   SetEmail("");
+  //   SetPassword("");
+  //   SetconfirmPassword("");
+  // };
 
   return (
     <div className="w-screen h-screen flex justify-center items-center bg-gray-100">
-
-      <div className="w-full md:w-200 h-100 rounded-lg flex overflow-hidden bg-white">
-
+      <div className="w-full md:w-200 h-auto rounded-lg flex overflow-hidden bg-white">
         {/* Image section */}
         <div className="w-1/2 bg-[#e2dddd] hidden md:block">
-          <img
-            src={food}
-            alt="food"
-            className="w-100 h-100 p-10"
-          />
+          <img src={food} alt="food" className="w-100 h-100 p-10" />
         </div>
 
         {/* Form section */}
         <div className=" w-full md:w-1/2  p-8 ">
-
-          <form onSubmit={handleForm} className="flex flex-col gap-1">
-            <h1 className="text-center text-[20px] mb-3 font-bold">Create Your Account ?</h1>
-            {/* <label htmlFor="fullname">Full_Name <span className="text-red-500">*</span></label> */}
+          <form onSubmit={handleSubmit} className="flex flex-col gap-1">
+            <h1 className="text-center text-[20px] mb-3 font-bold">
+              Create Your Account ?
+            </h1>
+         <div className="mb-3 ">
+             {/* <label htmlFor="fullname">Full_Name <span className="text-red-500">*</span></label> */}
             <input
               type="text"
-              className="p-2 border focus:outline-none border-[#e2dddd] rounded mb-3 focus:ring-1 focus:ring-blue-500" id="fullname"
+              className="w-full p-2 border focus:outline-none border-[#e2dddd] rounded focus:ring-1 focus:ring-blue-500"
+              id="fullname"
               placeholder="Enter full name"
-              name="fullname"
-
-              value={fullName}
-              onChange={(e) => SetfullName(e.target.value)}
+              name="fullName"
+              value={values.fullName}
+              onChange={handleChange}
+              onBlur={handleBlur}
             />
-            {/* <label htmlFor="email">Email<span className="text-red-500">*</span></label> */}
+            {touched.fullName && errors.fullName &&(
+              <p className="text-sm text-red-500">{errors.fullName}*</p>
+            )}
+         </div>
+           <div className="mb-3">
+             {/* <label htmlFor="email">Email<span className="text-red-500">*</span></label> */}
             <input
-              type="email" id="email"
-              className="p-2 border outline-none border-[#e2dddd] rounded mb-3 focus:ring-1 focus:ring-blue-500"
+              type="email"
+              id="email"
+              className="w-full p-2 border outline-none border-[#e2dddd] rounded  focus:ring-1 focus:ring-blue-500"
               placeholder="Enter your email"
               name="email"
-              value={email}
-              onChange={(e) => SetEmail(e.target.value)}
+              value={values.email}
+              onChange={handleChange}
+              onBlur={handleBlur}
             />
-            <div className="relative">
+             {touched.email && errors.email &&(
+              <p className="text-sm text-red-500">{errors.email}*</p>
+            )}
+           </div>
+            <div className="relative mb-3">
               {/* <label htmlFor="password">Password<span className="text-red-500">*</span></label> */}
               <input
-                type={passwordshow ? "text" : "password"} id="password"
-                className="w-full p-2 border outline-none border-[#e2dddd] rounded mb-3 focus:ring-1 focus:ring-blue-500 "
+                type={passwordshow ? "text" : "password"}
+                id="password"
+                className="w-full p-2 border outline-none border-[#e2dddd] rounded  focus:ring-1 focus:ring-blue-500 "
                 name="password"
                 autoComplete="new-password"
-
                 placeholder="Enter password"
-                value={password}
-
-                onChange={(e) => SetPassword(e.target.value)}
+                value={values.password}
+                onChange={handleChange}
+                onBlur={handleBlur}
               />
+                {touched.password && errors.password &&(
+              <p className="text-sm text-red-500">{errors.password}*</p>
+            )}
+              
 
-              <button type="button" className="absolute top-3 right-2 cursor-pointer " onClick={() => SetpasswordShow(!passwordshow)}>
+              <button
+                type="button"
+                className="absolute top-3 right-2 cursor-pointer "
+                onClick={() => SetpasswordShow(!passwordshow)}
+              >
                 {passwordshow ? <FiEye size={18} /> : <FiEyeOff size={18} />}
               </button>
             </div>
-            <div className="relative ">
+            <div className="relative mb-3">
               {/* <label htmlFor="password">Confirm Password<span className="text-red-500">*</span></label> */}
               <input
-                type={confirmshow ? "text" : "password"} id="confirmpassword"
-                className="w-full p-2 border outline-none border-[#e2dddd] rounded mb-3 focus:ring-1 focus:ring-blue-500"
-                name="confirm-password"
+                type={confirmshow ? "text" : "password"}
+                id="confirmpassword"
+                className="w-full p-2 border outline-none border-[#e2dddd] rounded  focus:ring-1 focus:ring-blue-500"
+                name="confirm_password"
                 autoComplete="new-password"
                 placeholder="Enter confirm password"
-
-                value={confirmPassword}
-                onChange={(e) => SetconfirmPassword(e.target.value)}
+                value={values.confirm_password}
+                onChange={handleChange}
+                onBlur={handleBlur}
               />
-              <button className="absolute top-3 right-2 cursor-pointer " type="button" onClick={() => Setconfirmshow(!confirmshow)}>
+               {touched.confirm_password && errors.confirm_password &&(
+              <p className="text-sm text-red-500">{errors.confirm_password}*</p>
+            )}
+              <button
+                className="absolute top-3 right-2 cursor-pointer "
+                type="button"
+                onClick={() => Setconfirmshow(!confirmshow)}
+              >
                 {confirmshow ? <FiEye size={18} /> : <FiEyeOff size={18} />}
-
               </button>
-
             </div>
-            <button className="bg-[#1992DE] p-2 -mt-2 transition duration-300 hover:bg-[#0E6BA6] cursor-pointer text-white rounded" type="submit">SignUp</button>
-            <span className="text-center">Already have an account? <Link to="/login">Login</Link></span>
+            <button
+              className="bg-[#1992DE] p-2 -mt-2 transition duration-300 hover:bg-[#0E6BA6] cursor-pointer text-white rounded"
+              type="submit"
+            >
+              SignUp
+            </button>
+            <span className="text-center">
+              Already have an account? <Link to="/login">Login</Link>
+            </span>
           </form>
         </div>
-
       </div>
     </div>
   );
