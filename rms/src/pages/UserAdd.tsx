@@ -404,10 +404,11 @@ const UserAdd = () => {
             </div>
           </div>
             {/* PAGINATION */}
-        <div className="flex gap-2 mb-2 justify-center">
+        <div className="flex gap-2 mb-2 justify-center ">
           <button
             disabled={currentPage === 1}
             onClick={() => setCurrentPage(currentPage - 1)}
+            className="cursor-pointer"
           >
             Prev
           </button>
@@ -417,7 +418,7 @@ const UserAdd = () => {
               key={i}
               onClick={() => setCurrentPage(i + 1)}
               className={
-                currentPage === i + 1 ? "bg-gray-400 text-white px-3 py-1 rounded" : ""
+                currentPage === i + 1 ? "bg-gray-400 text-white px-3 py-1 rounded cursor-pointer" : "cursor-pointer"
               }
             >
               {i + 1}
@@ -427,6 +428,7 @@ const UserAdd = () => {
           <button
             disabled={currentPage === totalPage}
             onClick={() => setCurrentPage(currentPage + 1)}
+             className="cursor-pointer"
           >
             Next
           </button>
