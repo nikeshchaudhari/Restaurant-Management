@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 // import adminLogo from "../assets/adminlogo.png"
 import { useEffect, useState } from "react";
 // import axios from "axios";
+import AllMenu from './ui/AllMenu';
 // import { toast } from "react-toastify";
 import Slide from "../components/Slide";
 import { X, Menu } from "lucide-react";
@@ -10,70 +11,82 @@ import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../store/store";
 import { menuOpen } from "../features/menuSlice";
 import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 
 interface Order {
   _id: number;
   total: number;
-  date: string;
+  totalAmount: number;
+  createdAt: string;
 }
-interface Token{
-    _id:any,
-    fullName:string,
-    role:string
-
+interface Token {
+  _id: any;
+  fullName: string;
+  role: string;
+}
+interface Table {
+  status: string;
 }
 const AdminDashboard = () => {
   const dispatch: AppDispatch = useDispatch();
   const Open = useSelector((state: RootState) => state.menu.isOpen);
 
-  const [sales, SetSales] = useState<Order[]>([]);
+  // const [sales, SetSales] = useState<Order[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const [fullName,SetFullName]=useState<string>("")
-  const navigate = useNavigate()
+  const [fullName, SetFullName] = useState<string>("");
+  const [order, setOrder] = useState<Order[]>([]);
+  const [tableAvailable, setTableAvailable] = useState<Table[]>([]);
+  const navigate = useNavigate();
+
+  // fetch order
 
   useEffect(() => {
-    const dataFetch = async () => {
-      try {
-
+    try {
+      const fetchOrder = async () => {
         const token = localStorage.getItem("token");
-        if(token){
-            const decode = jwtDecode<Token>(token)
-            SetFullName(decode.fullName)
-            
+
+        if (token) {
+          const decode = jwtDecode<Token>(token);
+          SetFullName(decode.fullName);
         }
+        const res = await axios.get("http://localhost:3000/order/all-order");
+        // console.log(res.data.allOrder.length);
+        setOrder(res.data.allOrder);
 
-        // const res = await axios.get("http://localhost:3000/orders");
-        // SetSales(res.data);
-
+        const tableFetch = await axios.get("http://localhost:3000/table/all-table")
+       setTableAvailable(tableFetch.data.allData)
+       console.log(tableFetch.data.allData);
        
-      } catch (err) {
-        // toast.error("Data Error...")
-        console.log(err);
-      }
-    };
-    dataFetch();
+      };
+      fetchOrder();
+    } catch (err) {
+      console.log("total order not fetch");
+    }
   }, []);
 
-  // date filter
-
+  //
   const today = new Date().toISOString().split("T")[0];
-  // console.log(today);
 
-  const todaySales = sales.filter((sale) => sale.date === today);
+  const todayOrder = order.filter(
+    (sales) => new Date(sales.createdAt).toISOString().split("T")[0] === today,
+  );
+  const todaySales = todayOrder.reduce(
+    (sum: number, o: any) => sum + Number(o.totalAmount),
+    0,
+  );
+
   // console.log(todaySales);
 
-  //    total Add
 
-  const totalSales = todaySales.reduce((sum, sale) => sum + sale.total, 0);
+  // table filter 
 
-
-  const handleLogout =()=>{
+  const table = tableAvailable.filter((a:any)=>a.status === "available")
+  const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
     navigate("/login");
-     
-  }
+  };
 
   return (
     <>
@@ -84,10 +97,15 @@ const AdminDashboard = () => {
         {/* Dashboard  */}
         <section className="w-screen h-screen bg-[#E9E9E9] overflow-x-auto">
           <div className=" flex justify-between mx-5 mt-5 bg-white p-4 md:p-2 rounded-full items-center ">
-            <h1 className="mx-2 md:text-[20px] font-bold">Welcome, {fullName}</h1>
+            <h1 className="mx-2 md:text-[20px] font-bold">
+              Welcome, {fullName}
+            </h1>
             <Link to="/login" className="">
               {" "}
-              <button className="rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300 hidden md:block" onClick={handleLogout}>
+              <button
+                className="rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300 hidden md:block"
+                onClick={handleLogout}
+              >
                 Logout
               </button>
             </Link>
@@ -106,16 +124,19 @@ const AdminDashboard = () => {
             <div className="bg-white h-30 rounded-lg  flex flex-col justify-center items-center cursor-pointer hover:scale-105 transition duration-300 ">
               <h1 className="font-medium">Today's Sales</h1>
               <h1 className="text-[#831F00]">
-                Rs.
-                {totalSales}
+                {" "}
+                Rs. {todaySales}
               </h1>
             </div>
             <div className="bg-white h-30 rounded-lg  flex flex-col justify-center items-center  hover:scale-105 transition duration-300 cursor-pointer">
-              <h1 className="font-medium">Total Orders</h1>
-              <h2 className="text-[#831F00]">{sales.length}</h2>
+              <h1 className="font-medium">Today's Orders</h1>
+              <h2 className="text-[#831F00] ">
+                {todayOrder.length}
+              </h2>
             </div>
-            <div className="bg-white h-30 rounded-lg flex justify-center items-center  hover:scale-105 transition duration-300 cursor-pointer ">
+            <div className="bg-white h-30 rounded-lg flex flex-col justify-center items-center  hover:scale-105 transition duration-300 cursor-pointer ">
               <h1 className="font-medium">Active Tables</h1>
+              <h2 className="text-[#831F00] ">{table.length}</h2>
             </div>
             <div className="bg-white h-30 rounded-lg flex justify-center items-center cursor-pointer hover:scale-105 transition duration-300 ">
               <h1 className="font-medium">Low Stock</h1>
