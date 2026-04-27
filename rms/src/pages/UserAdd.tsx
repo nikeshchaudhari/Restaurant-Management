@@ -33,13 +33,6 @@ const UserAdd = () => {
 
   const navigate = useNavigate();
 
-  // const data = {
-  //   fullName,
-  //   email,
-  //   password,
-  //   role,
-  // };
-  // console.log("data", data);
 
   // validation
 
@@ -57,7 +50,7 @@ const UserAdd = () => {
       fullName: "",
       email: "",
       password: "",
-      role: "Waiter",
+      role: "waiter",
     },
     validationSchema: User,
     onSubmit: async (values) => {
@@ -212,7 +205,7 @@ const UserAdd = () => {
 
   return (
     <>
-      <main className="flex relative ">
+      <main className="flex relative">
         {showDelete && (
           <div className="bg-black/50 fixed  inset-0 border w-full h-full rounded  top-0 z-10 flex justify-center items-center ">
             <div className="bg-white w-100 md:w-120  h-50 rounded">
@@ -432,7 +425,7 @@ const UserAdd = () => {
             </div>
           </div>
           {/* PAGINATION */}
-          <div className="flex gap-2 mb-2 justify-center ">
+          <div className="flex gap-2 mt-1 mb-5   lg:mt-0 lg:mb-4 justify-center ">
             <button
               disabled={currentPage === 1}
               onClick={() => setCurrentPage(currentPage - 1)}
