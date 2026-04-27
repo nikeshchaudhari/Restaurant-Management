@@ -11,6 +11,9 @@ import { toast } from "react-toastify";
 import { Trash2 } from "lucide-react";
 
 import { SquarePen } from "lucide-react";
+import { useFormik } from "formik";
+import { MenuValid } from "../schemas/MenuItemsSchema";
+
 interface menuAdd {
   imageUrl: string | undefined;
   _id: any;
@@ -39,79 +42,110 @@ const Menu = () => {
 
   const resetFile = useRef<HTMLInputElement>(null);
 
+  const {
+    values,
+    errors,
+    resetForm,
+    handleChange,
+    handleSubmit,
+    handleBlur,
+    touched,
+    setFieldValue,
+    setValues,
+  } = useFormik({
+    initialValues: {
+      menuName: "",
+      price: "",
+      category: "",
+      available: "",
+      photo: null,
+    },
+    validationSchema: MenuValid,
+    onSubmit: async (values) => {
+      console.log(values);
+
+      try {
+        const token = localStorage.getItem("token");
+
+        // FormData
+        const formData = new FormData();
+        formData.append("menuName", values.menuName);
+        formData.append("price", values.price);
+        formData.append("category", values.category);
+        formData.append("available", values.available);
+
+        if (values.photo) {
+          formData.append("photo", values.photo);
+        }
+
+        if (editMenu) {
+          // UPDATE MENU
+          const res = await axios.put(
+            `http://localhost:3000/menu/${editMenu._id}`,
+            formData,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            },
+          );
+
+          console.log("Update", res.data);
+
+          const updateItem = res.data.menu || res.data.updateData || res.data;
+
+          toast.success("Menu Updated Successfully");
+
+          setMenu((prev) =>
+            prev.map((m) => (m._id === editMenu._id ? updateItem : m)),
+          );
+          setEditMenu(null);
+        } else {
+          // ADD MENU
+          const res = await axios.post(
+            "http://localhost:3000/menu/add-menu",
+            formData,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            },
+          );
+
+          toast.success("Menu Add Successfully");
+
+          setMenu((prev) => [res.data.menu, ...prev]);
+        }
+
+        resetForm();
+
+        if (resetFile.current) {
+          resetFile.current.value = "";
+        }
+      } catch (err: any) {
+        toast.error("Something went wrong");
+        console.log(err);
+      }
+    },
+  });
+
+  // handle edit
+
+  const handleEdit =(menu:any)=>{
+    setEditMenu(menu);
+    setValues({
+      menuName:menu.menuName,
+      price:menu.price,
+      category:menu.category,
+      available:menu.available,
+      photo:menu.photo
+    })
+  }
   // form handle
-  const formHandle = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  // const formHandle = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
 
-    try {
-      const token = localStorage.getItem("token");
-
-      // FormData
-      const formData = new FormData();
-      formData.append("menuName", menuName);
-      formData.append("price", price);
-      formData.append("category", category);
-      formData.append("available", available);
-
-      if (photo) {
-        formData.append("photo", photo);
-      }
-
-      if (editMenu) {
-        // UPDATE MENU
-        const res = await axios.put(
-          `http://localhost:3000/menu/${editMenu._id}`,
-          formData,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-
-        console.log("Update", res.data);
-
-        const updateItem = res.data.menu || res.data.updateData || res.data;
-
-        toast.success("Menu Updated Successfully");
-
-        setMenu((prev) =>
-          prev.map((m) => (m._id === editMenu._id ? updateItem : m)),
-        );
-        console.log("Before:", menu);
-        setEditMenu(null);
-      } else {
-        // ADD MENU
-        const res = await axios.post(
-          "http://localhost:3000/menu/add-menu",
-          formData,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-
-        toast.success("Menu Add Successfully");
-
-        setMenu((prev) => [res.data.menu, ...prev]);
-      }
-
-      // Clear form
-      setMenuName("");
-      setPrice("");
-      setCategory("");
-      setAvailable("");
-      setPhoto(null);
-
-      if (resetFile.current) {
-        resetFile.current.value = "";
-      }
-    } catch (err: any) {
-      toast.error("Something went wrong");
-      console.log(err);
-    }
-  };
+  // };
 
   // fetch Data
 
@@ -184,66 +218,103 @@ const Menu = () => {
           {/* Add Menu Form */}
           <div className="max-w-full flex justify-center p-2 md:p-0 mx-5 md:mx-2 lg:mx-0">
             <form
-              onSubmit={formHandle}
+              onSubmit={handleSubmit}
               className="bg-white w-full md:w-full h-full md:mx-5 mt-5 rounded-md p-5"
             >
               <h1 className="text-2xl font-medium mb-3">
                 {editMenu ? "Update Menu" : "Menu"}
               </h1>
-              <input
-                type="text"
-                placeholder="Enter Menu Name"
-                className="border border-gray-300 outline-none  w-full p-2  rounded mb-3 focus:ring-1 focus:ring-blue-500 "
-                value={menuName}
-                onChange={(e) => setMenuName(e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder="Enter Price"
-                className="border border-gray-300 outline-none  w-full p-2  rounded mb-3 focus:ring-1 focus:ring-blue-500 "
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder="Enter Category"
-                className="border border-gray-300 outline-none w-full p-2  rounded mb-3 focus:ring-1 focus:ring-blue-500 "
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-              />
-              <div className="flex gap-2 mb-3 ">
+              <div className="mb-3">
+                <input
+                  type="text"
+                  placeholder="Enter Menu Name"
+                  className="border border-gray-300 outline-none  w-full p-2  rounded  focus:ring-1 focus:ring-blue-500 "
+                  name="menuName"
+                  value={values.menuName}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {touched.menuName && errors.menuName && (
+                  <p className="text-sm text-red-500">{errors.menuName} *</p>
+                )}
+              </div>
+              <div className="mb-3">
+                <input
+                  type="text"
+                  placeholder="Enter Price"
+                  className="border border-gray-300 outline-none  w-full p-2  rounded  focus:ring-1 focus:ring-blue-500 "
+                  name="price"
+                  value={values.price}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {touched.price && errors.price && (
+                  <p className="text-sm text-red-500">{errors.price} *</p>
+                )}
+              </div>
+
+              <div className="mb-3 ">
+                <input
+                  type="text"
+                  placeholder="Enter Category"
+                  className="border border-gray-300 outline-none w-full p-2  rounded focus:ring-1 focus:ring-blue-500 "
+                  name="category"
+                  value={values.category}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {touched.category && errors.category && (
+                  <p className="text-sm text-red-500">{errors.category} *</p>
+                )}
+              </div>
+             <div className=" mb-3">
+               <div className="flex gap-2 ">
                 <label htmlFor="">
                   <input
                     type="radio"
                     name="available"
                     className="cursor-pointer"
                     value="available"
-                    checked={available === "available"}
-                    onChange={(e) => setAvailable(e.target.value)}
+                    checked={values.available === "available"}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                   />
                 </label>
                 Available
                 <label htmlFor="">
                   <input
                     type="radio"
-                    name="no available"
+                    name="available"
                     value="no available"
-                    checked={available === "no available"}
-                    onChange={(e) => setAvailable(e.target.value)}
+                    checked={values.available === "no available"}
                     className="cursor-pointer"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                   />
                 </label>
                 No Available
               </div>
+              {touched.available && errors.available && (
+                <p className="text-sm text-red-500  ">{errors.available} *</p>
+              )}
 
-              <input
+             </div>
+              <div className="mb-3">
+                <input
                 type="file"
-                className="border border-gray-300 outline-none cursor-pointer  w-full p-2  rounded mb-3 focus:ring-1 focus:ring-blue-500 bg-[#e7e6e6]"
+                className="border border-gray-300 outline-none cursor-pointer  w-full p-2  rounded  focus:ring-1 focus:ring-blue-500 bg-[#e7e6e6]"
                 ref={resetFile}
+                name="photo"
+                accept="image/*"
                 onChange={(e) => {
-                  if (e.target.files) setPhoto(e.target.files[0]);
+                setFieldValue("photo",e.currentTarget.files?.[0]);
                 }}
+                onBlur={handleBlur}
               />
+               {touched.photo && errors.photo && (
+                <p className="text-sm text-red-500  mb-3">{errors.photo} *</p>
+              )}
+              </div>
               <div className="w-full flex ">
                 <button
                   type="submit"
@@ -257,12 +328,8 @@ const Menu = () => {
                     type="button"
                     onClick={() => {
                       setEditMenu(null);
-                      setMenuName("");
-                      setPrice("");
-                      setCategory("");
-                      setAvailable("");
-
-                      toast.info("Menu Cancel")
+                      resetForm()
+                      toast.info("Menu Cancel");
                     }}
                     className=" bg-[#080833] px-6 py-2 rounded text-white cursor-pointer transition hover:bg-[#232341] duration-300 "
                   >
@@ -303,7 +370,7 @@ const Menu = () => {
                       <td className=" px-2 md:px-4 py-2">{menu.length - i}</td>
                       <td className=" px-2 md:px-4 py-2">{m.menuName}</td>
                       <td className=" px-2 md:px-4 py-2">{m.category}</td>
-                      <td className=" px-2 md:px-4 py-2">{m.price}</td>
+                      <td className=" px-2 md:px-4 py-2">Rs. {m.price}</td>
                       <td className=" px-2 md:px-4 py-2">
                         <a
                           href={m.imageUrl}
@@ -319,13 +386,10 @@ const Menu = () => {
                             className="text-black cursor-pointer transform hover:-translate-y-0.5 duration-300"
                             onClick={() => {
                               setEditMenu(m);
-                              setMenuName(m.menuName);
-                              console.log(m.menuName);
+                              handleEdit(m)
+                              
 
-                              setCategory(m.category);
-                              setAvailable(m.available);
-                              setPrice(m.price);
-                              setPhoto(null);
+
                             }}
                           />
                           <span
