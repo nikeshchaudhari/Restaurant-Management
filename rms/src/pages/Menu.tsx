@@ -24,19 +24,20 @@ interface menuAdd {
   photo?: string;
 }
 const Menu = () => {
-  const [menuName, setMenuName] = useState<string>("");
-  const [price, setPrice] = useState<string>("");
-  const [category, setCategory] = useState<string>("");
-  const [available, setAvailable] = useState<string>("available");
-  const [photo, setPhoto] = useState<File | null>(null);
   const [editMenu, setEditMenu] = useState<menuAdd | null>(null);
   const [menu, setMenu] = useState<menuAdd[]>([]);
+  const[showDelete,setShowDelete]= useState(false);
+  const[SelectedeMenuId,setSelectedMenuId]=useState<string | null>(null)
+  console.log(SelectedeMenuId);
+  
 
   const navigate = useNavigate();
 
   // state
   const dispatch: AppDispatch = useDispatch();
   const Open = useSelector((state: RootState) => state.menu.isOpen);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowPage, setRowPage] = useState(10);
 
   // reset file
 
@@ -131,21 +132,16 @@ const Menu = () => {
 
   // handle edit
 
-  const handleEdit =(menu:any)=>{
+  const handleEdit = (menu: any) => {
     setEditMenu(menu);
     setValues({
-      menuName:menu.menuName,
-      price:menu.price,
-      category:menu.category,
-      available:menu.available,
-      photo:menu.photo
-    })
-  }
-  // form handle
-  // const formHandle = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-
-  // };
+      menuName: menu.menuName,
+      price: menu.price,
+      category: menu.category,
+      available: menu.available,
+      photo: menu.photo,
+    });
+  };
 
   // fetch Data
 
@@ -178,6 +174,8 @@ const Menu = () => {
       toast.success("delete menu");
 
       setMenu((prevMenu) => prevMenu.filter((menus) => menus._id !== id));
+      setShowDelete(false)
+      setSelectedMenuId(null)
     } catch (err) {
       console.log(err);
     }
@@ -191,14 +189,46 @@ const Menu = () => {
 
     navigate("/login");
   };
+
+  // pagination
+
+  const indexOflastPage = currentPage * rowPage;
+  const indexOfFirstPage = indexOflastPage - rowPage;
+  const currentList = menu.slice(indexOfFirstPage, indexOflastPage);
+  const totalPage = Math.ceil(menu.length / rowPage);
+ 
+
+  const totalItems = menu.length
+  //  console.log(totalItems);
+
+  
   return (
     <>
       <main className="md:flex">
+        {showDelete &&(
+          <div className="bg-black/50 fixed  inset-0 border w-full h-full rounded  top-0 z-10 flex justify-center items-center ">
+
+            <div className="bg-white w-[90vw] md:w-120  h-50 rounded">
+              <h1 className="text-center pt-8 mb-2 text-[20px] md:text-[30px] font-bold">
+                Delete Confirmation
+              </h1>
+              <p className="text-center">
+                Are You sure you want to menu user
+              </p>
+              <div  className="flex justify-center gap-10 py-5">
+                <button className="bg-black/20 py-2 px-4 rounded-3xl cursor-pointer hover:bg-black/40 " onClick={()=>setShowDelete(false)}>Cancel</button>
+                <button className="bg-red-600 py-2 px-6 rounded-3xl text-white hover:bg-red-700 cursor-pointer "
+                onClick={()=>deleteMenu(SelectedeMenuId)}
+                >Delete</button>
+              </div>
+            </div>
+          </div>
+        )}
         <MobileDashboard />
 
         <Slide />
-        <section className="w-screen bg-[#E9E9E9] min-h-screen  ">
-          <div className="flex justify-between mx-5 mt-5 bg-white p-2 rounded-full items-center">
+        <section className="w-screen bg-[#E9E9E9] min-h-screen  pt-5  ">
+          <div className="flex justify-between mx-5  bg-white p-2 rounded-full items-center">
             <h1 className="mx-2 md:text-[20px] font-bold">
               {editMenu ? "Edit Menu" : "Menu"}
             </h1>
@@ -267,53 +297,52 @@ const Menu = () => {
                   <p className="text-sm text-red-500">{errors.category} *</p>
                 )}
               </div>
-             <div className=" mb-3">
-               <div className="flex gap-2 ">
-                <label htmlFor="">
-                  <input
-                    type="radio"
-                    name="available"
-                    className="cursor-pointer"
-                    value="available"
-                    checked={values.available === "available"}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                </label>
-                Available
-                <label htmlFor="">
-                  <input
-                    type="radio"
-                    name="available"
-                    value="no available"
-                    checked={values.available === "no available"}
-                    className="cursor-pointer"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                </label>
-                No Available
+              <div className=" mb-3">
+                <div className="flex gap-2 ">
+                  <label htmlFor="">
+                    <input
+                      type="radio"
+                      name="available"
+                      className="cursor-pointer"
+                      value="available"
+                      checked={values.available === "available"}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                  </label>
+                  Available
+                  <label htmlFor="">
+                    <input
+                      type="radio"
+                      name="available"
+                      value="no available"
+                      checked={values.available === "no available"}
+                      className="cursor-pointer"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                  </label>
+                  No Available
+                </div>
+                {touched.available && errors.available && (
+                  <p className="text-sm text-red-500  ">{errors.available} *</p>
+                )}
               </div>
-              {touched.available && errors.available && (
-                <p className="text-sm text-red-500  ">{errors.available} *</p>
-              )}
-
-             </div>
               <div className="mb-3">
                 <input
-                type="file"
-                className="border border-gray-300 outline-none cursor-pointer  w-full p-2  rounded  focus:ring-1 focus:ring-blue-500 bg-[#e7e6e6]"
-                ref={resetFile}
-                name="photo"
-                accept="image/*"
-                onChange={(e) => {
-                setFieldValue("photo",e.currentTarget.files?.[0]);
-                }}
-                onBlur={handleBlur}
-              />
-               {touched.photo && errors.photo && (
-                <p className="text-sm text-red-500  mb-3">{errors.photo} *</p>
-              )}
+                  type="file"
+                  className="border border-gray-300 outline-none cursor-pointer  w-full p-2  rounded  focus:ring-1 focus:ring-blue-500 bg-[#e7e6e6]"
+                  ref={resetFile}
+                  name="photo"
+                  accept="image/*"
+                  onChange={(e) => {
+                    setFieldValue("photo", e.currentTarget.files?.[0]);
+                  }}
+                  onBlur={handleBlur}
+                />
+                {touched.photo && errors.photo && (
+                  <p className="text-sm text-red-500  mb-3">{errors.photo} *</p>
+                )}
               </div>
               <div className="w-full flex ">
                 <button
@@ -328,7 +357,7 @@ const Menu = () => {
                     type="button"
                     onClick={() => {
                       setEditMenu(null);
-                      resetForm()
+                      resetForm();
                       toast.info("Menu Cancel");
                     }}
                     className=" bg-[#080833] px-6 py-2 rounded text-white cursor-pointer transition hover:bg-[#232341] duration-300 "
@@ -341,8 +370,8 @@ const Menu = () => {
           </div>
 
           {/* View All Menu */}
-          <div className=" md:flex justify-center  overflow-x-auto p-5">
-            <table className="bg-white min-w-50 w-full md:w-full h-full mt-5 rounded-md ">
+          <div className=" md:flex justify-center  overflow-x-auto px-5">
+            <table className="bg-white min-w-50 w-full md:w-full h-full mt-0 mb-5 rounded-md ">
               <thead className="bg-gray-100 ">
                 <tr>
                   <th className=" px-4 py-2 text-left ">No</th>
@@ -365,9 +394,9 @@ const Menu = () => {
                     </td>
                   </tr>
                 ) : (
-                  menu.map((m, i) => (
+                  currentList.map((m, i) => (
                     <tr key={i}>
-                      <td className=" px-2 md:px-4 py-2">{menu.length - i}</td>
+                      <td className=" px-2 md:px-4 py-2">{totalItems-((currentPage-1)*rowPage+i)}</td>
                       <td className=" px-2 md:px-4 py-2">{m.menuName}</td>
                       <td className=" px-2 md:px-4 py-2">{m.category}</td>
                       <td className=" px-2 md:px-4 py-2">Rs. {m.price}</td>
@@ -386,10 +415,7 @@ const Menu = () => {
                             className="text-black cursor-pointer transform hover:-translate-y-0.5 duration-300"
                             onClick={() => {
                               setEditMenu(m);
-                              handleEdit(m)
-                              
-
-
+                              handleEdit(m);
                             }}
                           />
                           <span
@@ -402,7 +428,13 @@ const Menu = () => {
                         <div className="relative group">
                           <Trash2
                             className="text-black cursor-pointer transform hover:-translate-y-0.5 duration-300"
-                            onClick={() => deleteMenu(m._id)}
+                            onClick={() => 
+                            {
+                              setSelectedMenuId(m._id)
+                              setShowDelete(true)
+                            }
+                              
+                            }
                           />
 
                           <span className="absolute left-1/2 bottom-full bg-red-600 text-white text-sm rounded px-2 py-1 mb-2 hidden group-hover:block">
@@ -415,6 +447,12 @@ const Menu = () => {
                 )}
               </tbody>
             </table>
+          </div>
+          {/* pagination */}
+          <div className="flex gap-2 mt-1 mb-5  lg:mt-0 lg:mb-4 justify-center md:justify-end px-5 items-center ">
+            <button disabled={currentPage === 1} className="px-2 py-1 bg-gray-500 text-white rounded disabled:opacity-50 cursor-pointer" onClick={()=>setCurrentPage(currentPage-1)}>Prev</button>
+            <span className=" py-2">{currentPage} ..... {totalPage}</span>
+            <button disabled={currentPage===totalPage} className="px-3 py-1 bg-gray-500 text-white rounded disabled:opacity-50 cursor-pointer " onClick={()=>setCurrentPage(currentPage+1)}>Next</button>
           </div>
         </section>
       </main>
