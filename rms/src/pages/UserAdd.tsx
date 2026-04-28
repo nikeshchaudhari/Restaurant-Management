@@ -5,7 +5,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import MobileDashboard from "../components/MobileDashboard";
 
-import { Menu, Trash2, X } from "lucide-react";
+import { CircleArrowDown, CircleArrowLeft, Menu, Trash2, X } from "lucide-react";
 
 import { SquarePen } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,7 +23,6 @@ interface User {
 }
 
 const UserAdd = () => {
-  
   const [users, setUser] = useState<User[]>([]);
   const [editUser, setEditUser] = useState<User | null>(null);
   const [showDelete, setShowDelete] = useState(false);
@@ -32,7 +31,6 @@ const UserAdd = () => {
   const [rowPage, setRowPage] = useState(5);
 
   const navigate = useNavigate();
-
 
   // validation
 
@@ -131,7 +129,6 @@ const UserAdd = () => {
     });
   };
 
-
   // dataFetch
 
   useEffect(() => {
@@ -186,7 +183,7 @@ const UserAdd = () => {
   const indextOfFirstPage = indexOfLastPage - rowPage;
   const currentItems = users.slice(indextOfFirstPage, indexOfLastPage);
   const totalPage = Math.ceil(users.length / rowPage);
-  
+
   // scroll off
   useEffect(() => {
     if (showDelete) {
@@ -426,35 +423,14 @@ const UserAdd = () => {
           </div>
           {/* PAGINATION */}
           <div className="flex gap-2 mt-1 mb-5   lg:mt-0 lg:mb-4 justify-center ">
-            <button
-              disabled={currentPage === 1}
-              onClick={() => setCurrentPage(currentPage - 1)}
-              className="cursor-j "
-            >
-              Prev
-            </button>
+           <button disabled={currentPage===1} onClick={()=> setCurrentPage(currentPage-1)} className="px-2 py-1 bg-gray-400 text-white rounded disabled:opacity-50 cursor-pointer">
+          Prev
+           </button>
+           <button>
+              {currentPage} ....... {totalPage}
+           </button>
 
-            {Array.from({ length: totalPage }).map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setCurrentPage(i + 1)}
-                className={
-                  currentPage === i + 1
-                    ? "bg-gray-400 text-white px-3 py-1 rounded cursor-pointer"
-                    : "cursor-pointer"
-                }
-              >
-                {i + 1}
-              </button>
-            ))}
-
-            <button
-              disabled={currentPage === totalPage}
-              onClick={() => setCurrentPage(currentPage + 1)}
-              className="cursor-pointer"
-            >
-              Next
-            </button>
+           <button disabled={currentPage===totalPage} className="px-3 py-1 bg-gray-400 text-white rounded disabled:opacity-50 cursor-pointer " onClick={()=>setCurrentPage(currentPage+1)}>Next</button>
           </div>
         </section>
       </main>
