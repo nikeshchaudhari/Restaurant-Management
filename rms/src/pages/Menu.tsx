@@ -395,7 +395,7 @@ const Menu = () => {
                   </tr>
                 ) : (
                   currentList.map((m, i) => (
-                    <tr key={i}>
+                    <tr key={i} className="hover:bg-gray-400/10">
                       <td className=" px-2 md:px-4 py-2">{totalItems-((currentPage-1)*rowPage+i)}</td>
                       <td className=" px-2 md:px-4 py-2">{m.menuName}</td>
                       <td className=" px-2 md:px-4 py-2">{m.category}</td>
