@@ -378,6 +378,7 @@ const Menu = () => {
                   <th className=" px-4 py-2 text-left ">Menu_Name</th>
                   <th className=" px-4 py-2 text-left ">Category</th>
                   <th className=" px-4 py-2 text-left ">Price</th>
+                  <th className=" px-4 py-2 text-left ">Available/Unavailable</th>
                   <th className=" px-4 py-2 text-left ">Photo</th>
                   <th className=" px-4 py-2 text-left ">Action</th>
                 </tr>
@@ -400,6 +401,7 @@ const Menu = () => {
                       <td className=" px-2 md:px-4 py-2">{m.menuName}</td>
                       <td className=" px-2 md:px-4 py-2">{m.category}</td>
                       <td className=" px-2 md:px-4 py-2">Rs. {m.price}</td>
+                      <td className=" px-2 md:px-4 py-2">{m.available}</td>
                       <td className=" px-2 md:px-4 py-2">
                         <a
                           href={m.imageUrl}
