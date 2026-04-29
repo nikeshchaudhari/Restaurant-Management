@@ -54,7 +54,7 @@ const Slide = () => {
             </Link>
           </div>
           <div className="bg-[#1F354D]  md:w-60  ml-2  lg:w-65  p-2 rounded transition-all  hover:bg-[#445971]  duration-300 cursor-pointer mb-5">
-            <Link to="" className="flex pl-10 items-center">
+            <Link to="/dashboard/reports" className="flex pl-10 items-center">
               <MessageCircleWarning />
               <h1 className="text-[20px] pl-2 font-normal ">Reports</h1>
             </Link> 
