@@ -5,7 +5,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import MobileDashboard from "../components/MobileDashboard";
 
-import { CircleArrowDown, CircleArrowLeft, Menu, Trash2, X } from "lucide-react";
+import { Menu, Trash2, X } from "lucide-react";
 
 import { SquarePen } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
@@ -28,7 +28,8 @@ const UserAdd = () => {
   const [showDelete, setShowDelete] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [rowPage, setRowPage] = useState(5);
+  const [rowPage] = useState(10);
+  console.log(selectedUserId);
 
   const navigate = useNavigate();
 
@@ -156,6 +157,7 @@ const UserAdd = () => {
       await axios.delete(`http://localhost:3000/user/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+
       toast.success("User deleted successfully");
 
       setUser((prevUser) => prevUser.filter((users) => users._id !== id));
@@ -205,7 +207,7 @@ const UserAdd = () => {
       <main className="flex relative">
         {showDelete && (
           <div className="bg-black/50 fixed  inset-0 border w-full h-full rounded  top-0 z-10 flex justify-center items-center ">
-            <div className="bg-white w-100 md:w-120  h-50 rounded">
+            <div className="bg-white w-[90vw] md:w-120  h-50 rounded">
               <h1 className="text-center pt-8 mb-2 text-[20px] md:text-[30px] font-bold">
                 Delete Confirmation
               </h1>
@@ -422,15 +424,25 @@ const UserAdd = () => {
             </div>
           </div>
           {/* PAGINATION */}
-          <div className="flex gap-2 mt-1 mb-5   lg:mt-0 lg:mb-4 justify-center ">
-           <button disabled={currentPage===1} onClick={()=> setCurrentPage(currentPage-1)} className="px-2 py-1 bg-gray-400 text-white rounded disabled:opacity-50 cursor-pointer">
-          Prev
-           </button>
-           <button>
-              {currentPage} ....... {totalPage}
-           </button>
+          <div className="flex gap-2 mt-1 mb-5   lg:mt-0 lg:mb-4 justify-center md:justify-end items-center px-5 ">
+            <button
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage(currentPage - 1)}
+              className="px-2 py-1 bg-gray-500 text-white rounded disabled:opacity-50 cursor-pointer"
+            >
+              Prev
+            </button>
+            <button>
+              {currentPage} ..... {totalPage}
+            </button>
 
-           <button disabled={currentPage===totalPage} className="px-3 py-1 bg-gray-400 text-white rounded disabled:opacity-50 cursor-pointer " onClick={()=>setCurrentPage(currentPage+1)}>Next</button>
+            <button
+              disabled={currentPage === totalPage}
+              className="px-3 py-1 bg-gray-500 text-white rounded disabled:opacity-50 cursor-pointer "
+              onClick={() => setCurrentPage(currentPage + 1)}
+            >
+              Next
+            </button>
           </div>
         </section>
       </main>
