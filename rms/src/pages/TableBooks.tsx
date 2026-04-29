@@ -11,6 +11,9 @@ import { toast } from "react-toastify";
 import type { AppDispatch, RootState } from "../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { menuOpen } from "../features/menuSlice";
+import { useFormik } from "formik";
+import { TableValid } from "../schemas/TableSchema";
+import { setSelectedTable } from "../features/TableSlice";
 const TableBooks = () => {
   interface tableData {
     _id: any;
@@ -25,57 +28,97 @@ const TableBooks = () => {
   const [capacity, setCapacity] = useState<string>("");
   const [status, setStatus] = useState<string>("");
   const [editTable, setEditTable] = useState<tableData | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowPage, setRowPage] = useState(10);
+
+  const [showDelete, setShowDelete] = useState(false);
+  const[seletecedTable,setSelectedTable]= useState<string | null>(null)
   const navigate = useNavigate();
 
-  // post data
-  const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const {
+    values,
+    errors,
+    touched,
+    resetForm,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+    setValues
+  } = useFormik({
+    initialValues: {
+      tableNumber: "",
+      capacity: "",
+      status: "",
+    },
+    validationSchema: TableValid,
+    onSubmit: async (values) => {
+      try {
+        const token = localStorage.getItem("token");
+        // console.log(token);
 
-    try {
-      const token = localStorage.getItem("token");
-      console.log(token);
-
-      if (editTable) {
-        const updateTable = await axios.put(
-          `http://localhost:3000/table/${editTable._id}`,
-          {
-            tableNumber,
-            capacity,
-            status,
-          },
-        );
-        toast.success("Table update Sucessfully!!");
-        setTable((prev) =>
-          prev.map((t) =>
-            t._id === editTable._id ? updateTable.data.updateData : t,
-          ),
-        );
-      } else {
-        const postData = await axios.post(
-          "http://localhost:3000/table/add-table",
-          {
-            tableNumber,
-            capacity,
-            status,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
+        if (editTable) {
+          const updateTable = await axios.put(
+            `http://localhost:3000/table/${editTable._id}`,
+            {
+              tableNumber,
+              capacity,
+              status,
             },
-          },
-        );
+          );
+          toast.success("Table update Sucessfully!!");
+          setTable((prev) =>
+            prev.map((t) =>
+              t._id === editTable._id ? updateTable.data.updateData : t,
+            ),
+          );
+        } else {
+          const postData = await axios.post(
+            "http://localhost:3000/table/add-table",
+            values,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            },
+          );
+          resetForm();
+          toast.success("Table Added Sucessfully!");
+          setTable((prev) => [postData.data.addData, ...prev]);
+        }
+      } catch (err: any) {
+        const res = err?.response?.data;
 
-        toast.success("Table Added Sucessfully!");
-        setTable((prev) => [postData.data.addData, ...prev]);
+        if (res.type === "Duplicate") {
+          toast.error(res.message);
+        } else {
+          toast.error("Something went wrong");
+        }
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
-    }
-    setTableNumber("");
-    setCapacity("");
-    setStatus("");
-    setEditTable(null);
-  };
+    },
+  });
+
+  const handleEdit =(table:tableData)=>{
+    setEditTable(table)
+
+    setValues({
+      tableNumber:table.tableNumber,
+      capacity:table.capacity,
+      status:table.status
+    })
+
+
+  }
+
+  // post data
+  // const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+
+  //   setTableNumber("");
+  //   setCapacity("");
+  //   setStatus("");
+  //   setEditTable(null);
+  // };
 
   // fetch Data
   useEffect(() => {
@@ -101,8 +144,9 @@ const TableBooks = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      toast.success("Table deleted");
+      toast.success("Table Sucessfully deleted");
       setTable((prevTable) => prevTable.filter((table) => table._id !== id));
+      setShowDelete(false)
     } catch (err) {
       console.log(err);
     }
@@ -116,9 +160,41 @@ const TableBooks = () => {
 
     navigate("/login");
   };
+
+  // pagination
+
+  const indexOfLastPage = currentPage * rowPage;
+  const indexOfFirstPage = indexOfLastPage - rowPage;
+  const currentList = table.slice(indexOfFirstPage, indexOfLastPage);
+  const totalPage = Math.ceil(table.length / rowPage);
+  console.log(totalPage);
+
   return (
     <>
       <main className="flex">
+        {showDelete && (
+          <div className="bg-black/50 fixed  inset-0 border w-full h-full rounded  top-0 z-10 flex justify-center items-center ">
+            <div className="bg-white w-[90vw] md:w-120  h-50 rounded">
+              <h1 className="text-center pt-8 mb-2 text-[20px] md:text-[30px] font-bold">
+                Delete Confirmation
+              </h1>
+              <p className="text-center">
+                Are You sure you want to delete user
+              </p>
+              <div className="flex justify-center gap-10 py-5">
+                <button
+                  className="bg-black/20 py-2 px-4 rounded-3xl cursor-pointer hover:bg-black/40 "
+                  onClick={() => setShowDelete(false)}
+                >
+                  Cancel
+                </button>
+                <button className="bg-red-600 py-2 px-6 rounded-3xl text-white hover:bg-red-700 cursor-pointer " onClick={()=>deleteTable(seletecedTable)}>
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         <MobileDashboard />
         <Slide />
 
@@ -140,41 +216,56 @@ const TableBooks = () => {
           {/* UserAdd  */}
           <div className=" flex justify-center p-2 md:p-0 mx-5 md:mx-2 lg:mx-0">
             <form
-              onSubmit={handleForm}
+              onSubmit={handleSubmit}
               className="bg-white w-full md:w-full md:mx-5 h-full mt-5 rounded-md p-5"
             >
               <h1 className="text-2xl font-medium mb-3">
                 {editTable ? "Edit Table" : "Add Tables"}
               </h1>
-              <input
-                type="text"
-                placeholder="Table Name / Number"
-                className="border border-gray-300 outline-none  w-full p-2  rounded mb-3 focus:ring-1 focus:ring-blue-500 "
-                name="tablenumber"
-                value={tableNumber}
-                onChange={(e) => setTableNumber(e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder="Capacity (No of Seats) "
-                className="border border-gray-300 outline-none  w-full p-2  rounded mb-3 focus:ring-1 focus:ring-blue-500"
-                name="capacity"
-                value={capacity}
-                onChange={(e) => setCapacity(e.target.value)}
-              />
-
-              <select
-                name=""
-                id=""
-                className="border border-gray-300 outline-none  w-full p-2  rounded mb-3 focus:ring-1 focus:ring-blue-500"
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-              >
-                <option value="">--SELECT STATUS--</option>
-                <option value="available">Available</option>
-                <option value="reserved">Reserved</option>
-                <option value="occupied">Occupied</option>
-              </select>
+              <div className="mb-3">
+                <input
+                  type="text"
+                  placeholder="Table Name / Number"
+                  className="border border-gray-300 outline-none  w-full p-2  rounded  focus:ring-1 focus:ring-blue-500 "
+                  name="tableNumber"
+                  value={values.tableNumber}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {touched.tableNumber && errors.tableNumber && (
+                  <p className="text-sm text-red-500">{errors.tableNumber}</p>
+                )}
+              </div>
+              <div className="mb-3">
+                <input
+                  type="text"
+                  placeholder="Capacity (No of Seats) "
+                  className="border border-gray-300 outline-none  w-full p-2  rounded  focus:ring-1 focus:ring-blue-500"
+                  name="capacity"
+                  value={values.capacity}
+                  onChange={handleChange}
+                />
+                {touched.capacity && errors.capacity && (
+                  <p className="text-sm text-red-500">{errors.capacity}</p>
+                )}
+              </div>
+              <div className="mb-3">
+                <select
+                  name="status"
+                  id=""
+                  className="border border-gray-300 outline-none  w-full p-2  rounded  focus:ring-1 focus:ring-blue-500"
+                  value={values.status}
+                  onChange={handleChange}
+                >
+                  <option value="">--SELECT STATUS--</option>
+                  <option value="available">Available</option>
+                  <option value="unavailable">Unavailable</option>
+                  {/* <option value="occupied">Occupied</option> */}
+                </select>
+                {touched.status && errors.status && (
+                  <p className="text-sm text-red-500">{errors.status}</p>
+                )}
+              </div>
               <div className="w-full flex ">
                 <button
                   type="submit"
@@ -184,17 +275,15 @@ const TableBooks = () => {
                 </button>
 
                 {editTable && (
-                  <button type="button"
-                  
-                  onClick={()=>{
-                    setEditTable(null);
-                   setTableNumber("");
-                   setCapacity("");
-                   setStatus("")
-
-                   toast.info("Table Cancel")
-                  }}
-                  className=" bg-[#080833] px-6 py-2  rounded text-white  cursor-pointer transition hover:bg-[#232341] duration-300">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEditTable(null);
+                      resetForm();
+                      toast.info("Table Cancel");
+                    }}
+                    className=" bg-[#080833] px-6 py-2  rounded text-white  cursor-pointer transition hover:bg-[#232341] duration-300"
+                  >
                     Cancel
                   </button>
                 )}
@@ -224,7 +313,7 @@ const TableBooks = () => {
                     </td>
                   </tr>
                 ) : (
-                  table.map((items, index) => (
+                  currentList.map((items, index) => (
                     <tr key={index} className="hover:bg-gray-400/10">
                       <td className=" px-2 md:px-4  py-2">
                         {items.tableNumber}
@@ -237,9 +326,8 @@ const TableBooks = () => {
                             className="text-[#080833] cursor-pointer transform hover:-translate-y-0.5 duration-300"
                             onClick={() => {
                               setEditTable(items);
-                              setTableNumber(items.tableNumber || "");
-                              setCapacity(items.capacity);
-                              setStatus(items.status);
+                              handleEdit(items)
+                              
                             }}
                           />
                           <span
@@ -252,7 +340,12 @@ const TableBooks = () => {
                         <div className="relative group">
                           <Trash2
                             className="text-black cursor-pointer transform hover:-translate-y-0.5 duration-300"
-                            onClick={() => deleteTable(items._id)}
+                            onClick={() => {
+                            
+                              
+                                setSelectedTable(items._id);
+                                setShowDelete(true);
+                            }}
                           />
                           <span className="absolute left-1/2 bottom-full bg-red-600 text-white text-sm rounded px-2 py-1 mb-2 hidden group-hover:block">
                             Delete
@@ -264,6 +357,26 @@ const TableBooks = () => {
                 )}
               </tbody>
             </table>
+          </div>
+          {/* pagination */}
+          <div className="flex gap-2 mt-1 mb-5  lg:mt-0 lg:mb-4 justify-center md:justify-end px-5 items-center ">
+            <button
+              disabled={currentPage === 1}
+              className="px-2 py-1 bg-gray-500 text-white rounded disabled:opacity-50 cursor-pointer"
+              onClick={() => setCurrentPage(currentPage - 1)}
+            >
+              Prev
+            </button>
+            <span>
+              {currentPage} ..... {totalPage}
+            </span>
+            <button
+              disabled={currentPage === totalPage}
+              className="px-3 py-1 bg-gray-500 text-white rounded disabled:opacity-50 cursor-pointer "
+              onClick={() => setCurrentPage(currentPage + 1)}
+            >
+              Next
+            </button>
           </div>
         </section>
       </main>
