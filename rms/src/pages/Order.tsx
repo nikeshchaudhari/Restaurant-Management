@@ -85,7 +85,6 @@ const Order = () => {
     if (type === "today") {
       const data = order.filter((item) => {
         const d = new Date(item.createdAt);
-
         return (
           d.getDate() === now.getDate() &&
           d.getMonth() === now.getMonth() &&
@@ -94,6 +93,14 @@ const Order = () => {
       });
 
       setFilterOrder(data);
+    }
+
+    // week
+
+    if (type === "week") {
+      const weekDate = new Date();
+      weekDate.setDate(now.getDate() - 7);
+      console.log(weekDate);
     }
   };
   return (
@@ -123,6 +130,8 @@ const Order = () => {
               >
                 <option value="all">All</option>
                 <option value="today">Today</option>
+                <option value="week">Week</option>
+                <option value="months">Months</option>
               </select>
             </div>
             <div className=" md:flex justify-center  overflow-x-auto px-5">
