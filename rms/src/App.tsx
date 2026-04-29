@@ -19,6 +19,7 @@ import AllMenu from "./pages/ui/AllMenu";
 import AdminProtected from "./pages/AdminProtected";
 import Profile from "./pages/ui/Profile";
 import ViewOrder from "./pages/ui/ViewOrder";
+import Report from "./pages/Report";
 
 export const myroute = createBrowserRouter([
   { path: "", element: <Home /> },
@@ -41,6 +42,7 @@ export const myroute = createBrowserRouter([
       { path: "order", element: <Order /> },
       { path: "setting", element: <Setting /> },
       { path: "stocks", element: <Stock /> },
+      { path: "reports", element: <Report /> },
     ],
   },
   { path: "*", element: <Error /> },
@@ -58,8 +60,8 @@ export const myroute = createBrowserRouter([
         path: "all-menu",
         element: <AllMenu />,
       },
-      {path:"profile",element:<Profile/>},
-      {path:"my-order",element:<ViewOrder/>},
+      { path: "profile", element: <Profile /> },
+      { path: "my-order", element: <ViewOrder /> },
     ],
   },
 ]);
