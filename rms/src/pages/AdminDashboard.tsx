@@ -1,10 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 // import adminLogo from "../assets/adminlogo.png"
 import { useEffect, useState } from "react";
-// import axios from "axios";
-import Order from "./Order";
-import AllMenu from "./ui/AllMenu";
-// import { toast } from "react-toastify";
+
 import Slide from "../components/Slide";
 import { X, Menu } from "lucide-react";
 import MobileDashboard from "../components/MobileDashboard";
@@ -13,6 +10,7 @@ import type { AppDispatch, RootState } from "../store/store";
 import { menuOpen } from "../features/menuSlice";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const AdminDashboard = () => {
   interface OrderItems {
@@ -23,8 +21,10 @@ const AdminDashboard = () => {
     totalAmount: number;
   }
   interface Order {
+    status: string | number | readonly string[] | undefined;
     _id: number;
     orderId: string;
+    tableNumber:string,
     items: OrderItems[];
     total: number;
     totalAmount: number;
@@ -50,33 +50,47 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
 
   // fetch order
+  const fetchOrder = async () => {
+    const token = localStorage.getItem("token");
 
-  useEffect(() => {
-    try {
-      const fetchOrder = async () => {
-        const token = localStorage.getItem("token");
-
-        if (token) {
-          const decode = jwtDecode<Token>(token);
-          SetFullName(decode.fullName);
-        }
-        const res = await axios.get("http://localhost:3000/order/all-order");
-        // console.log(res.data.allOrder);
-        setOrder(res.data.allOrder);
-
-        const tableFetch = await axios.get(
-          "http://localhost:3000/table/all-table",
-        );
-        setTableAvailable(tableFetch.data.allData);
-        // console.log(tableFetch.data.allData);
-      };
-      fetchOrder();
-    } catch (err) {
-      console.log("total order not fetch");
+    if (token) {
+      const decode = jwtDecode<Token>(token);
+      SetFullName(decode.fullName);
     }
+    const res = await axios.get("http://localhost:3000/order/all-order");
+    // console.log(res.data.allOrder);
+    setOrder(res.data.allOrder);
+
+    const tableFetch = await axios.get("http://localhost:3000/table/all-table");
+    setTableAvailable(tableFetch.data.allData);
+  };
+  // realtime
+  useEffect(() => {
+    fetchOrder();
   }, []);
 
-  //
+  //update status or table
+
+  const updateStatus = async (id: any, status: any) => {
+    const token = localStorage.getItem("token");
+
+    try {
+      await axios.put(
+        `http://localhost:3000/order/order-update/${id}`,
+        { status },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      toast.success("Order Updated");
+      fetchOrder()
+    } catch (err) {
+      toast.error("Update failed");
+      console.log(err);
+    }
+  };
   const today = new Date().toISOString().split("T")[0];
 
   const todayOrder = order.filter(
@@ -102,21 +116,6 @@ const AdminDashboard = () => {
   const recentOrder = [...order].sort(
     (s, e) => new Date(e.createdAt).getTime() - new Date(s.createdAt).getTime(),
   );
- 
-
-  // update table
-
-  const updateTable = async(id:any,status:any)=>{
-
-  const token = localStorage.getItem("token");
-
-  try{
-
-  }catch(err){
-    
-  }
-
-  }
 
   return (
     <>
@@ -176,21 +175,23 @@ const AdminDashboard = () => {
 
               <table
                 className="bg-white  w-full  h-f
-            ull mt-2 rounded-md "
+            ull mt-2 rounded-md mb-10 "
               >
                 <thead className=" bg-gray-100">
                   <tr>
                     <th className=" px-4 py-5 text-left ">Order Id</th>
+                    <th className=" px-4 py-5 text-left ">Table No.</th>
                     <th className=" px-4 py-5 text-left ">Items</th>
                     <th className=" px-4 py-5 text-left ">Price</th>
                     <th className=" px-4 py-5 text-left ">Total Amount</th>
-                    <th className=" px-4 py-5 text-left ">Action</th>
+                    <th className=" px-4 py-5 text-left ">Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   {recentOrder.slice(0, 10).map((o) => (
-                    <tr key={o._id}  >
+                    <tr key={o._id}>
                       <td className=" px-2 md:px-4  py-2">{o.orderId}</td>
+                      <td className=" px-2 md:px-4  py-2">{o.tableNumber}</td>
                       <td className=" px-2 md:px-4 py-2">
                         {o.items.map((item, index) => (
                           <div key={index}>
@@ -205,15 +206,19 @@ const AdminDashboard = () => {
                       </td>
                       <td className="px-4 md:px-4 py-3">Rs. {o.totalAmount}</td>
                       <td className="px-4 md:px-4 py-3">
-                        <select name="" id="" className="cursor-pointer border border-amber-100 rounded  px-5 py-2" >
-                          <option value="pending" className="cursor-pointer border border-amber-100 rounded  px-5 py-2">Pending</option>
-                          <option value="complete" className="cursor-pointer border border-amber-100 rounded  px-5 py-2">Complete</option>
-                          <option value="paid" className="cursor-pointer border border-amber-100 rounded  px-5 py-2">Paid</option>
+                        <select
+                          name=""
+                          id=""
+                          className="cursor-pointer border border-amber-200 rounded px-4 py-2 focus:outline-none focus:ring-1 focus:ring-amber-400"
+                          value={o.status}
+                          onChange={(e) => updateStatus(o._id, e.target.value)}
+                        >
+                          <option value="preparing">Pending</option>
+                          <option value="completed">Complete</option>
+                          <option value="paid">Paid</option>
                         </select>
                       </td>
-                      
                     </tr>
-                    
                   ))}
                 </tbody>
               </table>
