@@ -11,33 +11,33 @@ import { menuOpen } from "../features/menuSlice";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import { toast } from "react-toastify";
+interface OrderItems {
+  menuId: string;
+  menuName: string;
+  price: number;
+  qty: number;
+  totalAmount: number;
+}
+interface Order {
+  status: string | number | readonly string[] | undefined;
+  _id: number;
+  orderId: string;
+  tableNumber: string;
+  items: OrderItems[];
+  total: number;
+  totalAmount: number;
+  createdAt: string;
+}
+interface Token {
+  _id: any;
+  fullName: string;
+  role: string;
+}
+interface Table {
+  status: string;
+}
 
 const AdminDashboard = () => {
-  interface OrderItems {
-    menuId: string;
-    menuName: string;
-    price: number;
-    qty: number;
-    totalAmount: number;
-  }
-  interface Order {
-    status: string | number | readonly string[] | undefined;
-    _id: number;
-    orderId: string;
-    tableNumber:string,
-    items: OrderItems[];
-    total: number;
-    totalAmount: number;
-    createdAt: string;
-  }
-  interface Token {
-    _id: any;
-    fullName: string;
-    role: string;
-  }
-  interface Table {
-    status: string;
-  }
   const dispatch: AppDispatch = useDispatch();
   const Open = useSelector((state: RootState) => state.menu.isOpen);
 
@@ -47,6 +47,9 @@ const AdminDashboard = () => {
   const [fullName, SetFullName] = useState<string>("");
   const [order, setOrder] = useState<Order[]>([]);
   const [tableAvailable, setTableAvailable] = useState<Table[]>([]);
+
+  const[currentPage,setCurrentPage]= useState(1)
+  const[rowPage]=useState(10)
   const navigate = useNavigate();
 
   // fetch order
@@ -85,7 +88,7 @@ const AdminDashboard = () => {
         },
       );
       toast.success("Order Updated");
-      fetchOrder()
+      fetchOrder();
     } catch (err) {
       toast.error("Update failed");
       console.log(err);
@@ -189,23 +192,23 @@ const AdminDashboard = () => {
                 </thead>
                 <tbody>
                   {recentOrder.slice(0, 10).map((o) => (
-                    <tr key={o._id}>
-                      <td className=" px-2 md:px-4  py-2">{o.orderId}</td>
-                      <td className=" px-2 md:px-4  py-2">{o.tableNumber}</td>
-                      <td className=" px-2 md:px-4 py-2">
+                    <tr key={o._id}  className=" hover:bg-gray-50 transition">
+                      <td className=" px-4  py-3">{o.orderId}</td>
+                      <td className=" px-4  py-3">{o.tableNumber}</td>
+                      <td className=" px-4  py-3">
                         {o.items.map((item, index) => (
                           <div key={index}>
                             {item.menuName} X {item.qty}
                           </div>
                         ))}
                       </td>
-                      <td className="px-4 md:px-4 py-3">
+                      <td className="px-4  py-3">
                         {o.items.map((item, index) => (
                           <div key={index}>Rs. {item.price}</div>
                         ))}
                       </td>
-                      <td className="px-4 md:px-4 py-3">Rs. {o.totalAmount}</td>
-                      <td className="px-4 md:px-4 py-3">
+                      <td className="px-4  py-3">Rs. {o.totalAmount}</td>
+                      <td className="px-4  py-3">
                         <select
                           name=""
                           id=""
@@ -213,8 +216,9 @@ const AdminDashboard = () => {
                           value={o.status}
                           onChange={(e) => updateStatus(o._id, e.target.value)}
                         >
-                          <option value="preparing">Pending</option>
-                          <option value="completed">Complete</option>
+                          <option value="preparing">Preparing</option>
+                          <option value="cancelled">Cancel</option>
+
                           <option value="paid">Paid</option>
                         </select>
                       </td>
