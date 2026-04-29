@@ -59,18 +59,17 @@ const TableBooks = () => {
         if (editTable) {
           const updateTable = await axios.put(
             `http://localhost:3000/table/${editTable._id}`,
-            {
-              tableNumber,
-              capacity,
-              status,
-            },
+           values
           );
           toast.success("Table update Sucessfully!!");
           setTable((prev) =>
             prev.map((t) =>
               t._id === editTable._id ? updateTable.data.updateData : t,
-            ),
+            )
+            
+            
           );
+          setEditTable(null);
         } else {
           const postData = await axios.post(
             "http://localhost:3000/table/add-table",
