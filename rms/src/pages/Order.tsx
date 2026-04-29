@@ -100,7 +100,23 @@ const Order = () => {
     if (type === "week") {
       const weekDate = new Date();
       weekDate.setDate(now.getDate() - 7);
-      console.log(weekDate);
+
+      const data = order.filter((item) => new Date(item.createdAt) >= weekDate);
+      setFilterOrder(data);
+
+      return;
+    }
+
+    // months
+    if (type === "months") {
+      const data = order.filter((item) => {
+        const d = new Date(item.createdAt);
+
+        return d.getMonth() === now.getMonth();
+      });
+
+      setFilterOrder(data);
+      console.log(data);
     }
   };
   return (
