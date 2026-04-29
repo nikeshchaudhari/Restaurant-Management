@@ -7,7 +7,6 @@ import { menuOpen } from "../features/menuSlice";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
-import Profile from "./ui/Profile";
 import { useNavigate } from "react-router-dom";
 
 interface UserData {
@@ -18,12 +17,9 @@ interface UserData {
   photo?: String;
 }
 const Setting = () => {
-  const [fullName, SetFullName] = useState<string>("");
-  const [email, SetEmail] = useState<string>("");
-  const [password, SetPassword] = useState<string>("");
   const [photo, SetPhoto] = useState<File | null>(null);
   const [update, setUpdate] = useState<UserData | null>(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
   const Open = useSelector((state: RootState) => state.menu.isOpen);
   console.log(photo);
@@ -89,12 +85,11 @@ const Setting = () => {
     }
   };
 
-   const handleLogout = () => {
-   localStorage.clear();
-   localStorage.removeItem("Image")
+  const handleLogout = () => {
+    localStorage.clear();
+    localStorage.removeItem("Image");
     navigate("/login");
   };
-
 
   return (
     <>
@@ -105,7 +100,10 @@ const Setting = () => {
           <div className=" flex justify-between mx-5 mt-5 bg-white p-2 rounded-full items-center">
             <h1 className="mx-2 md:text-[20px] font-bold">Setting</h1>
 
-            <button className="hidden md:block rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300" onClick={handleLogout}>
+            <button
+              className="hidden md:block rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300"
+              onClick={handleLogout}
+            >
               Logout
             </button>
             <span className="md:hidden" onClick={() => dispatch(menuOpen())}>
