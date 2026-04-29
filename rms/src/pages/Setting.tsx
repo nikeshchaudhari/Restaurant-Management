@@ -7,6 +7,7 @@ import { menuOpen } from "../features/menuSlice";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
+import Profile from "./ui/Profile";
 
 interface UserData {
   _id: any;
@@ -20,48 +21,63 @@ const Setting = () => {
   const [email, SetEmail] = useState<string>("");
   const [password, SetPassword] = useState<string>("");
   const [photo, SetPhoto] = useState<File | null>(null);
-  const [userData, setUserData] = useState<UserData | null>(null);
+  const [update, setUpdate] = useState<UserData | null>(null);
   const dispatch: AppDispatch = useDispatch();
   const Open = useSelector((state: RootState) => state.menu.isOpen);
+  console.log(photo);
 
   //   form Handle
 
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+    image: "",
+  });
+  console.log(formData);
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await axios.get("http://localhost:3000/user/profile", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setUpdate(res.data.profile);
+
+      setFormData({
+        fullName: res.data.profile.fullName || "",
+        email: res.data.profile.email || "",
+        password: "",
+        image: res.data.profile.imageUrl,
+      });
+    };
+    fetchData();
+  }, []);
+
   const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-try {
-    const token = localStorage.getItem("token");
+    try {
+      const data = new FormData();
+      data.append("fullName", formData.fullName);
+      data.append("email", formData.email);
+      data.append("password", formData.password);
 
-    const formData = new FormData();
-    formData.append("fullName", fullName);
-    formData.append("email", email);
- if(password){
-  formData.append("password",password)
- }
-    if (photo) {
-      formData.append("photo", photo);
-    }
-    
-      if (!userData) return;
+      if (photo) {
+        data.append("photo", photo);
+      }
 
-      const res = await axios.put(
-        `http://localhost:3000/user/${userData._id}`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      if (!update?._id) {
+        toast.error("User ID not found");
+        return;
+      }
+      await axios.put(`http://localhost:3000/user/${update?._id}`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
-
-      setUserData(res.data.updateData);
-
-      SetFullName(res.data.updateData.fullName);
-      SetEmail(res.data.updateData.email);
-
-      console.log(res.data.updateData);
-      
-      toast.success("Profile Update Successfully...");
-      console.log(res.data.updateData);
+      });
+      toast.success("Profile Updated Successfully");
     } catch (err: any) {
       if (err.response.data) {
         toast.error(err.response.data.msg || "Update Failed");
@@ -70,8 +86,6 @@ try {
       }
     }
   };
-
-
 
   return (
     <>
@@ -101,13 +115,15 @@ try {
                 type="text"
                 placeholder="Enter Full Name"
                 className="border border-gray-300 outline-none  w-full p-2  rounded mb-3 focus:ring-1 focus:ring-blue-500 "
-                name="fullname"
+                name="fullName"
                 autoComplete="off"
-                value={fullName}
-                onChange={(e) => {
-                  SetFullName(e.target.value);
-                  // console.log(e.target.value);
-                }}
+                value={formData.fullName}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    fullName: e.target.value,
+                  })
+                }
               />
               <input
                 type="email"
@@ -115,8 +131,13 @@ try {
                 className="border border-gray-300 outline-none  w-full p-2  rounded mb-3 focus:ring-1 focus:ring-blue-500"
                 name="email"
                 autoComplete="off"
-                value={email}
-                onChange={(e) => SetEmail(e.target.value)}
+                value={formData.email}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    email: e.target.value,
+                  })
+                }
               />
               <div className="relative">
                 <input
@@ -125,15 +146,20 @@ try {
                   className="border border-gray-300 outline-none  w-full p-2  rounded mb-3 focus:ring-1 focus:ring-blue-500"
                   name="password"
                   autoComplete="new-password"
-                  value={password}
-                  onChange={(e) => SetPassword(e.target.value)}
+                  value={formData.password}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
                 />
               </div>
               <input
                 type="file"
                 className="border border-gray-300 outline-none cursor-pointer  w-full p-2  rounded mb-3 focus:ring-1 focus:ring-blue-500 bg-[#e7e6e6]"
+                accept="image/*"
                 onChange={(e) => {
-                  if (e.target.files) SetPhoto(e.target.files[0]);
+                  if (e.target.files && e.target.files[0]) {
+                    SetPhoto(e.target.files[0]);
+                  }
                 }}
               />
               <div className="w-full flex ">
