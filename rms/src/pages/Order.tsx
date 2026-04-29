@@ -157,6 +157,7 @@ const Order = () => {
                     <th className=" px-4 py-2 text-left ">Order Id</th>
                     <th className=" px-4 py-2 text-left ">Table</th>
                     <th className=" px-4 py-2 text-left ">Items</th>
+                    <th className=" px-4 py-2 text-left ">Price</th>
                     <th className=" px-4 py-2 text-left ">Total Amount</th>
                     <th className=" px-4 py-2 text-left ">Status</th>
                   </tr>
@@ -174,6 +175,12 @@ const Order = () => {
                           </div>
                         ))}
                       </td>
+                      <td className=" px-2 md:px-4 py-2">
+                        {o.items.map((item, index) => (
+                          <div key={index}>Rs. {item.price}</div>
+                        ))}
+                      </td>
+
                       <td className=" px-2 md:px-4 py-2">
                         Rs. {o.totalAmount}
                       </td>
