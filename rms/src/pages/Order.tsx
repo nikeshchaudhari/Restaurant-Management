@@ -4,6 +4,10 @@ import Slide from "../components/Slide";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { Menu, X } from "lucide-react";
+import type { AppDispatch, RootState } from "../store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { menuOpen } from "../features/menuSlice";
 interface OrderMenu {
   menuName: string;
   price: number;
@@ -28,8 +32,13 @@ const Order = () => {
   const [order, setOrder] = useState<Order[]>([]);
   const [table, setTable] = useState<Table[]>([]);
   const [filterOrder, setFilterOrder] = useState<Order[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowPage] = useState(10);
 
   const navigate = useNavigate();
+
+  const dispatch:AppDispatch = useDispatch();
+  const open = useSelector((state:RootState)=>state.menu.isOpen)
 
   const logoutHandle = () => {
     localStorage.removeItem("token");
@@ -119,14 +128,24 @@ const Order = () => {
       console.log(data);
     }
   };
+
+  // pagination
+
+  const indexOfLastPage = currentPage*rowPage;
+  const indexOfFirstPage = indexOfLastPage - rowPage;
+  const currentList = filterOrder.slice(indexOfFirstPage,indexOfLastPage)
+  const totalPage = Math.ceil(filterOrder.length/rowPage)
+ 
+  console.log(totalPage);
+  
   return (
     <>
       <main className="md:flex">
         <MobileDashboard />
 
         <Slide />
-        <section className="w-full  bg-[#E9E9E9] min-h-screen  ">
-          <div className="flex justify-between mx-5 mt-5 bg-white p-2 rounded-full items-center">
+        <section className="w-screen bg-[#E9E9E9] min-h-screen  pt-5">
+          <div className="flex justify-between mx-5  bg-white p-2 rounded-full items-center">
             <h1 className="mx-2 md:text-[20px] font-bold">Orders</h1>
             <button
               className="hidden md:block rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300"
@@ -134,6 +153,9 @@ const Order = () => {
             >
               Logout
             </button>
+            <span className="md:hidden" onClick={() => dispatch(menuOpen())}>
+              {open ? <X /> : <Menu/>}
+            </span>
           </div>
           <div className="mt-5 ">
             <div className="flex  justify-end px-5 mb-3 gap-2 items-center ">
@@ -164,7 +186,7 @@ const Order = () => {
                 </thead>
 
                 <tbody>
-                  {filterOrder.map((o) => (
+                  {currentList.map((o) => (
                     <tr key={o._id} className=" hover:bg-gray-50 transition">
                       <td className=" px-2 md:px-4 py-2">{o.orderId}</td>
                       <td className=" px-2 md:px-4 py-2">{o.tableNumber} </td>
@@ -204,6 +226,13 @@ const Order = () => {
                 </tbody>
               </table>
             </div>
+          </div>
+          {/* pagination */}
+
+           <div className="flex gap-2 mt-1 mb-5  lg:mt-0 lg:mb-4 justify-center md:justify-end px-5 items-center ">
+            <button disabled={currentPage === 1} className="px-2 py-1 bg-gray-500 text-white rounded disabled:opacity-50 cursor-pointer" onClick={()=>setCurrentPage(currentPage-1)}>Prev</button>
+            <span className=" py-2">{currentPage} ..... {totalPage}</span>
+            <button disabled={currentPage===totalPage} className="px-3 py-1 bg-gray-500 text-white rounded disabled:opacity-50 cursor-pointer " onClick={()=>setCurrentPage(currentPage+1)}>Next</button>
           </div>
         </section>
       </main>
