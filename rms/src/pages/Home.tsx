@@ -166,7 +166,7 @@ const Home = () => {
             {role === "admin" && (
               <Link to="/dashboard">
                 <button className="px-4 py-2  font-['poppins']  bg-orange-500 hover:bg-orange-700 transition duration-500 text-white rounded-full cursor-pointer">
-                  Dashboard
+                  Admin 
                 </button>
               </Link>
             )}
@@ -174,7 +174,7 @@ const Home = () => {
             {role === "waiter" && (
               <Link to="/food-order/">
                 <button className="px-4 py-2  font-['poppins'] bg-orange-500  hover:bg-orange-700 transition duration-500 text-white rounded-full cursor-pointer">
-                  Orders Now
+                  Waiter 
                 </button>
               </Link>
             )}
