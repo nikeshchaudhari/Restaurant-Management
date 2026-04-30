@@ -14,8 +14,13 @@ import {
   BarElement,
   Title,
   PointElement,
+  RadialLinearScale,
+  LineElement,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+
+import { Line } from "react-chartjs-2";
+
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -28,6 +33,8 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
+  RadialLinearScale,
+  LineElement,
 );
 
 interface OrderItems {
@@ -108,6 +115,9 @@ const Report = () => {
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+    animation: {
+      duration: 2000, // 2 sec
+    },
   };
   // chart datapass
 
@@ -123,11 +133,65 @@ const Report = () => {
       },
     ],
   };
-// count order items
 
-const itemsCount:Record<string,number>=()=>{};
-console.log(itemsCount);
+  const lineOptions = {
+    animations: {
+      tension: {
+        duration: 1000,
+        easing: "linear",
+        from: 0.8,
+        to: 0.3,
+        loop: false,
+      },
+    },
+  };
+  // count order items
+  const productCount: Record<string, number> = {};
+  console.log(productCount);
 
+  order.forEach((o) => {
+    o.items.forEach((element) => {
+      // const total = element.qty * element.price;
+
+      if (productCount[element.menuName]) {
+        productCount[element.menuName] += element.qty;
+      } else {
+        productCount[element.menuName] = element.qty;
+      }
+    });
+  });
+
+  const label = Object.keys(productCount);
+  const values = Object.values(productCount);
+
+  const dataBestSell = {
+    labels: label,
+    datasets: [
+      {
+        label: "Best Selling Items",
+        data: values,
+        backgroundColor: [
+          "red",
+          "teal",
+          "olive",
+          "cyan",
+          "indigo",
+          "maroon",
+          "yellow",
+          "green",
+          "blue",
+          "black",
+          "orange",
+          "skyblue",
+          "brown",
+          "white",
+          "gray",
+          "pink",
+          "magenta",
+        ],
+      },
+    ],
+  };
 
   return (
     <>
@@ -146,12 +210,17 @@ console.log(itemsCount);
           </div>
 
           <div className="flex gap-4   py-10 md:px-10 px-5 overflow-hidden">
-            <div className="w-1/2 h-[400px]">
+            <div className="w-1/2 h-100">
               <Bar data={data} options={options} />
             </div>
 
-            <div className="w-1/2 h-[400px]">
+            <div className="w-1/2 h-100">
               <Bar data={dataMonth} options={options} />
+            </div>
+          </div>
+          <div className="w-full flex gap-4 justify-center  py-10 md:px-10 px-5 overflow-hidden">
+            <div className="w-full h-100 ">
+              <Line data={dataBestSell} options={lineOptions} />
             </div>
           </div>
         </section>
