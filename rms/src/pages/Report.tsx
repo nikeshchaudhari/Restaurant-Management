@@ -4,54 +4,131 @@ import { Menu, X } from "lucide-react";
 import type { AppDispatch, RootState } from "../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { menuOpen } from "../features/menuSlice";
-import Chart from "chart.js/auto";
-import { useEffect, useRef } from "react";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  PointElement,
+} from "chart.js";
+import { Bar } from "react-chartjs-2";
+import { useEffect, useState } from "react";
+import axios from "axios";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  PointElement,
+  ArcElement,
+  Title,
+  Tooltip,
+  Legend,
+);
+
+interface OrderItems {
+  menuName: string;
+  price: number;
+  qty: number;
+  totalAmount: number;
+}
+
+interface Order {
+  orderId: string;
+  items: OrderItems[];
+  totalAmount: number;
+  createdAt: string;
+}
 
 const Report = () => {
-    const chartRef = useRef<HTMLCanvasElement | null>(null);
-    const chartInstance = useRef<any>(null)
+  const [order, setOrder] = useState<Order[]>([]);
 
-
-
-    useEffect(() => {
-    if (chartInstance.current) {
-      chartInstance.current.destroy();
-    }
-
-    const ctx = chartRef.current?.getContext("2d");
-
-    chartInstance.current = new Chart(ctx!, {
-      type: "bar",
-      data: {
-        labels: ["Total Income"],
-        datasets: [
-          {
-            label: "Income (Rs)",
-            data: [5000],
-            backgroundColor: "green",
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-      },
+  useEffect(() => {
+    axios.get("http://localhost:3000/order/all-order").then((res) => {
+      setOrder(res.data.allOrder);
     });
-
-    return () => {
-      chartInstance.current?.destroy();
-    };
   }, []);
+
   const dispatch: AppDispatch = useDispatch();
   const open = useSelector((state: RootState) => state.menu.isOpen);
-
-  const order = [
-    { totalAmount: 500, status: "paid", createdAt: "2026-04-29" },
-    { totalAmount: 300, status: "pending", createdAt: "2026-04-29" },
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
 
-  const totalIncome = order.reduce((sum:any, items) => sum + items.totalAmount,0);
-  console.log(totalIncome);
-  
+  // monthly income view
+
+  const monthltIncome = new Array(12).fill(0);
+
+  order.forEach((item) => {
+    const date = new Date(item.createdAt);
+    const monthData = date.getMonth();
+
+    monthltIncome[monthData] = monthltIncome[monthData] + item.totalAmount;
+
+    // console.log(monthData);
+  });
+  // console.log(monthltIncome[3]);
+
+  const dataMonth = {
+    labels: months,
+    datasets: [
+      {
+        label: "Monthly Income",
+        data: monthltIncome,
+        borderColor: "rgb(255, 99, 132)",
+        backgroundColor: "rgb(54, 162, 235)",
+        barPercentage: 1,
+      },
+    ],
+  };
+
+  // console.log(monthltIncome);
+
+  const totalIncome = order.reduce(
+    (sum: any, item) => sum + item.totalAmount,
+    0,
+  );
+  // console.log(totalIncome);
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+  };
+  // chart datapass
+
+  const data = {
+    labels: ["Incomes"],
+    datasets: [
+      {
+        label: "Total Income",
+        data: [totalIncome],
+        backgroundColor: "green",
+
+        barPercentage: 0.4,
+      },
+    ],
+  };
+// count order items
+
+const itemsCount:Record<string,number>=()=>{};
+console.log(itemsCount);
+
+
   return (
     <>
       <main className="flex">
@@ -68,8 +145,14 @@ const Report = () => {
             </span>
           </div>
 
-          <div style={{ width: "400px" }}>
-             <canvas ref={chartRef}></canvas>
+          <div className="flex gap-4   py-10 md:px-10 px-5 overflow-hidden">
+            <div className="w-1/2 h-[400px]">
+              <Bar data={data} options={options} />
+            </div>
+
+            <div className="w-1/2 h-[400px]">
+              <Bar data={dataMonth} options={options} />
+            </div>
           </div>
         </section>
       </main>
