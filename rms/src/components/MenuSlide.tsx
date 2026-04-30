@@ -4,6 +4,7 @@ import type { AppDispatch, RootState } from "../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { menuClose } from "../features/menuSlice";
 import { Link } from "react-router-dom";
+import { User2Icon, UserCheck2, UserIcon, UsersIcon, UsersRound } from "lucide-react";
 
 interface props {
 onMenuClick:()=>void
@@ -43,12 +44,15 @@ const MenuSlide = ({onMenuClick}:props) => {
             />
         </div>
 
-        <div className="flex justify-center w-full ">
-          <ul className="mt-5 text-lg font-['poppins'] ">
+        <div className="flex w-full ">
+          <ul className="mt-5 text-lg font-['poppins'] flex flex-col justify-center items-center w-full">
            <Link to="/home" onClick={()=>dispatch(menuClose())}> <li className=" mb-3">Home</li></Link>
             <li className=" mb-3" onClick={handle}>All Menu</li>
-            <li className="  mb-3">About Us</li>
-            <li className="mb-3">Contact Us</li>
+            {/* <Link to='/signup'><li className="mb-3 bg-amber-600  text-white px-5 py-1 flex justify-center rounded-full">Register</li></Link> */}
+           <Link to="/login" className="flex items-center justify-center gap-1 bg-amber-600/10 px-5 py-1 rounded-full text-amber-600">
+           <UsersRound size={20}/>
+            <li className="">Login</li>
+           </Link>
           </ul>
         </div>
       </aside>

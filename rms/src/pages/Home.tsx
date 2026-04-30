@@ -108,51 +108,6 @@ const Home = () => {
     setSelected(item);
   };
 
-  // fetchUser
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-  //   if (token) {
-  //     // console.log("Token is comming");
-
-  //     const fetchData = async () => {
-  //       try {
-  //         const res = await axios.get("http://localhost:3000/user/all-user");
-
-  //         // console.log(res.data);
-  //       } catch (err) {}
-  //     };
-
-  //     // const splitToken = token.split(".")[1];
-  //     // const decode = atob(splitToken);
-  //     // //  console.log(decode);
-
-  //     // const payload = JSON.parse(decode);
-  //     //  console.log(payload);
-
-  //     // dispatch(
-  //     //   login({
-  //     //     name:payload.fullName,
-  //     //     profileImage:payload.imageUrl
-  //     //   })
-  //     // )
-
-  //     fetchData();
-  //   }
-  // }, []);
-
-  // search logic
-
-  // const filter = menu.filter((item) =>
-  //   item.menuName.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
-  // );
-
-  // console.log(filter);
-
-  // reload
-
-  const refresh = ()=>{
-    window.location.reload()
-  }
 
   return (
     <>
@@ -193,8 +148,9 @@ const Home = () => {
                 </Link>
           </div>
           <RxHamburgerMenu
-            className="block md:hidden text-50 hover:bg-gray-100 mr-5"
+            className="block md:hidden  hover:bg-gray-100 mr-5"
             onClick={() => dispatch(menuOpen())}
+            size={24}
           />
         </nav>
 
@@ -269,14 +225,16 @@ const Home = () => {
 
         <div ref={allMenuRef}>
           <h1 className="text-center  my-10 text-[18px] md:text-[25px] lg:text-[30px] font-bold font-['poppins']">
-            All Category
+            All Menus
           </h1>
           <div>
             {filterItems.length === 0 ? (
               <div className="w-full pb-5  flex flex-col justify-center items-center ">
                 <h2 className="text-[20px]">No items Founds</h2>
 
-<RotateCw className="cursor-pointer mt-2  hover:text-amber-600" onClick={refresh}/>
+<RotateCw className="cursor-pointer mt-2  hover:text-amber-600" onClick={()=>{
+  window.location.reload();
+}}/>
               </div>
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 w-[80vw] justify-self-center">

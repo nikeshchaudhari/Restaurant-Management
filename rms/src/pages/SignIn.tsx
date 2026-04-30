@@ -86,7 +86,7 @@
     return (
       <>
         <div className="w-screen h-screen flex justify-center items-center bg-gray-100">
-          <div className="w-full md:w-200 h-100 rounded-lg flex overflow-hidden bg-white justify-center">
+          <div className="w-full md:w-200 h-auto rounded-lg flex overflow-hidden bg-white justify-center">
             {/* Image section */}
             <div className="w-1/2 bg-[#e2dddd] hidden md:block">
               <img src={food} alt="food" className="w-100 h-100 p-10" />

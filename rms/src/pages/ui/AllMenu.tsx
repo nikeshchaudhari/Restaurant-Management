@@ -10,6 +10,7 @@ import CartUi from "./CartUi";
 import {  ChevronLeft, ChevronRight } from "lucide-react";
 import MenuSlide from "../../components/MenuSlide";
 import OrderSlide from "../../components/OrderSlide";
+import { useParams, useSearchParams } from "react-router-dom";
 
 interface MenuItems {
   menuName: string;
@@ -33,12 +34,21 @@ const AllMenu = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [rowPage, setRowPage] = useState(15);
 
-  // const table: any = useSelector(
-  //   (state: RootState) => state.table.selectedTable,
-  // );
-  // console.log(table);
+  
 
   const dispatch: AppDispatch = useDispatch();
+
+const [parms]= useSearchParams() 
+console.log(parms);
+
+
+ const querySearch  = parms.get("search")|| "";
+ console.log(querySearch);
+ 
+
+ useEffect(()=>{
+  setSearch(querySearch);
+ },[querySearch])
 
   // fetch all menu
 
@@ -185,7 +195,10 @@ const AllMenu = () => {
                     >
                       <ChevronLeft size={35} onClick={()=>setCurrentPage((prev)=>Math.max(prev-1,1))}  />
                     </div>
-                    <span className="text-[20px] font-['poppins']">{currentPage} ....... {totalPage}</span>
+                    <span className="text-[20px] font-['poppins']">
+                      
+                      
+                      {currentPage} ....... {totalPage}</span>
                    <div className={`mr-10 rounded-full transition duration-500 ${
                     currentPage === totalPage ? " text-black/10 cursor-not-allowed":" hover:bg-red-800 cursor-pointer hover:text-white "
                     }`}>

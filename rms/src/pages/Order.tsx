@@ -186,7 +186,15 @@ const Order = () => {
                 </thead>
 
                 <tbody>
-                  {currentList.map((o) => (
+                 {filterOrder.length === 0 ?(
+                  <tr>
+                    <td colSpan={5}
+                        className="text-center p-5 text-[20px] font-bold">No Orders Found</td>
+                  </tr>
+
+                 ):(
+                 
+                     currentList.map((o) => (
                     <tr key={o._id} className=" hover:bg-gray-50 transition">
                       <td className=" px-2 md:px-4 py-2">{o.orderId}</td>
                       <td className=" px-2 md:px-4 py-2">{o.tableNumber} </td>
@@ -222,18 +230,21 @@ const Order = () => {
                         </select>
                       </td>
                     </tr>
-                  ))}
+                  ))
+                 )}
                 </tbody>
               </table>
             </div>
           </div>
           {/* pagination */}
 
-           <div className="flex gap-2 mt-1 mb-5  lg:mt-0 lg:mb-4 justify-center md:justify-end px-5 items-center ">
+           {filterOrder.length > 0  &&(
+            <div className="flex gap-2 mt-1 mb-5  lg:mt-0 lg:mb-4 justify-center md:justify-end px-5 items-center ">
             <button disabled={currentPage === 1} className="px-2 py-1 bg-gray-500 text-white rounded disabled:opacity-50 cursor-pointer" onClick={()=>setCurrentPage(currentPage-1)}>Prev</button>
             <span className=" py-2">{currentPage} ..... {totalPage}</span>
             <button disabled={currentPage===totalPage} className="px-3 py-1 bg-gray-500 text-white rounded disabled:opacity-50 cursor-pointer " onClick={()=>setCurrentPage(currentPage+1)}>Next</button>
           </div>
+           )}
         </section>
       </main>
     </>

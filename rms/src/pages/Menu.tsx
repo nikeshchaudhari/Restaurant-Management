@@ -378,7 +378,7 @@ const Menu = () => {
                   <th className=" px-4 py-2 text-left ">Menu_Name</th>
                   <th className=" px-4 py-2 text-left ">Category</th>
                   <th className=" px-4 py-2 text-left ">Price</th>
-                  <th className=" px-4 py-2 text-left ">Available/Unavailable</th>
+                  <th className=" px-4 py-2 text-left ">Available</th>
                   <th className=" px-4 py-2 text-left ">Photo</th>
                   <th className=" px-4 py-2 text-left ">Action</th>
                 </tr>
@@ -391,7 +391,7 @@ const Menu = () => {
                       colSpan={6}
                       className="text-center p-5 text-[20px] font-bold"
                     >
-                      Data Not Found
+                   No  Menus Found
                     </td>
                   </tr>
                 ) : (
@@ -451,11 +451,13 @@ const Menu = () => {
             </table>
           </div>
           {/* pagination */}
-          <div className="flex gap-2 mt-1 mb-5  lg:mt-0 lg:mb-4 justify-center md:justify-end px-5 items-center ">
+         {menu.length>0 &&(
+           <div className="flex gap-2 mt-1 mb-5  lg:mt-0 lg:mb-4 justify-center md:justify-end px-5 items-center ">
             <button disabled={currentPage === 1} className="px-2 py-1 bg-gray-500 text-white rounded disabled:opacity-50 cursor-pointer" onClick={()=>setCurrentPage(currentPage-1)}>Prev</button>
             <span className=" py-2">{currentPage} ..... {totalPage}</span>
             <button disabled={currentPage===totalPage} className="px-3 py-1 bg-gray-500 text-white rounded disabled:opacity-50 cursor-pointer " onClick={()=>setCurrentPage(currentPage+1)}>Next</button>
           </div>
+         )}
         </section>
       </main>
     </>

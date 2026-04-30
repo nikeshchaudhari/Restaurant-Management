@@ -6,9 +6,10 @@ import axios from "axios";
 import type { AppDispatch, RootState } from "../../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { menuOpen } from "../../features/menuSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { setSelectedTable } from "../../features/TableSlice";
 import CartUi from "./CartUi";
+import OrderSlide from "../../components/OrderSlide";
 
 interface Table {
   _id: string;
@@ -19,7 +20,7 @@ interface Table {
 const ListTabel = () => {
   const [tables, setTables] = useState<Table[]>([]);
   const [selected, setSelected] = useState<Table | null>(null);
-
+    const [search, setSearch] = useState("");
   const dispatch: AppDispatch = useDispatch();
   // const open = useSelector((state: RootState) => state.menu.isOpen);
 
@@ -49,10 +50,17 @@ const ListTabel = () => {
     navigate("/food-order/all-menu");
   };
 
+  const[parms]= useSearchParams()
+
+  const querySearch = parms.get("search") || ""
+  console.log(querySearch);
+  
+  
+
   return (
     <>
       <main>
-        <Navbar />
+        <Navbar/>
         <div className="md:flex  ">
           <div className="hidden md:block  ">
             <UiSlider />
@@ -73,7 +81,7 @@ const ListTabel = () => {
                 <div className="bg-amber-500/40 px-2 py-1 md:px-5 md:py-2 rounded-full text-white transition transform hover:-translate-x-1 duration-300 font-['poppins']">
                   <h2 className="text-[12px] md:text-[16px]">Unavailable</h2>
                 </div>
-                <div className="bg-[#360404] px-5 py-2 rounded-full text-white transition transform hover:-translate-x-1 duration-300 font-['poppins']">
+                <div className="bg-[#360404] px-2 py-1 md:px-5 md:py-2 rounded-full text-white transition transform hover:-translate-x-1 duration-300 font-['poppins']">
                   <h2 className="text-[12px] md:text-[16px]">Selected</h2>
                 </div>
               </div>
@@ -115,6 +123,7 @@ const ListTabel = () => {
             <CartUi/>
           </section>
         </div>
+        <OrderSlide/> 
       </main>
     </>
   );

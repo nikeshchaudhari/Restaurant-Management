@@ -32,7 +32,7 @@ const ViewOrder = () => {
 
 
   const [order, setOrder] = useState<Order[]>([]);
-  console.log(order);
+  // console.log(order);
   const fetchOrder = async () => {
     const token = localStorage.getItem("token");
     const res = await axios.get("http://localhost:3000/order/my-order", {
@@ -89,7 +89,7 @@ const ViewOrder = () => {
         My Orders
       </h2>
 
-      {/* Mobile scroll */}
+      {/* */}
       <div className="overflow-x-auto mt-5 rounded">
         <table className="min-w-225 md:min-w-full ">
           <thead className="bg-gray-100">
@@ -150,8 +150,7 @@ const ViewOrder = () => {
                       className="border p-2 rounded cursor-pointer text-sm"
                     >
                       <option value="preparing">Preparing</option>
-                      <option value="completed">Completed</option>
-                      <option value="paid">Paid</option>
+                      <option value="cancelled">Cancel</option>                      <option value="paid">Paid</option>
                     </select>
                   </td>
                 </tr>

@@ -16,10 +16,8 @@ const Profile = () => {
   }
 
   const [update, setUpdate] = useState<User | null>(null);
-  
 
-
-    const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     password: "",
@@ -51,7 +49,6 @@ const Profile = () => {
           password: "",
           confirm_password: "",
         });
-
       } catch (err) {
         console.log(err);
       }
@@ -64,9 +61,9 @@ const Profile = () => {
   const formHandle = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if(formData.password !== formData.confirm_password){
-       toast.error("Password and Confirm Password do not match");
-       return;
+    if (formData.password !== formData.confirm_password) {
+      toast.error("Password and Confirm Password do not match");
+      return;
     }
 
     try {
@@ -75,15 +72,11 @@ const Profile = () => {
         return;
       }
 
-      await axios.put(
-        `http://localhost:3000/user/${update._id}`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await axios.put(`http://localhost:3000/user/${update._id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       toast.success("Profile Updated Successfully");
     } catch (err) {
@@ -92,7 +85,7 @@ const Profile = () => {
   };
 
   return (
-    <main >
+    <main>
       <Navbar />
 
       <div className="md:flex min-h-screen ">
@@ -103,11 +96,9 @@ const Profile = () => {
         <div className="w-full mt-20  md:mx-10 lg:mx-10">
           <h2 className="text-center mt-5 font-bold font-['poppins'] text-[20px]">
             Update Your Profile
-          </h2> 
+          </h2>
 
           <form onSubmit={formHandle} className="mt-5 mx-5">
-
-           
             <input
               type="text"
               value={formData.fullName}
@@ -136,7 +127,7 @@ const Profile = () => {
               className="border p-2 w-full m-2 border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-amber-800"
               placeholder="New Password"
             />
-            
+
             <input
               type="password"
               value={formData.confirm_password}
@@ -147,18 +138,16 @@ const Profile = () => {
               placeholder="Confirm_Password"
             />
 
-
             <button
               type="submit"
               className=" bg-red-900 rounded text-[14px] hover:bg-red-800  text-white p-2 m-2 cursor-pointer font-['poppins']"
             >
               Update Profile
             </button>
-
           </form>
         </div>
-        <CartUi/>
-        <OrderSlide/>
+        <CartUi />
+        <OrderSlide />
       </div>
     </main>
   );

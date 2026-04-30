@@ -135,6 +135,8 @@ const Report = () => {
   };
 
   const lineOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
     animations: {
       tension: {
         duration: 1000,

@@ -13,14 +13,17 @@ const SignUp = () => {
   const [passwordshow, SetpasswordShow] = useState<boolean>(false);
   const [confirmshow, Setconfirmshow] = useState<boolean>(false);
 
-  // const [fullName, SetfullName] = useState<string>("");
-  // const [email, SetEmail] = useState<string>("");
-  // const [password, SetPassword] = useState<string>("");
-  // const [confirmPassword, SetconfirmPassword] = useState<string>("");
-
   const navigate = useNavigate();
 
-  const{values,errors,resetForm,touched,handleBlur,handleChange,handleSubmit}=useFormik({
+  const {
+    values,
+    errors,
+    resetForm,
+    touched,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+  } = useFormik({
     initialValues: {
       fullName: "",
       email: "",
@@ -31,73 +34,26 @@ const SignUp = () => {
     onSubmit: async (values) => {
       console.log(values);
       try {
-      const token = localStorage.getItem("token");
+        const token = localStorage.getItem("token");
 
-      const response = await axios.post(
-        "http://localhost:3000/user/add-user",
-        values,
-        {
-          headers: {
-            Authorization: `Bear ${token}`,
+        const response = await axios.post(
+          "http://localhost:3000/user/add-user",
+          values,
+          {
+            headers: {
+              Authorization: `Bear ${token}`,
+            },
           },
-        },
-      );
-      console.log("User Add", response.data);
-      toast.success("Data Add Sucessfully...");
-      resetForm();
-      navigate("/login");
-      
-    } catch (err) {
-      toast.error("Error ");
-    }
-
+        );
+        console.log("User Add", response.data);
+        toast.success("Data Add Sucessfully...");
+        resetForm();
+        navigate("/login");
+      } catch (err) {
+        toast.error("Error ");
+      }
     },
   });
-
-  function SetconfirmPassword(value: string): void {
-    throw new Error("Function not implemented.");
-  }
-
-  // const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   // console.log("Data insert");
-
-  //   if (password != confirmPassword) {
-  //     alert("password do not match");
-  //     return;
-  //   }
-
-  //   const data = {
-  //     fullName,
-  //     email,
-  //     password,
-  //     confirmPassword,
-  //   };
-
-  //   try {
-  //     const token = localStorage.getItem("token");
-
-  //     const response = await axios.post(
-  //       "http://localhost:3000/user/add-user",
-  //       data,
-  //       {
-  //         headers: {
-  //           Authorization: `Bear ${token}`,
-  //         },
-  //       },
-  //     );
-  //     console.log("User Add", response.data);
-  //     toast.success("Data Add Sucessfully...");
-  //     navigate("/login");
-  //   } catch (err) {
-  //     toast.error("Error ");
-  //   }
-
-  //   SetfullName("");
-  //   SetEmail("");
-  //   SetPassword("");
-  //   SetconfirmPassword("");
-  // };
 
   return (
     <div className="w-screen h-screen flex justify-center items-center bg-gray-100">
@@ -113,38 +69,38 @@ const SignUp = () => {
             <h1 className="text-center text-[20px] mb-3 font-bold">
               Create Your Account ?
             </h1>
-         <div className="mb-3 ">
-             {/* <label htmlFor="fullname">Full_Name <span className="text-red-500">*</span></label> */}
-            <input
-              type="text"
-              className="w-full p-2 border focus:outline-none border-[#e2dddd] rounded focus:ring-1 focus:ring-blue-500"
-              id="fullname"
-              placeholder="Enter full name"
-              name="fullName"
-              value={values.fullName}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            {touched.fullName && errors.fullName &&(
-              <p className="text-sm text-red-500">{errors.fullName}*</p>
-            )}
-         </div>
-           <div className="mb-3">
-             {/* <label htmlFor="email">Email<span className="text-red-500">*</span></label> */}
-            <input
-              type="email"
-              id="email"
-              className="w-full p-2 border outline-none border-[#e2dddd] rounded  focus:ring-1 focus:ring-blue-500"
-              placeholder="Enter your email"
-              name="email"
-              value={values.email}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-             {touched.email && errors.email &&(
-              <p className="text-sm text-red-500">{errors.email}*</p>
-            )}
-           </div>
+            <div className="mb-3 ">
+              {/* <label htmlFor="fullname">Full_Name <span className="text-red-500">*</span></label> */}
+              <input
+                type="text"
+                className="w-full p-2 border focus:outline-none border-[#e2dddd] rounded focus:ring-1 focus:ring-blue-500"
+                id="fullname"
+                placeholder="Enter full name"
+                name="fullName"
+                value={values.fullName}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              {touched.fullName && errors.fullName && (
+                <p className="text-sm text-red-500">{errors.fullName}*</p>
+              )}
+            </div>
+            <div className="mb-3">
+              {/* <label htmlFor="email">Email<span className="text-red-500">*</span></label> */}
+              <input
+                type="email"
+                id="email"
+                className="w-full p-2 border outline-none border-[#e2dddd] rounded  focus:ring-1 focus:ring-blue-500"
+                placeholder="Enter your email"
+                name="email"
+                value={values.email}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              {touched.email && errors.email && (
+                <p className="text-sm text-red-500">{errors.email}*</p>
+              )}
+            </div>
             <div className="relative mb-3">
               {/* <label htmlFor="password">Password<span className="text-red-500">*</span></label> */}
               <input
@@ -158,10 +114,9 @@ const SignUp = () => {
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-                {touched.password && errors.password &&(
-              <p className="text-sm text-red-500">{errors.password}*</p>
-            )}
-              
+              {touched.password && errors.password && (
+                <p className="text-sm text-red-500">{errors.password}*</p>
+              )}
 
               <button
                 type="button"
@@ -184,9 +139,11 @@ const SignUp = () => {
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-               {touched.confirm_password && errors.confirm_password &&(
-              <p className="text-sm text-red-500">{errors.confirm_password}*</p>
-            )}
+              {touched.confirm_password && errors.confirm_password && (
+                <p className="text-sm text-red-500">
+                  {errors.confirm_password}*
+                </p>
+              )}
               <button
                 className="absolute top-3 right-2 cursor-pointer "
                 type="button"

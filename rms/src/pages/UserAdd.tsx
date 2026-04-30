@@ -424,7 +424,9 @@ const UserAdd = () => {
             </div>
           </div>
           {/* PAGINATION */}
-          <div className="flex gap-2 mt-1 mb-5   lg:mt-0 lg:mb-4 justify-center md:justify-end items-center px-5 ">
+         {
+          users.length > 0 &&(
+             <div className="flex gap-2 mt-1 mb-5   lg:mt-0 lg:mb-4 justify-center md:justify-end items-center px-5 ">
             <button
               disabled={currentPage === 1}
               onClick={() => setCurrentPage(currentPage - 1)}
@@ -444,6 +446,8 @@ const UserAdd = () => {
               Next
             </button>
           </div>
+          )
+         }
         </section>
       </main>
     </>

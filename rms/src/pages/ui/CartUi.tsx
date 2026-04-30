@@ -11,6 +11,7 @@ import {
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { setSelectedTable } from "../../features/TableSlice";
 
 const CartUi = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -65,6 +66,8 @@ const token = localStorage.getItem("token");
       );
       dispatch(clearCart());
       dispatch(closeCart());
+      setSelectedTable(null)
+      localStorage.removeItem("selectedTable");
 
       toast.success("Order Successfully !");
       navigate("/food-order")

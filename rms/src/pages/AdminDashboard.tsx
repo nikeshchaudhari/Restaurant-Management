@@ -48,8 +48,7 @@ const AdminDashboard = () => {
   const [order, setOrder] = useState<Order[]>([]);
   const [tableAvailable, setTableAvailable] = useState<Table[]>([]);
 
-  const[currentPage,setCurrentPage]= useState(1)
-  const[rowPage]=useState(10)
+
   const navigate = useNavigate();
 
   // fetch order
@@ -191,7 +190,19 @@ const AdminDashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {recentOrder.slice(0, 10).map((o) => (
+                  {
+                    recentOrder.length == 0 ?(
+                      <tr>
+                    <td
+                      colSpan={6}
+                      className="text-center p-5 text-[20px] font-bold"
+                    >
+                   Recent Order Not Found
+                    </td>
+                  </tr>
+                    ):(
+                      
+                      recentOrder.slice(0, 10).map((o) => (
                     <tr key={o._id}  className=" hover:bg-gray-50 transition">
                       <td className=" px-4  py-3">{o.orderId}</td>
                       <td className=" px-4  py-3">{o.tableNumber}</td>
@@ -223,7 +234,10 @@ const AdminDashboard = () => {
                         </select>
                       </td>
                     </tr>
-                  ))}
+                  ))
+                      
+                    )
+                  }
                 </tbody>
               </table>
             </div>

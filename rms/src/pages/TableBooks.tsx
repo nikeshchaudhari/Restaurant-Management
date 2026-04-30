@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { menuOpen } from "../features/menuSlice";
 import { useFormik } from "formik";
 import { TableValid } from "../schemas/TableSchema";
-import { setSelectedTable } from "../features/TableSlice";
+
 const TableBooks = () => {
   interface tableData {
     _id: any;
@@ -24,9 +24,7 @@ const TableBooks = () => {
   const dispatch: AppDispatch = useDispatch();
   const Open = useSelector((state: RootState) => state.menu.isOpen);
   const [table, setTable] = useState<tableData[]>([]);
-  const [tableNumber, setTableNumber] = useState<string>("");
-  const [capacity, setCapacity] = useState<string>("");
-  const [status, setStatus] = useState<string>("");
+
   const [editTable, setEditTable] = useState<tableData | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [rowPage, setRowPage] = useState(10);
@@ -109,15 +107,6 @@ const TableBooks = () => {
 
   }
 
-  // post data
-  // const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-
-  //   setTableNumber("");
-  //   setCapacity("");
-  //   setStatus("");
-  //   setEditTable(null);
-  // };
 
   // fetch Data
   useEffect(() => {
@@ -308,7 +297,7 @@ const TableBooks = () => {
                       colSpan={5}
                       className="text-center p-5 text-[20px] font-bold"
                     >
-                      Data Not Founds
+                     Not Table  Founds
                     </td>
                   </tr>
                 ) : (
@@ -358,7 +347,9 @@ const TableBooks = () => {
             </table>
           </div>
           {/* pagination */}
-          <div className="flex gap-2 mt-1 mb-5  lg:mt-0 lg:mb-4 justify-center md:justify-end px-5 items-center ">
+        {
+          table.length > 0 &&(
+              <div className="flex gap-2 mt-1 mb-5  lg:mt-0 lg:mb-4 justify-center md:justify-end px-5 items-center ">
             <button
               disabled={currentPage === 1}
               className="px-2 py-1 bg-gray-500 text-white rounded disabled:opacity-50 cursor-pointer"
@@ -377,6 +368,8 @@ const TableBooks = () => {
               Next
             </button>
           </div>
+          )
+        }
         </section>
       </main>
     </>

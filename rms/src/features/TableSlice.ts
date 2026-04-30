@@ -19,10 +19,15 @@ export const tableSlice = createSlice({
   reducers: {
     setSelectedTable :(state,action)=>{
       state.selectedTable = action.payload
+    },
+    clearSelectedTable:(state)=>{
+      state.selectedTable = null;
+
     }
   },
+  
 });
 
-export const{setSelectedTable} = tableSlice.actions;
+export const{setSelectedTable,clearSelectedTable} = tableSlice.actions;
 export default tableSlice.reducer
 
