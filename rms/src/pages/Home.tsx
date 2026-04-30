@@ -18,6 +18,8 @@ import MenuSlide from "../components/MenuSlide";
 import type { AppDispatch, RootState } from "../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { menuOpen } from "../features/menuSlice";
+import { CircleUserRound } from "lucide-react";
+import { HandPlatter } from "lucide-react";
 
 interface MenuItems {
   _id: null | undefined;
@@ -84,7 +86,6 @@ const Home = () => {
   }, []);
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-     
       setQuery(search);
     }
   };
@@ -100,8 +101,7 @@ const Home = () => {
       query === "" ||
       items.menuName.toLocaleLowerCase().includes(query.toLocaleLowerCase());
 
-
-      return categoryMatch && matchSearch;
+    return categoryMatch && matchSearch;
   });
   // .filter(
   //   (items) =>
@@ -126,9 +126,11 @@ const Home = () => {
               alt=""
               className="ml:10 lg:ml-20 w-15 h-15 p-2 hidden md:block cursor-pointer   "
             />
-            <h1 className="font-['poppins'] md:text-[20px] lg:text-[40px] font-bold hidden md:block cursor-pointer  ">
+            <Link to="/">
+            <h1 className="font-['poppins'] md:text-[20px] lg:text-[40px] font-bold hidden md:block cursor-pointer  " >
               End RMS
             </h1>
+            </Link>
           </div>
           <div className="relative  flex-1 mx-4 md:mx-10  ">
             <input
@@ -164,17 +166,27 @@ const Home = () => {
             )}
 
             {role === "admin" && (
-              <Link to="/dashboard">
-                <button className="px-4 py-2  font-['poppins']  bg-orange-500 hover:bg-orange-700 transition duration-500 text-white rounded-full cursor-pointer">
-                  Admin 
+              <Link
+                to="/dashboard"
+                className="flex items-center gap-1 px-6 py-2  rounded-full cursor-pointer   bg-orange-500 hover:bg-orange-700 transition duration-500"
+              >
+                <CircleUserRound className="text-white " size={20} />
+                <button className=" font-['poppins']  text-white text-[20px]  cursor-pointer font-light  ">
+                  Admin
                 </button>
               </Link>
             )}
 
             {role === "waiter" && (
-              <Link to="/food-order/">
-                <button className="px-4 py-2  font-['poppins'] bg-orange-500  hover:bg-orange-700 transition duration-500 text-white rounded-full cursor-pointer">
-                  Waiter 
+              <Link
+                to="/food-order"
+                className="flex items-center gap-1 px-6 py-2  rounded-full cursor-pointer   bg-orange-500 hover:bg-orange-700 transition duration-500"
+              >
+                
+                <HandPlatter className="text-white " size={18}/>
+
+                <button className=" font-['poppins']  text-white text-[20px]  cursor-pointer font-light ">
+                  Waiter
                 </button>
               </Link>
             )}
