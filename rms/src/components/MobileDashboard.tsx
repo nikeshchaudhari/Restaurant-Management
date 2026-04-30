@@ -1,6 +1,6 @@
 import adminLogo from "../assets/adminlogo.png";
 import { RxCross2 } from "react-icons/rx";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiLogOut } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../store/store";
@@ -9,7 +9,13 @@ const MobileDashboard = () => {
   const dispatch: AppDispatch = useDispatch();
   const Open = useSelector((state: RootState) => state.menu.isOpen);
   // const [isOpen, SetIsOpen] = useState<boolean>(false);
-
+   const navigate = useNavigate()
+   const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    localStorage.clear();
+    navigate("/login");
+  };
   return (
     <>
       {/* <button
@@ -85,7 +91,14 @@ const MobileDashboard = () => {
             <li className="bg-[#1F354D] p-2 text-white px-10 mb-3">Orders</li>
           </Link>
 
-          <li className="bg-[#1F354D] p-2 text-white px-10 mb-3">Reports</li>
+          <Link
+            to="/dashboard/reports"
+            onClick={() => {
+              dispatch(menuClose());
+            }}
+          >
+            <li className="bg-[#1F354D] p-2 text-white px-10 mb-3">Reports</li>
+          </Link>
 
           <Link to="/dashboard/setting">
             <li
@@ -98,7 +111,7 @@ const MobileDashboard = () => {
             </li>
           </Link>
         </ul>
-        <div className="absolute bottom-0 left-0 w-full bg-[#1F354D] p-4 text-white text-center  font-bold flex gap-5 items-center  justify-center">
+        <div className="absolute bottom-0 left-0 w-full bg-[#1F354D] p-4 text-white text-center  font-bold flex gap-5 items-center  justify-center" onClick={handleLogout}>
           <FiLogOut className="text-2xl" />
           <button className="text-[20px]">Logout</button>
         </div>

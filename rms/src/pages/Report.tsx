@@ -23,6 +23,7 @@ import { Line } from "react-chartjs-2";
 
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 ChartJS.register(
   CategoryScale,
@@ -195,6 +196,15 @@ const Report = () => {
     ],
   };
 
+  //logout
+  const navigate = useNavigate()
+   const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    localStorage.clear();
+    navigate("/login");
+  };
+
   return (
     <>
       <main className="flex">
@@ -203,7 +213,7 @@ const Report = () => {
         <section className="w-screen  bg-[#E9E9E9] min-h-screen ">
           <div className=" flex justify-between mx-5 mt-5 bg-white p-2 rounded-full items-center">
             <h1 className="mx-2 md:text-[20px] font-bold">Reports</h1>
-            <button className="hidden md:block rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300">
+            <button className="hidden md:block rounded-full bg-[#1F354D] text-[12px] md:text-[18px] w-20 md:w-30 p-2 text-white cursor-pointer transition-all  hover:bg-[#445971]  duration-300" onClick={handleLogout}>
               Logout
             </button>
             <span className="md:hidden" onClick={() => dispatch(menuOpen())}>

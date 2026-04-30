@@ -151,22 +151,22 @@ const AdminDashboard = () => {
               )}
             </span>
           </div>
-          <div className=" mx-10 mt-5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <div className="bg-white h-30 rounded-lg  flex flex-col justify-center items-center cursor-pointer hover:scale-105 transition duration-300 ">
+          <div className=" mx-10 mt-5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+            <div className="bg-white  h-36 rounded-lg  flex flex-col justify-center items-center cursor-pointer hover:scale-105 transition duration-300 ">
               <h1 className="font-medium">Today's Sales</h1>
               <h1 className="text-[#831F00]"> Rs. {todaySales}</h1>
             </div>
-            <div className="bg-white h-30 rounded-lg  flex flex-col justify-center items-center  hover:scale-105 transition duration-300 cursor-pointer">
+            <div className="bg-white h-36 rounded-lg  flex flex-col justify-center items-center  hover:scale-105 transition duration-300 cursor-pointer">
               <h1 className="font-medium">Today's Orders</h1>
               <h2 className="text-[#831F00] ">{todayOrder.length}</h2>
             </div>
-            <div className="bg-white h-30 rounded-lg flex flex-col justify-center items-center  hover:scale-105 transition duration-300 cursor-pointer ">
+            <div className="bg-white h-36 rounded-lg flex flex-col justify-center items-center  hover:scale-105 transition duration-300 cursor-pointer ">
               <h1 className="font-medium">Active Tables</h1>
               <h2 className="text-[#831F00] ">{table.length}</h2>
             </div>
-            <div className="bg-white h-30 rounded-lg flex justify-center items-center cursor-pointer hover:scale-105 transition duration-300 ">
+            {/* <div className="bg-white h-30 rounded-lg flex justify-center items-center cursor-pointer hover:scale-105 transition duration-300 ">
               <h1 className="font-medium">Low Stock</h1>
-            </div>
+            </div> */}
           </div>
 
           {/* recent order */}

@@ -1,5 +1,10 @@
-import { ArrowDownToDot, RefreshCcwDot, RefreshCcwIcon, Search } from "lucide-react";
-import { RotateCw } from 'lucide-react';
+import {
+  ArrowDownToDot,
+  RefreshCcwDot,
+  RefreshCcwIcon,
+  Search,
+} from "lucide-react";
+import { RotateCw } from "lucide-react";
 
 import logo from "../assets/logo.png";
 import herobg from "../assets/herobg.png";
@@ -44,6 +49,9 @@ const Home = () => {
   // const users = useSelector((state: RootState) => state.auth.user);
   // // console.log(users);
 
+  const role = localStorage.getItem("role");
+  const token = localStorage.getItem("token");
+
   const allMenuRef = useRef<HTMLDivElement>(null);
   const menuScroll = () => {
     {
@@ -78,22 +86,6 @@ const Home = () => {
     fetchData();
   }, []);
 
-  // category show only
-
-  // const showCategory = (menus: string, index: number) => {
-  //   setActive(index);
-  //   if (menus === "All") {
-  //     setFilterMenu(menu);
-  //     // console.log(menu);
-  //   } else {
-  //     const filterMenu = menu.filter((item) => item.category === menus).filter((item)=>item.menuName.toLocaleLowerCase().includes(search.toLocaleLowerCase()));
-
-  //     setFilterMenu(filterMenu);
-  //     console.log("FilterData", filterMenu);
-
-  //   }
-  // };
-
   const filterItems = menu
     .filter((items) =>
       selected === "All" ? true : items.category === selected,
@@ -107,7 +99,6 @@ const Home = () => {
 
     setSelected(item);
   };
-
 
   return (
     <>
@@ -134,7 +125,9 @@ const Home = () => {
             <Search className="absolute top-3 left-5" />
           </div>
           <div className="hidden md:flex gap-4 mr-8 ">
-            <Link to="/signup">
+            {!token && (
+              <div>
+                <Link to="/signup">
                   <button className="px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition cursor-pointer">
                     Register
                   </button>
@@ -146,6 +139,24 @@ const Home = () => {
                     Login
                   </button>
                 </Link>
+              </div>
+            )}
+
+            {role === "admin" && (
+              <Link to="/dashboard">
+                <button className="px-4 py-2  bg-orange-500 text-white rounded-full">
+                  Dashboard
+                </button>
+              </Link>
+            )}
+
+  {role === "waiter" && (
+    <Link to="/food-order/">
+      <button className="px-4 py-2 bg-green-500 text-white rounded-full">
+        Orders Now
+      </button>
+    </Link>
+  )}
           </div>
           <RxHamburgerMenu
             className="block md:hidden  hover:bg-gray-100 mr-5"
@@ -232,9 +243,12 @@ const Home = () => {
               <div className="w-full pb-5  flex flex-col justify-center items-center ">
                 <h2 className="text-[20px]">No items Founds</h2>
 
-<RotateCw className="cursor-pointer mt-2  hover:text-amber-600" onClick={()=>{
-  window.location.reload();
-}}/>
+                <RotateCw
+                  className="cursor-pointer mt-2  hover:text-amber-600"
+                  onClick={() => {
+                    window.location.reload();
+                  }}
+                />
               </div>
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 w-[80vw] justify-self-center">

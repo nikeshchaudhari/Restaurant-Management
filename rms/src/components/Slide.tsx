@@ -9,6 +9,7 @@ import { MessageCircleWarning } from "lucide-react";
 import { Settings2 } from "lucide-react";
 import { SquareStack } from 'lucide-react';
 const Slide = () => {
+
   return (
     <>
       <aside className="hidden md:block py-5 w-75 bg-[rgb(16,34,55)] h-screen sticky top-0 shrink-0 overflow-y-auto">
