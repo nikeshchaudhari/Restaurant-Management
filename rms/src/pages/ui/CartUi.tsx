@@ -24,15 +24,13 @@ const CartUi = () => {
   );
   // console.log("Table", selectTable);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const totalPrice = cart.reduce((t, i: any) => t + i.price * i.quantity, 0);
   // console.log(totalPrice);
 
-
-
   // confirm order
-const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
 
   const confirmOrder = async () => {
     if (!selectTable) {
@@ -58,31 +56,33 @@ const token = localStorage.getItem("token");
     try {
       const res = await axios.post(
         "http://localhost:3000/order/order",
-        payload,{
-          headers:{
-            Authorization:`Bearer ${token}`
-          }
-        }
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
-      dispatch(clearCart());
       dispatch(closeCart());
-      setSelectedTable(null)
+      setSelectedTable(null);
       localStorage.removeItem("selectedTable");
 
       toast.success("Order Successfully !");
-      navigate("/food-order")
+      navigate("/food-order");
 
-      setTimeout(()=>{
-        window.print()
-      },1000)
+      setTimeout(() => {
+        window.print();
 
-      // console.log(res.data);
+        setTimeout(() => {
+          dispatch(clearCart());
+        },200);
+      }, 200);
     } catch (err) {
       toast.error("Order Failed");
       console.log("error");
     }
   };
- 
+
   return (
     <>
       {/* OVERLAY */}
@@ -178,9 +178,25 @@ const token = localStorage.getItem("token");
         </button>
       </div>
 
-      <div id="invoice"  >
-        {/* <h2>Table: heelo table</h2> */}
-       
+      <div id="invoice" className="hidden print:block p-5">
+        <h2 className="text-center font-medium text-xl">
+          Endocdes Nepal Ptd.Ltd.
+        </h2>
+       <div className="flex justify-center"> <span className="text-center">Address: Balkot Bhaktapur</span></div>
+        <p>Table: {selectTable?.tableNumber}</p>
+        <hr />
+
+        {cart.map((item: any, i: number) => (
+          <div key={i} className="flex justify-between">
+            <span>
+              {item.menuName} x {item.quantity}
+            </span>
+            <span>Rs. {item.price * item.quantity}</span>
+          </div>
+        ))}
+
+        <hr />
+        <h3 className="font-bold text-end">Total: Rs. {totalPrice}</h3>
       </div>
     </>
   );
