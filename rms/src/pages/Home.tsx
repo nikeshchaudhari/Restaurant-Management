@@ -40,14 +40,11 @@ const Home = () => {
   // const [filterMenu, setFilterMenu] = useState<MenuItems[]>([]);
   // const [user, setUser] = useState<string | null>(null);
 
-  const [search, setSearch] = useState<string>("");
   const dispatch: AppDispatch = useDispatch();
   const auth = useSelector((state: RootState) => state.auth);
-  // const user: any = useSelector((state: RootState) => state.auth.user);
-  // console.log("Hii",user);
 
-  // const users = useSelector((state: RootState) => state.auth.user);
-  // // console.log(users);
+  const [search, setSearch] = useState("");
+  const [query, setQuery] = useState("");
 
   const role = localStorage.getItem("role");
   const token = localStorage.getItem("token");
@@ -85,14 +82,32 @@ const Home = () => {
 
     fetchData();
   }, []);
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+     
+      setQuery(search);
+    }
+  };
 
-  const filterItems = menu
-    .filter((items) =>
-      selected === "All" ? true : items.category === selected,
-    )
-    .filter((items) =>
-      items.menuName.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
-    );
+  const handleSearch = () => {
+    setQuery(search);
+  };
+
+  const filterItems = menu.filter((items) => {
+    const categoryMatch = selected === "All" || items.category === selected;
+
+    const matchSearch =
+      query === "" ||
+      items.menuName.toLocaleLowerCase().includes(query.toLocaleLowerCase());
+
+
+      return categoryMatch && matchSearch;
+  });
+  // .filter(
+  //   (items) =>
+  //     query === "" ||
+  //     items.menuName.toLocaleLowerCase().includes(query.toLocaleLowerCase()),
+  // );
 
   const handleCategory = (item: any) => {
     console.log(item);
@@ -118,11 +133,17 @@ const Home = () => {
           <div className="relative  flex-1 mx-4 md:mx-10  ">
             <input
               type="text"
-              className="w-full h-12 rounded-full bg-[#E2E2E2] py-3 px-12 outline-none focus:ring-1 focus:ring-[#FF8000] font-poppins transition-all"
+              className="w-full h-12 rounded-full bg-[#E2E2E2] py-3 pl-10 pr-12 outline-none focus:ring-1 focus:ring-[#FF8000] font-poppins transition-all"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
-            <Search className="absolute top-3 left-5" />
+            <div
+              className="absolute top-1 right-3 p-2 hover:bg-white transition duration-300 rounded-full"
+              onClick={handleSearch}
+            >
+              <Search className="  hover:text-red-600 cursor-pointer " />
+            </div>
           </div>
           <div className="hidden md:flex gap-4 mr-8 ">
             {!token && (
@@ -135,7 +156,7 @@ const Home = () => {
 
                 <Link to="/login">
                   {" "}
-                  <button className="px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition cursor-pointer">
+                  <button className=" px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition cursor-pointer">
                     Login
                   </button>
                 </Link>
@@ -144,19 +165,19 @@ const Home = () => {
 
             {role === "admin" && (
               <Link to="/dashboard">
-                <button className="px-4 py-2  bg-orange-500 text-white rounded-full">
+                <button className="px-4 py-2  font-['poppins']  bg-orange-500 hover:bg-orange-700 transition duration-500 text-white rounded-full cursor-pointer">
                   Dashboard
                 </button>
               </Link>
             )}
 
-  {role === "waiter" && (
-    <Link to="/food-order/">
-      <button className="px-4 py-2 bg-green-500 text-white rounded-full">
-        Orders Now
-      </button>
-    </Link>
-  )}
+            {role === "waiter" && (
+              <Link to="/food-order/">
+                <button className="px-4 py-2  font-['poppins'] bg-orange-500  hover:bg-orange-700 transition duration-500 text-white rounded-full cursor-pointer">
+                  Orders Now
+                </button>
+              </Link>
+            )}
           </div>
           <RxHamburgerMenu
             className="block md:hidden  hover:bg-gray-100 mr-5"
