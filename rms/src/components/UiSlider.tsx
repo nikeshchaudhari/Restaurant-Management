@@ -71,7 +71,7 @@ const UiSlider = () => {
                     onClick={() => {
                       handleLogout(item);
                     }}
-                    className={` flex  items-center  gap-2 lg:py-2 bg-[#faefee] hover:bg-[#e0e0e0]/30 w-full rounded  cursor-pointer md:mb-3 lg:mb-1 font-['poppins'] md:text-[12px] lg:text-[16px]  font-semibold ${
+                    className={` flex  items-center  gap-2 lg:py-2 bg-[#faefee] hover:bg-[#e0e0e0]/30 w-full rounded  cursor-pointer md:mb-3 lg:mb-1 font-['poppins'] md:text-[12px] lg:text-[16px]  font-semibold px-5 ${
                       location.pathname === item.path
                         ? "bg-[#eb9e95] text-red-800"
                         : "bg-white"

@@ -50,10 +50,6 @@ const ListTabel = () => {
     navigate("/food-order/all-menu");
   };
 
-  const[parms]= useSearchParams()
-
-  const querySearch = parms.get("search") || ""
-  console.log(querySearch);
   
   
 

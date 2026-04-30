@@ -5,6 +5,8 @@ import axios from "axios";
 import { useEffect, useState, type FormEvent } from "react";
 import CartUi from "./CartUi";
 import OrderSlide from "../../components/OrderSlide";
+import { useFormik } from "formik";
+import { profile } from "../../schemas/ProfileSchema";
 
 const Profile = () => {
   interface User {
@@ -26,6 +28,60 @@ const Profile = () => {
 
   const token = localStorage.getItem("token");
 
+  const {
+    values,
+    errors,
+    resetForm,
+    touched,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+    setValues,
+  } = useFormik({
+    initialValues: {
+      fullName: "",
+      email: "",
+      password: "",
+      confirm_password: "",
+    },
+    validationSchema: profile,
+    onSubmit: async (values) => {
+      try {
+        if (!token) {
+          toast.error("User ID not found");
+          return;
+        }
+        if (values.password !== values.confirm_password) {
+          toast.error("Password not match");
+          return;
+        }
+        if (!update?._id) {
+          toast.error("User Not Found");
+          return;
+        }
+
+        await axios.put(
+          `http://localhost:3000/user/${update._id}`,
+          {
+            fullName: values.fullName,
+            email: values.email,
+            password: values.password,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+        ((values.password = ""),
+          (values.confirm_password = ""),
+          toast.success("Profile Updated Successfully"));
+      } catch (err) {
+        console.log(err);
+      }
+    },
+  });
+
   // fetchdata
   useEffect(() => {
     const fetchData = async () => {
@@ -43,7 +99,7 @@ const Profile = () => {
 
         setUpdate(res.data.profile);
 
-        setFormData({
+        setValues({
           fullName: res.data.profile.fullName || "",
           email: res.data.profile.email || "",
           password: "",
@@ -65,23 +121,6 @@ const Profile = () => {
       toast.error("Password and Confirm Password do not match");
       return;
     }
-
-    try {
-      if (!update?._id) {
-        toast.error("User ID not found");
-        return;
-      }
-
-      await axios.put(`http://localhost:3000/user/${update._id}`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      toast.success("Profile Updated Successfully");
-    } catch (err) {
-      console.log(err);
-    }
   };
 
   return (
@@ -98,45 +137,67 @@ const Profile = () => {
             Update Your Profile
           </h2>
 
-          <form onSubmit={formHandle} className="mt-5 mx-5">
-            <input
-              type="text"
-              value={formData.fullName}
-              onChange={(e) =>
-                setFormData({ ...formData, fullName: e.target.value })
-              }
-              className="border p-2 w-full m-2 border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-amber-800"
-              placeholder="Full Name"
-            />
-            <input
-              type="email"
-              value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
-              className="border p-2 w-full m-2 border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-amber-800"
-              placeholder="Email"
-            />
+          <form onSubmit={handleSubmit} className="mt-5 mx-5">
+            <div className="m-2">
+              <input
+                type="text"
+                name="fullName"
+                value={values.fullName}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                className="border p-2 w-full  border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-amber-800"
+                placeholder="Full Name"
+              />
+              {touched.fullName && errors.fullName && (
+                <p className="text-sm text-red-500">{errors.fullName} *</p>
+              )}
+            </div>
+            <div className="m-2">
+              <input
+                type="email"
+                name="email"
+                value={values.email}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                className="border p-2 w-full  border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-amber-800"
+                placeholder="Email"
+              />
+              {touched.email && errors.email && (
+                <p className="text-sm text-red-500">{errors.email} *</p>
+              )}
+            </div>
 
-            <input
-              type="password"
-              value={formData.password}
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
-              }
-              className="border p-2 w-full m-2 border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-amber-800"
-              placeholder="New Password"
-            />
+            <div className="m-2">
+              <input
+                type="password"
+                name="password"
+                value={values.password}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                className="border p-2 w-full  border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-amber-800"
+                placeholder="New Password"
+              />
+              {touched.password && errors.password && (
+                <p className="text-sm text-red-500">{errors.password} *</p>
+              )}
+            </div>
 
-            <input
-              type="password"
-              value={formData.confirm_password}
-              onChange={(e) =>
-                setFormData({ ...formData, confirm_password: e.target.value })
-              }
-              className="border p-2 w-full m-2 border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-amber-800"
-              placeholder="Confirm_Password"
-            />
+            <div className="m-2">
+              <input
+                type="password"
+                name="confirm_password"
+                value={values.confirm_password}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                className="border p-2 w-full  border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-amber-800"
+                placeholder="Confirm_Password"
+              />
+              {touched.confirm_password && errors.confirm_password && (
+                <p className="text-sm text-red-500">
+                  {errors.confirm_password} *
+                </p>
+              )}
+            </div>
 
             <button
               type="submit"

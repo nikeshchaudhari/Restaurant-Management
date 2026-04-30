@@ -10,12 +10,18 @@ import { useEffect, useState } from "react";
 import type { AppDispatch, RootState } from "../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { openCart } from "../features/CartOpen";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { menuOpen } from "../features/menuSlice";
 import UiSlider from "./UiSlider";
 
-const Navbar = ({ search, setSearch }: any) => {
+interface NavbarProps {
+  search: string;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
+}
+
+
+const Navbar = ({ search, setSearch }: NavbarProps) => {
   // const [search, setSearch] = useState("");
 
   const isLoggedIn: any = useSelector(
@@ -56,10 +62,12 @@ const Navbar = ({ search, setSearch }: any) => {
     <>
       <>
         <div className=" w-full h-16 bg-white shadow-lg flex items-center md:justify-around fixed top-0 z-40  ">
-          <div className="md:px-4 w-auto">
-            <h2 className="font-['poppins']  lg:text-[25px] font-bold hidden md:block">
+          <div className="md:px-4 md:w-full lg:w-auto">
+           <Link to="/food-order">
+            <h2 className="font-['poppins']  md:text-[16px]  lg:text-[25px] font-bold hidden md:block">
               Hamro Restor
             </h2>
+           </Link>
           </div>
           <div className="relative w-full md:w-auto flex items-center h-full  px-4 md:px-0 ">
             <input
