@@ -53,11 +53,7 @@ const ListTabel = () => {
   return (
     <>
       <main>
-        <Navbar
-          search={search}
-          setSearch={setSearch}
-        
-        />
+        <Navbar />
         <div className="md:flex  ">
           <div className="hidden md:block  ">
             <UiSlider />

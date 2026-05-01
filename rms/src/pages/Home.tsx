@@ -20,6 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { menuOpen } from "../features/menuSlice";
 import { CircleUserRound } from "lucide-react";
 import { HandPlatter } from "lucide-react";
+import Footer from "./Footer";
 
 interface MenuItems {
   _id: null | undefined;
@@ -39,8 +40,7 @@ const Home = () => {
   const [menu, setMenu] = useState<MenuItems[]>([]);
   const [category, setCategory] = useState<string[]>([]);
   const [selected, setSelected] = useState<string>("All");
-  // const [filterMenu, setFilterMenu] = useState<MenuItems[]>([]);
-  // const [user, setUser] = useState<string | null>(null);
+  const [visibleCount, setVisibleCount] = useState(20);
 
   const dispatch: AppDispatch = useDispatch();
   const auth = useSelector((state: RootState) => state.auth);
@@ -69,7 +69,7 @@ const Home = () => {
         // console.log(res.data.allMenu);
         const menuData: MenuItems[] = res.data.allMenu;
         setMenu(menuData.reverse());
-        console.log("allData", menuData);
+        // console.log("allData", menuData);
 
         const uniqueCategory = [
           "All",
@@ -84,6 +84,7 @@ const Home = () => {
 
     fetchData();
   }, []);
+  // enter search
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       setQuery(search);
@@ -103,18 +104,19 @@ const Home = () => {
 
     return categoryMatch && matchSearch;
   });
-  // .filter(
-  //   (items) =>
-  //     query === "" ||
-  //     items.menuName.toLocaleLowerCase().includes(query.toLocaleLowerCase()),
-  // );
-
+ 
   const handleCategory = (item: any) => {
     console.log(item);
 
     setSelected(item);
+    setSearch("")
   };
 
+
+  // loadmore
+  const visibleCounts = filterItems.slice(0,visibleCount)
+  console.log(visibleCounts);
+  
   return (
     <>
       <main className="w-full max-w-full">
@@ -285,7 +287,7 @@ const Home = () => {
               </div>
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 w-[80vw] justify-self-center">
-                {filterItems.map((items, index) => (
+                {visibleCounts.map((items, index) => (
                   <div
                     key={index}
                     className="w-full h-56 md:h-64  shadow-2xl rounded-2xl flex justify-center relative cursor-pointer group "
@@ -308,7 +310,18 @@ const Home = () => {
               </div>
             )}
           </div>
+         {visibleCount < filterItems.length && (
+  <div className="flex justify-center mt-5">
+    <button
+      className="bg-amber-600 text-white px-5 py-2 text-[18px] font-['poppins'] cursor-pointer rounded hover:bg-amber-700 transition duration-300"
+      onClick={() => setVisibleCount((prev) => prev + 10)}
+    >
+      View More
+    </button>
+  </div>
+)}
         </div>
+        <Footer/>
       </main>
     </>
   );
