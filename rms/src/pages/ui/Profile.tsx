@@ -115,14 +115,14 @@ const Profile = () => {
   }, []);
 
   // Update profile
-  const formHandle = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  // const formHandle = async (e: FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
 
-    if (formData.password !== formData.confirm_password) {
-      toast.error("Password and Confirm Password do not match");
-      return;
-    }
-  };
+  //   if (formData.password !== formData.confirm_password) {
+  //     toast.error("Password and Confirm Password do not match");
+  //     return;
+  //   }
+  // };
 
   return (
     <main>
