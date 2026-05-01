@@ -11,6 +11,8 @@ import { menuOpen } from "../features/menuSlice";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { Helmet } from "react-helmet-async";
+import Dashboard from './Dashboard';
 interface OrderItems {
   menuId: string;
   menuName: string;
@@ -121,6 +123,11 @@ const AdminDashboard = () => {
 
   return (
     <>
+    
+    <Helmet>
+      <title>Endcodes Nepal Restaurant | Dashboard</title>
+      <meta name="description" content="Best food ordering system" />
+    </Helmet>
       <main className="md:flex ">
         <MobileDashboard />
 

@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 interface UserData {
   _id: any;
@@ -93,6 +94,10 @@ const Setting = () => {
 
   return (
     <>
+     <Helmet>
+          <title>Endcodes Nepal Restaurant | Setting Dashboard</title>
+          <meta name="description" content="Best food ordering system" />
+        </Helmet>
       <main className="flex">
         <MobileDashboard />
         <Slide />

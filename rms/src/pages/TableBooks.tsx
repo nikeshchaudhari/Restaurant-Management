@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { menuOpen } from "../features/menuSlice";
 import { useFormik } from "formik";
 import { TableValid } from "../schemas/TableSchema";
+import { Helmet } from "react-helmet-async";
 
 const TableBooks = () => {
   interface tableData {
@@ -159,6 +160,10 @@ const TableBooks = () => {
 
   return (
     <>
+     <Helmet>
+          <title>Endcodes Nepal Restaurant | TableAdd Dashboard</title>
+          <meta name="description" content="Best food ordering system" />
+        </Helmet>
       <main className="flex">
         {showDelete && (
           <div className="bg-black/50 fixed  inset-0 border w-full h-full rounded  top-0 z-10 flex justify-center items-center ">

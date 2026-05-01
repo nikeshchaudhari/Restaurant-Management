@@ -19,6 +19,7 @@ import { menuOpen } from "../features/menuSlice";
 import { CircleUserRound } from "lucide-react";
 import { HandPlatter } from "lucide-react";
 import Footer from "./Footer";
+import { Helmet } from "react-helmet-async";
 
 interface MenuItems {
   _id: null | undefined;
@@ -117,6 +118,11 @@ const Home = () => {
   
   return (
     <>
+
+<Helmet>
+  <title>Endcodes Nepal Restaurant | Home</title>
+  <meta name="description" content="Best food ordering system" />
+</Helmet>
       <main className="w-full max-w-full">
         <MenuSlide onMenuClick={menuScroll} />
         <nav className="shadow-lg bg-white h-20  md:h-20 flex items-center md:justify-around sticky top-0 z-50 w-full ">

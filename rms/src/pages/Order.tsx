@@ -8,6 +8,7 @@ import { Menu, X } from "lucide-react";
 import type { AppDispatch, RootState } from "../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { menuOpen } from "../features/menuSlice";
+import { Helmet } from "react-helmet-async";
 interface OrderMenu {
   menuName: string;
   price: number;
@@ -140,6 +141,10 @@ const Order = () => {
   
   return (
     <>
+    <Helmet>
+      <title>Endcodes Nepal Restaurant | View All Order Dashboard</title>
+      <meta name="description" content="Best food ordering system" />
+    </Helmet>
       <main className="md:flex">
         <MobileDashboard />
 

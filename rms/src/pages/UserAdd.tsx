@@ -13,6 +13,7 @@ import type { AppDispatch, RootState } from "../store/store";
 import { menuOpen } from "../features/menuSlice";
 import { useFormik } from "formik";
 import { User } from "../schemas/UserSchema";
+import { Helmet } from "react-helmet-async";
 
 interface User {
   _id: any;
@@ -204,6 +205,10 @@ const UserAdd = () => {
 
   return (
     <>
+     <Helmet>
+          <title>Endcodes Nepal Restaurant | UserAdd Dashboard</title>
+          <meta name="description" content="Best food ordering system" />
+        </Helmet>
       <main className="flex relative">
         {showDelete && (
           <div className="bg-black/50 fixed  inset-0 border w-full h-full rounded  top-0 z-10 flex justify-center items-center ">

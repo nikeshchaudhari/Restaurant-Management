@@ -13,6 +13,7 @@ import { Trash2 } from "lucide-react";
 import { SquarePen } from "lucide-react";
 import { useFormik } from "formik";
 import { MenuValid } from "../schemas/MenuItemsSchema";
+import { Helmet } from "react-helmet-async";
 
 interface menuAdd {
   imageUrl: string | undefined;
@@ -205,6 +206,10 @@ const Menu = () => {
 
   return (
     <>
+     <Helmet>
+          <title>Endcodes Nepal Restaurant | AddMenu Dashboard</title>
+          <meta name="description" content="Best food ordering system" />
+        </Helmet>
       <main className="md:flex">
         {showDelete && (
           <div className="bg-black/50 fixed  inset-0 border w-full h-full rounded  top-0 z-10 flex justify-center items-center ">

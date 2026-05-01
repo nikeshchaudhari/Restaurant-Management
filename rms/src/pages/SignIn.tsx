@@ -12,6 +12,7 @@
   import { useFormik } from "formik";
   import {Login} from "../schemas/LoginSchema"
 import { menuClose } from "../features/menuSlice";
+import { Helmet } from "react-helmet-async";
   const initialValues = {
     email: "",
     password: "",
@@ -87,6 +88,10 @@ import { menuClose } from "../features/menuSlice";
     // };
     return (
       <>
+      <Helmet>
+        <title>Endcodes Nepal Restaurant | Login</title>
+        <meta name="description" content=" Best foods ordering system"/>
+      </Helmet>
         <div className="w-screen h-screen flex justify-center items-center bg-gray-100">
           <div className="w-full md:w-200 h-fix md:h-auto rounded-lg flex overflow-hiddenm mx-5 lg:mx-0 bg-white justify-center">
             {/* Image section */}
