@@ -8,6 +8,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
 import { Register } from "../schemas/RegisterSchema";
+import { Helmet } from "react-helmet-async";
 
 const SignUp = () => {
   const [passwordshow, SetpasswordShow] = useState<boolean>(false);
@@ -56,7 +57,12 @@ const SignUp = () => {
   });
 
   return (
+    
     <div className="w-screen h-screen flex justify-center items-center bg-gray-100">
+       <Helmet>
+            <title>Endcodes Nepal Restaurant |  Register</title>
+            <meta name="description" content="Best food ordering system" />
+          </Helmet>
       <div className="w-full md:w-200 mx-5 lg:mx-0 h-fix md:h-auto rounded-lg flex overflow-hidden bg-white">
         {/* Image section */}
         <div className="w-1/2 bg-[#e2dddd] hidden md:block">

@@ -11,6 +11,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import MenuSlide from "../../components/MenuSlide";
 import OrderSlide from "../../components/OrderSlide";
 import { useParams, useSearchParams } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 interface MenuItems {
   menuName: string;
@@ -101,8 +102,12 @@ const AllMenu = () => {
 
   return (
     <>
+     <Helmet>
+          <title>Endcodes Nepal Restaurant | View All Menu List</title>
+          <meta name="description" content="Best food ordering system" />
+        </Helmet>
       <main className="">
-        <Navbar search={search} setSearch={setSearch} />
+        <Navbar  />
         <div className=" md:flex  ">
           <div className="hidden md:block">
             <UiSlider />

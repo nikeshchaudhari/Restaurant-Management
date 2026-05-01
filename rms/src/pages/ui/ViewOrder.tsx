@@ -9,6 +9,7 @@ import OrderSlide from "../../components/OrderSlide";
 import type { AppDispatch } from "../../store/store";
 import { useDispatch } from "react-redux";
 import { clearSelectedTable } from "../../features/TableSlice";
+import { Helmet } from "react-helmet-async";
 
 const ViewOrder = () => {
   interface OrderItem {
@@ -127,6 +128,10 @@ const ViewOrder = () => {
 
   return (
     <>
+     <Helmet>
+          <title>Endcodes Nepal Restaurant | View Order</title>
+          <meta name="description" content="Best food ordering system" />
+        </Helmet>
       <main>
         <Navbar />
         <div className="min-h-screen">

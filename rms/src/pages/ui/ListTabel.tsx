@@ -10,6 +10,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { setSelectedTable } from "../../features/TableSlice";
 import CartUi from "./CartUi";
 import OrderSlide from "../../components/OrderSlide";
+import { Helmet } from "react-helmet-async";
 
 interface Table {
   _id: string;
@@ -52,6 +53,10 @@ const ListTabel = () => {
 
   return (
     <>
+     <Helmet>
+          <title>Endcodes Nepal Restaurant | Table List </title>
+          <meta name="description" content="Best food ordering system" />
+        </Helmet>
       <main>
         <Navbar />
         <div className="md:flex  ">

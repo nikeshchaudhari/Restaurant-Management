@@ -7,6 +7,7 @@ import CartUi from "./CartUi";
 import OrderSlide from "../../components/OrderSlide";
 import { useFormik } from "formik";
 import { profile } from "../../schemas/ProfileSchema";
+import { Helmet } from "react-helmet-async";
 
 const Profile = () => {
   interface User {
@@ -125,6 +126,10 @@ const Profile = () => {
 
   return (
     <main>
+       <Helmet>
+            <title>Endcodes Nepal Restaurant | Profile</title>
+            <meta name="description" content="Best food ordering system" />
+          </Helmet>
       <Navbar />
 
       <div className="md:flex min-h-screen ">
