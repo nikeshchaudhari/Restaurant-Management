@@ -1,7 +1,5 @@
 import {
   ArrowDownToDot,
-  RefreshCcwDot,
-  RefreshCcwIcon,
   Search,
 } from "lucide-react";
 import { RotateCw } from "lucide-react";
