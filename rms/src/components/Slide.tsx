@@ -48,12 +48,12 @@ const Slide = () => {
               <h1 className="text-[20px] pl-2 font-normal ">Orders</h1>
             </Link>
           </div>
-             {/* <div className="bg-[#1F354D] md:w-60 ml-2   lg:w-65  p-2 rounded transition-all  hover:bg-[#445971]  duration-300 cursor-pointer mb-5">
+             <div className="bg-[#1F354D] md:w-60 ml-2   lg:w-65  p-2 rounded transition-all  hover:bg-[#445971]  duration-300 cursor-pointer mb-5">
             <Link to="/dashboard/stocks" className="flex pl-10 items-center">
               <SquareStack />
               <h1 className="text-[20px] pl-2 font-normal ">Stocks</h1>
             </Link>
-          </div> */}
+          </div>
           <div className="bg-[#1F354D]  md:w-60  ml-2  lg:w-65  p-2 rounded transition-all  hover:bg-[#445971]  duration-300 cursor-pointer mb-5">
             <Link to="/dashboard/reports" className="flex pl-10 items-center">
               <MessageCircleWarning />

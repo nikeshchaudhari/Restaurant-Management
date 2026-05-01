@@ -115,7 +115,7 @@ const Home = () => {
 
   // loadmore
   const visibleCounts = filterItems.slice(0,visibleCount)
-  console.log(visibleCounts);
+  // console.log(visibleCounts);
   
   return (
     <>
@@ -137,7 +137,7 @@ const Home = () => {
           <div className="relative  flex-1 mx-4 md:mx-10  ">
             <input
               type="text"
-              className="w-full h-12 rounded-full bg-[#E2E2E2] py-3 pl-10 pr-12 outline-none focus:ring-1 focus:ring-[#FF8000] font-poppins transition-all"
+              className="w-full h-12 rounded-full bg-[#E2E2E2] py-3 pl-5 pr-12 outline-none focus:ring-1 focus:ring-[#FF8000] font-poppins transition-all"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -298,7 +298,7 @@ const Home = () => {
                       className="w-full h-40 lg:h-48 object-cover rounded-2xl transform hover:scale-95 duration-500 p-2"
                     />
                     <div className="absolute bottom-3 md:bottom-10 lg:bottom-3">
-                      <h1 className="font-[poppins] lg:text-[18px] font-bold">
+                      <h1 className="font-[poppins] lg:text-[16px] font-bold">
                         {items.menuName}
                       </h1>
                       <h1 className="font-[poppins] lg:text-[16px] font-medium text-red-900">
