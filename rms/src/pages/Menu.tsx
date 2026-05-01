@@ -26,10 +26,9 @@ interface menuAdd {
 const Menu = () => {
   const [editMenu, setEditMenu] = useState<menuAdd | null>(null);
   const [menu, setMenu] = useState<menuAdd[]>([]);
-  const[showDelete,setShowDelete]= useState(false);
-  const[SelectedeMenuId,setSelectedMenuId]=useState<string | null>(null)
+  const [showDelete, setShowDelete] = useState(false);
+  const [SelectedeMenuId, setSelectedMenuId] = useState<string | null>(null);
   console.log(SelectedeMenuId);
-  
 
   const navigate = useNavigate();
 
@@ -58,7 +57,7 @@ const Menu = () => {
       menuName: "",
       price: "",
       category: "",
-      available: "",
+      available: "available",
       photo: null,
     },
     validationSchema: MenuValid,
@@ -91,7 +90,7 @@ const Menu = () => {
             },
           );
 
-          console.log("Update", res.data);
+          // console.log("Update", res.data);
 
           const updateItem = res.data.menu || res.data.updateData || res.data;
 
@@ -101,6 +100,7 @@ const Menu = () => {
             prev.map((m) => (m._id === editMenu._id ? updateItem : m)),
           );
           setEditMenu(null);
+          // console.log(values.available);
         } else {
           // ADD MENU
           const res = await axios.post(
@@ -134,13 +134,16 @@ const Menu = () => {
 
   const handleEdit = (menu: any) => {
     setEditMenu(menu);
-    setValues({
-      menuName: menu.menuName,
-      price: menu.price,
-      category: menu.category,
-      available: menu.available,
-      photo: menu.photo,
-    });
+
+    setTimeout(() => {
+      setValues({
+        menuName: menu.menuName,
+        price: menu.price,
+        category: menu.category,
+        available: (menu.available || "available").trim().toLowerCase(),
+        photo: menu.photo,
+      });
+    }, 0);
   };
 
   // fetch Data
@@ -174,8 +177,8 @@ const Menu = () => {
       toast.success("delete menu");
 
       setMenu((prevMenu) => prevMenu.filter((menus) => menus._id !== id));
-      setShowDelete(false)
-      setSelectedMenuId(null)
+      setShowDelete(false);
+      setSelectedMenuId(null);
     } catch (err) {
       console.log(err);
     }
@@ -196,30 +199,33 @@ const Menu = () => {
   const indexOfFirstPage = indexOflastPage - rowPage;
   const currentList = menu.slice(indexOfFirstPage, indexOflastPage);
   const totalPage = Math.ceil(menu.length / rowPage);
- 
 
-  const totalItems = menu.length
+  const totalItems = menu.length;
   //  console.log(totalItems);
 
-  
   return (
     <>
       <main className="md:flex">
-        {showDelete &&(
+        {showDelete && (
           <div className="bg-black/50 fixed  inset-0 border w-full h-full rounded  top-0 z-10 flex justify-center items-center ">
-
             <div className="bg-white w-[90vw] md:w-120  h-50 rounded">
               <h1 className="text-center pt-8 mb-2 text-[20px] md:text-[30px] font-bold">
                 Delete Confirmation
               </h1>
-              <p className="text-center">
-                Are You sure you want to menu user
-              </p>
-              <div  className="flex justify-center gap-10 py-5">
-                <button className="bg-black/20 py-2 px-4 rounded-3xl cursor-pointer hover:bg-black/40 " onClick={()=>setShowDelete(false)}>Cancel</button>
-                <button className="bg-red-600 py-2 px-6 rounded-3xl text-white hover:bg-red-700 cursor-pointer "
-                onClick={()=>deleteMenu(SelectedeMenuId)}
-                >Delete</button>
+              <p className="text-center">Are You sure you want to menu user</p>
+              <div className="flex justify-center gap-10 py-5">
+                <button
+                  className="bg-black/20 py-2 px-4 rounded-3xl cursor-pointer hover:bg-black/40 "
+                  onClick={() => setShowDelete(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="bg-red-600 py-2 px-6 rounded-3xl text-white hover:bg-red-700 cursor-pointer "
+                  onClick={() => deleteMenu(SelectedeMenuId)}
+                >
+                  Delete
+                </button>
               </div>
             </div>
           </div>
@@ -315,14 +321,14 @@ const Menu = () => {
                     <input
                       type="radio"
                       name="available"
-                      value="no available"
-                      checked={values.available === "no available"}
+                      value="unavailable"
+                      checked={values.available === "unavailable"}
                       className="cursor-pointer"
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
                   </label>
-                  No Available
+                  Unavailable
                 </div>
                 {touched.available && errors.available && (
                   <p className="text-sm text-red-500  ">{errors.available} *</p>
@@ -391,13 +397,15 @@ const Menu = () => {
                       colSpan={6}
                       className="text-center p-5 text-[20px] font-bold"
                     >
-                   No  Menus Found
+                      No Menus Found
                     </td>
                   </tr>
                 ) : (
                   currentList.map((m, i) => (
                     <tr key={i} className="hover:bg-gray-400/10">
-                      <td className=" px-2 md:px-4 py-2">{totalItems-((currentPage-1)*rowPage+i)}</td>
+                      <td className=" px-2 md:px-4 py-2">
+                        {totalItems - ((currentPage - 1) * rowPage + i)}
+                      </td>
                       <td className=" px-2 md:px-4 py-2">{m.menuName}</td>
                       <td className=" px-2 md:px-4 py-2">{m.category}</td>
                       <td className=" px-2 md:px-4 py-2">Rs. {m.price}</td>
@@ -430,13 +438,10 @@ const Menu = () => {
                         <div className="relative group">
                           <Trash2
                             className="text-black cursor-pointer transform hover:-translate-y-0.5 duration-300"
-                            onClick={() => 
-                            {
-                              setSelectedMenuId(m._id)
-                              setShowDelete(true)
-                            }
-                              
-                            }
+                            onClick={() => {
+                              setSelectedMenuId(m._id);
+                              setShowDelete(true);
+                            }}
                           />
 
                           <span className="absolute left-1/2 bottom-full bg-red-600 text-white text-sm rounded px-2 py-1 mb-2 hidden group-hover:block">
@@ -451,13 +456,27 @@ const Menu = () => {
             </table>
           </div>
           {/* pagination */}
-         {menu.length>0 &&(
-           <div className="flex gap-2 mt-1 mb-5  lg:mt-0 lg:mb-4 justify-center md:justify-end px-5 items-center ">
-            <button disabled={currentPage === 1} className="px-2 py-1 bg-gray-500 text-white rounded disabled:opacity-50 cursor-pointer" onClick={()=>setCurrentPage(currentPage-1)}>Prev</button>
-            <span className=" py-2">{currentPage} ..... {totalPage}</span>
-            <button disabled={currentPage===totalPage} className="px-3 py-1 bg-gray-500 text-white rounded disabled:opacity-50 cursor-pointer " onClick={()=>setCurrentPage(currentPage+1)}>Next</button>
-          </div>
-         )}
+          {menu.length > 0 && (
+            <div className="flex gap-2 mt-1 mb-5  lg:mt-0 lg:mb-4 justify-center md:justify-end px-5 items-center ">
+              <button
+                disabled={currentPage === 1}
+                className="px-2 py-1 bg-gray-500 text-white rounded disabled:opacity-50 cursor-pointer"
+                onClick={() => setCurrentPage(currentPage - 1)}
+              >
+                Prev
+              </button>
+              <span className=" py-2">
+                {currentPage} ..... {totalPage}
+              </span>
+              <button
+                disabled={currentPage === totalPage}
+                className="px-3 py-1 bg-gray-500 text-white rounded disabled:opacity-50 cursor-pointer "
+                onClick={() => setCurrentPage(currentPage + 1)}
+              >
+                Next
+              </button>
+            </div>
+          )}
         </section>
       </main>
     </>

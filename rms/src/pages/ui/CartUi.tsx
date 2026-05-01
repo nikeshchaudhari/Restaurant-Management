@@ -180,7 +180,7 @@ const CartUi = () => {
 
       <div id="invoice" className="hidden print:block p-5">
         <h2 className="text-center font-medium text-xl">
-          Endocdes Nepal Ptd.Ltd.
+          Endocdes Nepal Pvt.Ltd.
         </h2>
        <div className="flex justify-center"> <span className="text-center">Address: Balkot Bhaktapur</span></div>
         <p>Table: {selectTable?.tableNumber}</p>

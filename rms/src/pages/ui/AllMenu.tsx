@@ -7,7 +7,7 @@ import axios from "axios";
 import { addToCart } from "../../features/CartSlice";
 import { openCart } from "../../features/CartOpen";
 import CartUi from "./CartUi";
-import {  ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import MenuSlide from "../../components/MenuSlide";
 import OrderSlide from "../../components/OrderSlide";
 import { useParams, useSearchParams } from "react-router-dom";
@@ -34,21 +34,17 @@ const AllMenu = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [rowPage, setRowPage] = useState(15);
 
-  
-
   const dispatch: AppDispatch = useDispatch();
 
-const [parms]= useSearchParams() 
-console.log(parms);
+  const [parms] = useSearchParams();
+  console.log(parms);
 
+  const querySearch = parms.get("search") || "";
+  console.log(querySearch);
 
- const querySearch  = parms.get("search")|| "";
- console.log(querySearch);
- 
-
- useEffect(()=>{
-  setSearch(querySearch);
- },[querySearch])
+  useEffect(() => {
+    setSearch(querySearch);
+  }, [querySearch]);
 
   // fetch all menu
 
@@ -79,11 +75,16 @@ console.log(parms);
 
   const filterMenu = menu
     .filter((items) =>
-      selectCategory === "All" ? true : items.category === selectCategory,
+    {
+      const matchCategory = selectCategory === "All"|| items.category === selectCategory;
+      const matchSearch = items.menuName.toLocaleLowerCase().includes(search.toLocaleLowerCase().trim()) ||
+      items.category.toLocaleLowerCase().includes(search.toLocaleLowerCase().trim());
+
+      return matchCategory && matchSearch;
+    }
+    
     )
-    .filter((items) =>
-      items.menuName.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
-    );
+   
 
   const handleCategory = (items: any) => {
     // console.log(items);
@@ -103,10 +104,9 @@ console.log(parms);
       <main className="">
         <Navbar search={search} setSearch={setSearch} />
         <div className=" md:flex  ">
-          
-<div className="hidden md:block">
-  <UiSlider/>
-</div>
+          <div className="hidden md:block">
+            <UiSlider />
+          </div>
           <section className="px-5 overflow-hidden  relative ">
             <div>
               <h2 className=" py-5  lg:text-[22px] font-['poppins'] font-semibold">
@@ -146,11 +146,11 @@ console.log(parms);
                   </button>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 ">
                   {currentItems.map((items, index) => (
                     <div
                       key={index}
-                      className="w-full h-56 md:h-60  shadow-2xl rounded-2xl flex justify-center relative cursor-pointer group "
+                      className="w-full h-56 md:h-60  shadow-2xl rounded-2xl flex justify-center relative cursor-pointer group overflow-x-auto "
                     >
                       <img
                         src={items.imageUrl}
@@ -158,27 +158,34 @@ console.log(parms);
                         className="w-full h-40 lg:h-48 object-cover rounded-2xl transform hover:scale-95 duration-500 p-2"
                       />
                       <div className="absolute bottom-10 md:bottom-14 lg:bottom-3">
-                        <h1 className="font-[poppins] lg:text-[18px] font-bold">
+                        <h1 className="font-[poppins] text-[12px] lg:text-[16px] font-bold line-clamp-1">
                           {items.menuName}
                         </h1>
                       </div>
 
-                      <div className="absolute flex justify-between items-center top-3 w-full px-3">
-                        <h3 className="bg-red-800 px-4 py-1 rounded-full text-white font-[poppins] text-[12px] md:text-[14px]">
+                      <div className="absolute flex flex-col md:flex-row justify-between items-center top-3 w-auto   md:w-full px-3 ">
+                        <h3 className="bg-red-800 px-4 py-1 rounded-full text-white font-[poppins] text-[12px] md:text-[12px] mb-1 md:mb-0">
                           {items.available}
                         </h3>
-                        <h3 className="bg-yellow-800 px-4 py-1 rounded-full text-white font-[poppins]  text-[12px] md:text-[14px]">
+                        <h3 className="bg-yellow-800 px-4 py-1 rounded-full text-white font-[poppins]  text-[12px] md:text-[12px]">
                           Rs.{items.price}
                         </h3>
                       </div>
 
                       <div className=" absolute w-full bottom-0 z-10 lg:opacity-0 lg:group-hover:opacity-100 duration-500">
                         <div
-                          className="text-center flex items-center justify-center bg-[#3a230c] text-white h-8 md:h-12"
-                          onClick={() => handleCart(items)}
+                          className={`text-center flex items-center justify-center  h-8 md:h-12 ${
+                            items.available === "unavailable"
+                              ? "cursor-not-allowed"
+                              : "bg-[#3a230c] text-white cursor-pointer"
+                          }`}
+                          onClick={() => {
+                            if (items.available === "unavailable") return;
+                            handleCart(items);
+                          }}
                         >
                           <h1 className="font-[poppins] text-[12px] lg:text-[18px] md:font-bold">
-                            Order Now
+                            {items.available === "available"?"Order Now":""}
                           </h1>
                         </div>
                       </div>
@@ -188,28 +195,45 @@ console.log(parms);
                   {/* pagination */}
 
                   <div className="absolute w-full  bottom-0 z-50 flex items-center justify-end gap-5 mb-5">
-                    <div className={` rounded-full transition duration-500 ${
-                    currentPage === 1 ?" text-black/10 cursor-not-allowed":" hover:bg-red-800 cursor-pointer hover:text-white "
-                    } ` } 
-                    
+                    <div
+                      className={` rounded-full transition duration-500 ${
+                        currentPage === 1
+                          ? " text-black/10 cursor-not-allowed"
+                          : " hover:bg-red-800 cursor-pointer hover:text-white "
+                      } `}
                     >
-                      <ChevronLeft size={35} onClick={()=>setCurrentPage((prev)=>Math.max(prev-1,1))}  />
+                      <ChevronLeft
+                        size={35}
+                        onClick={() =>
+                          setCurrentPage((prev) => Math.max(prev - 1, 1))
+                        }
+                      />
                     </div>
                     <span className="text-[20px] font-['poppins']">
-                      
-                      
-                      {currentPage} ....... {totalPage}</span>
-                   <div className={`mr-10 rounded-full transition duration-500 ${
-                    currentPage === totalPage ? " text-black/10 cursor-not-allowed":" hover:bg-red-800 cursor-pointer hover:text-white "
-                    }`}>
-                     <ChevronRight size={35} onClick={()=>setCurrentPage((next)=>Math.min(next+1, totalPage))}/>
-                   </div>
+                      {currentPage} ....... {totalPage}
+                    </span>
+                    <div
+                      className={`mr-10 rounded-full transition duration-500 ${
+                        currentPage === totalPage
+                          ? " text-black/10 cursor-not-allowed"
+                          : " hover:bg-red-800 cursor-pointer hover:text-white "
+                      }`}
+                    >
+                      <ChevronRight
+                        size={35}
+                        onClick={() =>
+                          setCurrentPage((next) =>
+                            Math.min(next + 1, totalPage),
+                          )
+                        }
+                      />
+                    </div>
                   </div>
                 </div>
               )}
             </div>
             <CartUi />
-            <OrderSlide/>
+            <OrderSlide />
           </section>
         </div>
       </main>

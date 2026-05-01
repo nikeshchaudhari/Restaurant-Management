@@ -171,10 +171,10 @@ const Report = () => {
     labels: label,
     datasets: [
       {
-        label: "Best Selling Items",
+        label: "Selling Items",
         data: values,
         backgroundColor: [
-          "red",
+          
           "teal",
           "olive",
           "cyan",

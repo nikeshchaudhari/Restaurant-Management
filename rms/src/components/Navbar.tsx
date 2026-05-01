@@ -21,8 +21,8 @@ interface NavbarProps {
 }
 
 
-const Navbar = ({ search, setSearch }: NavbarProps) => {
-  // const [search, setSearch] = useState("");
+const Navbar = () => {
+  const [search, setSearch] = useState("");
 
   const isLoggedIn: any = useSelector(
     (state: RootState) => state.auth.isLoggedIn,
@@ -46,17 +46,24 @@ const Navbar = ({ search, setSearch }: NavbarProps) => {
   const cart = useSelector((state: RootState) => state.cart.items);
   const cartCount = cart.length;
 
-  const handleSearch = () => {
-    if (!search.trim()) return;
+  const handleSearch = (e:any) => {
+    e.preventDefault()
+  const query = search.trim();
 
-    navigate(`/food-order/all-menu?search=${search.trim()}`);
+  if (query) {
+    navigate(`/food-order/all-menu?search=${query}`);
+  } else {
+    navigate(`/food-order/all-menu`);
+  }
+    
   };
 
-  const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      handleSearch();
-    }
+
+const handleEnter = (e: any) => {
+  if (e.key === "Enter") {
+    handleSearch(e);
+  }
+
   };
   return (
     <>

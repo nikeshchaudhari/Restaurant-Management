@@ -20,7 +20,7 @@ interface Table {
 const ListTabel = () => {
   const [tables, setTables] = useState<Table[]>([]);
   const [selected, setSelected] = useState<Table | null>(null);
-    const [search, setSearch] = useState("");
+  const [search, setSearch] = useState("");
   const dispatch: AppDispatch = useDispatch();
   // const open = useSelector((state: RootState) => state.menu.isOpen);
 
@@ -50,13 +50,14 @@ const ListTabel = () => {
     navigate("/food-order/all-menu");
   };
 
-  
-  
-
   return (
     <>
       <main>
-        <Navbar/>
+        <Navbar
+          search={search}
+          setSearch={setSearch}
+        
+        />
         <div className="md:flex  ">
           <div className="hidden md:block  ">
             <UiSlider />
@@ -116,10 +117,10 @@ const ListTabel = () => {
                 </div>
               )}
             </div>
-            <CartUi/>
+            <CartUi />
           </section>
         </div>
-        <OrderSlide/> 
+        <OrderSlide />
       </main>
     </>
   );
