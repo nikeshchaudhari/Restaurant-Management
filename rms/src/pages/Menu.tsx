@@ -227,7 +227,7 @@ const Menu = () => {
         <MobileDashboard />
 
         <Slide />
-        <section className="w-screen bg-[#E9E9E9] min-h-screen  pt-5  ">
+        <section className="w-screen bg-[#E9E9E9] min-h-screen   ">
           <div className="flex justify-between mx-5  bg-white p-2 rounded-full items-center">
             <h1 className="mx-2 md:text-[20px] font-bold">
               {editMenu ? "Edit Menu" : "Menu"}

@@ -11,6 +11,7 @@
   import type { AppDispatch } from "../store/store";
   import { useFormik } from "formik";
   import {Login} from "../schemas/LoginSchema"
+import { menuClose } from "../features/menuSlice";
   const initialValues = {
     email: "",
     password: "",
@@ -20,6 +21,7 @@
     // const [email, SetEmail] = useState<string>("");
     // const [password, SetPassword] = useState<string>("");
   const dispatch: AppDispatch = useDispatch();
+  
       const navigate = useNavigate();
 
     const { values, errors, resetForm, touched, handleBlur, handleChange, handleSubmit } =
@@ -86,7 +88,7 @@
     return (
       <>
         <div className="w-screen h-screen flex justify-center items-center bg-gray-100">
-          <div className="w-full md:w-200 h-auto rounded-lg flex overflow-hidden bg-white justify-center">
+          <div className="w-full md:w-200 h-fix md:h-auto rounded-lg flex overflow-hiddenm mx-5 lg:mx-0 bg-white justify-center">
             {/* Image section */}
             <div className="w-1/2 bg-[#e2dddd] hidden md:block">
               <img src={food} alt="food" className="w-100 h-100 p-10" />
@@ -144,11 +146,12 @@
                 <button
                   type="submit"
                   className="bg-[#1992DE] p-2 mt-2 transition duration-300 hover:bg-[#0E6BA6] cursor-pointer text-white rounded"
+                  onClick={()=>dispatch(menuClose())}
                 >
-                  SignUp
+                  Login
                 </button>
-                <span className="text-center">
-                  Create Your Account? <Link to="/signup">SignUp</Link>
+                <span className="text-center ">
+                  Create Your Account? <Link to="/signup" className="text-blue-500">SignUp</Link>
                 </span>
               </form>
             </div>

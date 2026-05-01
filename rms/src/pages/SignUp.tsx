@@ -57,7 +57,7 @@ const SignUp = () => {
 
   return (
     <div className="w-screen h-screen flex justify-center items-center bg-gray-100">
-      <div className="w-full md:w-200 h-auto rounded-lg flex overflow-hidden bg-white">
+      <div className="w-full md:w-200 mx-5 lg:mx-0 h-fix md:h-auto rounded-lg flex overflow-hidden bg-white">
         {/* Image section */}
         <div className="w-1/2 bg-[#e2dddd] hidden md:block">
           <img src={food} alt="food" className="w-100 h-100 p-10" />
@@ -159,7 +159,7 @@ const SignUp = () => {
               SignUp
             </button>
             <span className="text-center">
-              Already have an account? <Link to="/login">Login</Link>
+              Already have an account? <Link to="/login" className="text-blue-500">Login</Link>
             </span>
           </form>
         </div>

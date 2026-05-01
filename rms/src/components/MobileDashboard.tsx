@@ -9,8 +9,8 @@ const MobileDashboard = () => {
   const dispatch: AppDispatch = useDispatch();
   const Open = useSelector((state: RootState) => state.menu.isOpen);
   // const [isOpen, SetIsOpen] = useState<boolean>(false);
-   const navigate = useNavigate()
-   const handleLogout = () => {
+  const navigate = useNavigate();
+  const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
     localStorage.clear();
@@ -111,7 +111,13 @@ const MobileDashboard = () => {
             </li>
           </Link>
         </ul>
-        <div className="absolute bottom-0 left-0 w-full bg-[#1F354D] p-4 text-white text-center  font-bold flex gap-5 items-center  justify-center" onClick={handleLogout}>
+        <div
+          className="absolute bottom-0 left-0 w-full bg-[#1F354D] p-4 text-white text-center  font-bold flex gap-5 items-center  justify-center"
+          onClick={() => {
+            handleLogout();
+            dispatch(menuClose());
+          }}
+        >
           <FiLogOut className="text-2xl" />
           <button className="text-[20px]">Logout</button>
         </div>
